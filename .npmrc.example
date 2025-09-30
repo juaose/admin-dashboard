@@ -1,0 +1,14 @@
+# NPM Configuration for GitHub Packages
+# Copy this file to .npmrc and replace the environment variable with your actual token
+
+@juaose:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_NPM_TOKEN}
+
+# For local development, you can replace ${GITHUB_NPM_TOKEN} with your actual GitHub token
+# Example:
+# //npm.pkg.github.com/:_authToken=ghp_your_actual_token_here
+
+# To generate a GitHub token:
+# 1. Go to GitHub Settings > Developer settings > Personal access tokens
+# 2. Generate a new token with 'read:packages' permission
+# 3. Use that token in place of ${GITHUB_NPM_TOKEN}

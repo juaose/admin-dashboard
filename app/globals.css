@@ -1,0 +1,166 @@
+:root {
+  --max-width: 1100px;
+  --border-radius: 12px;
+  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
+    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
+    "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+
+  /* Theme System - Both Original and Dark Palettes */
+
+  /* Shared Neutrals */
+  --pure-white: #ffffff;
+  --off-white: #f8f8f8;
+  --deep-black: #0f0f0f;
+  --pure-white-rgb: 255, 255, 255;
+  --off-white-rgb: 248, 248, 248;
+  --deep-black-rgb: 15, 15, 15;
+
+  /* Gray Scale (Dark Palette) */
+  --charcoal: #2c2c2c;
+  --slate: #404040;
+  --ash: #5a5a5a;
+  --mist: #7a7a7a;
+  --fog: #9a9a9a;
+  --charcoal-rgb: 44, 44, 44;
+  --slate-rgb: 64, 64, 64;
+  --ash-rgb: 90, 90, 90;
+  --mist-rgb: 122, 122, 122;
+  --fog-rgb: 154, 154, 154;
+
+  /* Default to Dark Palette */
+  --brand-primary: #2d4a2b;
+  --brand-primary-alt: #4a6b47;
+  --brand-secondary: #5a8a4f;
+  --brand-dark: #1a2419;
+  --brand-white: #ffffff;
+  --mint-highlight: #7fb069;
+  --emerald-focus: #5a8a4f;
+
+  --brand-primary-rgb: 45, 74, 43;
+  --brand-primary-alt-rgb: 74, 107, 71;
+  --brand-secondary-rgb: 90, 138, 79;
+  --brand-dark-rgb: 26, 36, 25;
+  --brand-white-rgb: 255, 255, 255;
+  --mint-highlight-rgb: 127, 176, 105;
+  --emerald-focus-rgb: 90, 138, 79;
+
+  /* Theme Variables */
+  --bg-primary: var(--off-white);
+  --bg-secondary: var(--pure-white);
+  --bg-elevated: var(--pure-white);
+  --text-primary: var(--charcoal);
+  --text-secondary: var(--ash);
+  --text-tertiary: var(--mist);
+  --border-color: var(--mist);
+  --hover-bg: rgba(var(--brand-primary-rgb), 0.05);
+
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: #cbbeff;
+  --background-end-rgb: 255, 255, 255;
+
+  --callout-rgb: 238, 240, 241;
+  --callout-border-rgb: 172, 175, 176;
+  --card-rgb: #6649ae;
+  --card-border-rgb: 131, 134, 135;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+
+    --callout-rgb: 20, 20, 20;
+    --callout-border-rgb: 108, 108, 108;
+    --card-rgb: 100, 100, 100;
+    --card-border-rgb: 200, 200, 200;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Light Theme (Professional Light) */
+[data-theme="light"] {
+  --brand-primary: #2d4a2b;
+  --brand-primary-alt: #4a6b47;
+  --brand-secondary: #5a8a4f;
+  --brand-dark: #1a2419;
+  --brand-white: #ffffff;
+  --mint-highlight: #7fb069;
+  --emerald-focus: #5a8a4f;
+
+  --brand-primary-rgb: 45, 74, 43;
+  --brand-primary-alt-rgb: 74, 107, 71;
+  --brand-secondary-rgb: 90, 138, 79;
+  --brand-dark-rgb: 26, 36, 25;
+  --brand-white-rgb: 255, 255, 255;
+  --mint-highlight-rgb: 127, 176, 105;
+  --emerald-focus-rgb: 90, 138, 79;
+
+  /* Light theme variables */
+  --bg-primary: var(--off-white);
+  --bg-secondary: var(--pure-white);
+  --bg-elevated: var(--pure-white);
+  --text-primary: var(--charcoal);
+  --text-secondary: var(--ash);
+  --text-tertiary: var(--mist);
+  --border-color: var(--mist);
+  --hover-bg: rgba(var(--brand-primary-rgb), 0.05);
+}
+
+/* Dark Theme (Professional Dark) */
+[data-theme="dark"] {
+  --brand-primary: #2d4a2b;
+  --brand-primary-alt: #4a6b47;
+  --brand-secondary: #5a8a4f;
+  --brand-dark: #1a2419;
+  --brand-white: #ffffff;
+  --mint-highlight: #7fb069;
+  --emerald-focus: #5a8a4f;
+
+  --brand-primary-rgb: 45, 74, 43;
+  --brand-primary-alt-rgb: 74, 107, 71;
+  --brand-secondary-rgb: 90, 138, 79;
+  --brand-dark-rgb: 26, 36, 25;
+  --brand-white-rgb: 255, 255, 255;
+  --mint-highlight-rgb: 127, 176, 105;
+  --emerald-focus-rgb: 90, 138, 79;
+
+  /* Dark theme variables */
+  --bg-primary: var(--brand-dark);
+  --bg-secondary: var(--charcoal);
+  --bg-elevated: var(--slate);
+  --text-primary: var(--off-white);
+  --text-secondary: var(--fog);
+  --text-tertiary: var(--mist);
+  --border-color: var(--ash);
+  --hover-bg: rgba(var(--brand-primary-rgb), 0.1);
+}
+
+/* Apply theme to body */
+body {
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}

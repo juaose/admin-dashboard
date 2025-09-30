@@ -1,0 +1,291 @@
+/* Spanish translations for Amplify UI Authenticator - Dark Theme Styling */
+
+/* Ensure proper styling for translated elements with dark theme using Amplify CSS custom properties */
+[data-amplify-authenticator] {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+  /* Set Amplify component colors to match our dark theme */
+  --amplify-components-authenticator-router-background-color: var(--bg-primary);
+  --amplify-components-authenticator-form-background-color: var(--bg-secondary);
+  --amplify-components-authenticator-form-border-color: var(--border-color);
+  --amplify-components-authenticator-form-box-shadow: 0 4px 6px
+    rgba(0, 0, 0, 0.1);
+  --amplify-components-authenticator-form-border-radius: 12px;
+
+  /* Button styling */
+  --amplify-components-button-primary-background-color: var(--brand-primary);
+  --amplify-components-button-primary-color: var(--brand-white);
+  --amplify-components-button-primary-border-color: var(--brand-primary);
+  --amplify-components-button-primary-hover-background-color: var(
+    --brand-secondary
+  );
+  --amplify-components-button-primary-hover-border-color: var(
+    --brand-secondary
+  );
+  --amplify-components-button-primary-hover-color: var(--brand-white);
+
+  /* Input field styling */
+  --amplify-components-fieldcontrol-background-color: var(--bg-elevated);
+  --amplify-components-fieldcontrol-border-color: var(--border-color);
+  --amplify-components-fieldcontrol-color: var(--off-white);
+  --amplify-components-fieldcontrol-focus-border-color: var(--brand-primary);
+  --amplify-components-fieldcontrol-focus-box-shadow: 0 0 0 2px
+    rgba(var(--brand-primary-rgb), 0.2);
+
+  /* Label styling */
+  --amplify-components-label-color: var(--text-primary);
+
+  /* Text styling */
+  --amplify-components-text-color: var(--text-secondary);
+
+  /* Link styling */
+  --amplify-components-button-link-color: var(--brand-primary);
+  --amplify-components-button-link-hover-color: var(--brand-secondary);
+
+  /* Alert styling */
+  --amplify-components-alert-error-background-color: rgba(220, 53, 69, 0.1);
+  --amplify-components-alert-error-border-color: rgba(220, 53, 69, 0.3);
+  --amplify-components-alert-error-color: #dc3545;
+
+  /* Placeholder styling */
+  --amplify-components-fieldcontrol-placeholder-color: var(--text-tertiary);
+
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Main form container styling - More specific selectors */
+.amplify-authenticator .amplify-card,
+.amplify-authenticator [data-amplify-authenticator] .amplify-card,
+.amplify-authenticator .amplify-tabs,
+.amplify-authenticator .amplify-tabs__panel,
+.amplify-authenticator [data-amplify-authenticator] .amplify-tabs,
+.amplify-authenticator [data-amplify-authenticator] .amplify-tabs__panel {
+  background-color: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 12px !important;
+}
+
+/* Form wrapper styling */
+.amplify-authenticator .amplify-authenticator__form,
+.amplify-authenticator
+  [data-amplify-authenticator]
+  .amplify-authenticator__form,
+.amplify-authenticator .amplify-authenticator__modal,
+.amplify-authenticator
+  [data-amplify-authenticator]
+  .amplify-authenticator__modal {
+  background-color: var(--bg-secondary) !important;
+}
+
+/* Override any white backgrounds with high specificity */
+.amplify-authenticator *,
+.amplify-authenticator [data-amplify-authenticator] * {
+  background-color: inherit;
+}
+
+.amplify-authenticator .amplify-card *,
+.amplify-authenticator [data-amplify-authenticator] .amplify-card * {
+  background-color: transparent !important;
+}
+
+/* Specific form background override */
+.amplify-authenticator form,
+.amplify-authenticator [data-amplify-authenticator] form {
+  background-color: var(--bg-secondary) !important;
+}
+
+/* Force dark theme with very specific selectors */
+.amplify-authenticator .amplify-authenticator__container,
+.amplify-authenticator
+  [data-amplify-authenticator]
+  .amplify-authenticator__container,
+.amplify-authenticator .amplify-authenticator__container > *,
+.amplify-authenticator
+  [data-amplify-authenticator]
+  .amplify-authenticator__container
+  > * {
+  background-color: var(--bg-secondary) !important;
+}
+
+/* Target the specific white container */
+.amplify-authenticator [data-amplify-authenticator-signin],
+.amplify-authenticator [data-amplify-authenticator-signin] *,
+.amplify-authenticator .amplify-tabs__item,
+.amplify-authenticator .amplify-tabs__item *,
+.amplify-authenticator .amplify-field-group,
+.amplify-authenticator .amplify-field-group * {
+  background-color: var(--bg-secondary) !important;
+}
+
+/* Override Amplify's default white background with maximum specificity */
+.amplify-authenticator.amplify-authenticator .amplify-card.amplify-card {
+  background-color: var(--bg-secondary) !important;
+  background: var(--bg-secondary) !important;
+}
+
+/* Force all nested elements to inherit the dark background */
+.amplify-authenticator .amplify-card > *,
+.amplify-authenticator .amplify-card > * > *,
+.amplify-authenticator .amplify-card > * > * > * {
+  background-color: inherit !important;
+}
+
+/* Style for buttons to ensure proper display after translation */
+.amplify-authenticator button[type="submit"],
+.amplify-authenticator [data-amplify-authenticator] button[type="submit"],
+.amplify-authenticator .amplify-button--primary,
+.amplify-authenticator [data-amplify-authenticator] .amplify-button--primary,
+.amplify-authenticator .amplify-button[data-variation="primary"],
+.amplify-authenticator button[data-variation="primary"],
+.amplify-authenticator .amplify-button--primary.amplify-button,
+.amplify-authenticator button.amplify-button--primary {
+  transition: all 0.2s ease !important;
+  min-height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background-color: var(--brand-primary) !important;
+  background: var(--brand-primary) !important;
+  color: var(--brand-white) !important;
+  border: 1px solid var(--brand-primary) !important;
+  border-color: var(--brand-primary) !important;
+}
+
+.amplify-authenticator button[type="submit"]:hover,
+.amplify-authenticator [data-amplify-authenticator] button[type="submit"]:hover,
+.amplify-authenticator .amplify-button--primary:hover,
+.amplify-authenticator
+  [data-amplify-authenticator]
+  .amplify-button--primary:hover {
+  background-color: var(--brand-secondary) !important;
+  border-color: var(--brand-secondary) !important;
+}
+
+.amplify-authenticator button[type="submit"]:focus,
+.amplify-authenticator [data-amplify-authenticator] button[type="submit"]:focus,
+.amplify-authenticator .amplify-button--primary:focus,
+.amplify-authenticator
+  [data-amplify-authenticator]
+  .amplify-button--primary:focus {
+  outline: 2px solid var(--brand-primary) !important;
+  outline-offset: 2px;
+}
+
+/* Style for secondary buttons */
+.amplify-authenticator button:not([type="submit"]) {
+  background-color: transparent !important;
+  color: var(--brand-primary) !important;
+  border: 1px solid var(--brand-primary) !important;
+}
+
+.amplify-authenticator button:not([type="submit"]):hover {
+  background-color: rgba(var(--brand-primary-rgb), 0.1) !important;
+}
+
+/* Style for links to ensure proper display after translation */
+.amplify-authenticator a {
+  transition: color 0.2s ease;
+  text-decoration: none;
+  color: var(--brand-primary) !important;
+}
+
+.amplify-authenticator a:hover {
+  color: var(--brand-secondary) !important;
+  text-decoration: underline;
+}
+
+/* Ensure form fields have proper spacing */
+.amplify-authenticator .amplify-field {
+  margin-bottom: 1rem;
+}
+
+/* Style for labels */
+.amplify-authenticator label,
+.amplify-authenticator .amplify-label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
+  color: var(--text-primary) !important;
+}
+
+/* Style for input fields - Force light text color for visibility with higher specificity */
+.amplify-authenticator input,
+.amplify-authenticator .amplify-input,
+[data-amplify-authenticator] .amplify-input,
+[data-amplify-authenticator] input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 6px;
+  font-size: 16px;
+  color: var(--off-white) !important;
+  background-color: var(--bg-elevated) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Additional override for input text visibility with maximum specificity */
+.amplify-authenticator input[type="email"],
+.amplify-authenticator input[type="password"],
+.amplify-authenticator input[type="text"],
+.amplify-authenticator .amplify-input[type="email"],
+.amplify-authenticator .amplify-input[type="password"],
+.amplify-authenticator .amplify-input[type="text"],
+[data-amplify-authenticator] .amplify-input,
+[data-amplify-authenticator] input,
+.amplify-authenticator.amplify-authenticator .amplify-input,
+.amplify-authenticator.amplify-authenticator input {
+  color: var(--off-white) !important;
+}
+
+.amplify-authenticator input:focus,
+.amplify-authenticator .amplify-input:focus {
+  outline: none;
+  border-color: var(--brand-primary) !important;
+  box-shadow: 0 0 0 2px rgba(var(--brand-primary-rgb), 0.2) !important;
+}
+
+.amplify-authenticator input::placeholder,
+.amplify-authenticator .amplify-input::placeholder {
+  color: var(--text-tertiary) !important;
+}
+
+/* Style for headers */
+.amplify-authenticator .amplify-heading,
+.amplify-authenticator h1,
+.amplify-authenticator h2,
+.amplify-authenticator h3 {
+  color: var(--text-primary) !important;
+}
+
+/* Style for text elements */
+.amplify-authenticator .amplify-text,
+.amplify-authenticator p {
+  color: var(--text-secondary) !important;
+}
+
+/* Style for error messages */
+.amplify-authenticator .amplify-alert,
+.amplify-authenticator .amplify-alert--error {
+  background-color: rgba(220, 53, 69, 0.1) !important;
+  border: 1px solid rgba(220, 53, 69, 0.3) !important;
+  color: #dc3545 !important;
+  border-radius: 6px !important;
+}
+
+/* Style for success messages */
+.amplify-authenticator .amplify-alert--success {
+  background-color: rgba(var(--mint-highlight-rgb), 0.15) !important;
+  border: 1px solid rgba(var(--mint-highlight-rgb), 0.3) !important;
+  color: var(--mint-highlight) !important;
+  border-radius: 6px !important;
+}
+
+/* Style for info messages */
+.amplify-authenticator .amplify-alert--info {
+  background-color: rgba(var(--brand-primary-rgb), 0.1) !important;
+  border: 1px solid rgba(var(--brand-primary-rgb), 0.3) !important;
+  color: var(--brand-primary) !important;
+  border-radius: 6px !important;
+}

@@ -1,0 +1,23 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = git@github.com:juaose/admin-app.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "main"]
+	remote = origin
+	merge = refs/heads/main
+[branch "hostedUI"]
+	vscode-merge-base = origin/main
+	remote = origin
+	merge = refs/heads/hostedUI
+[branch "loginPrototype"]
+	vscode-merge-base = origin/main
+	remote = origin
+	merge = refs/heads/loginPrototype
+[branch "feature/bncr-integration"]
+	remote = origin
+	merge = refs/heads/feature/bncr-integration
+	vscode-merge-base = origin/feature/bot-monitor-interface
