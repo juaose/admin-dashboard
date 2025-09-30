@@ -8,13 +8,12 @@ import {
 import { Amplify } from "aws-amplify";
 import { fetchUserAttributes } from "aws-amplify/auth";
 import "@aws-amplify/ui-react/styles.css";
-import outputs from "../amplify_outputs.json";
 import "./app.css";
 import "./spanish-auth.css";
 import Navigation from "../components/Navigation";
 import { formFields, components } from "../lib/authenticator-config";
 
-Amplify.configure(outputs);
+// Amplify configuration is handled automatically by the new V6 amplify CLI
 
 export default function App() {
   const [userAttributes, setUserAttributes] = useState<any>(null);
@@ -108,7 +107,7 @@ export default function App() {
                       textAlign: "center",
                     }}
                   >
-                    🤖 Monitor de Bots Bancarios
+                    📊 Admin Dashboard
                   </h1>
                   <p
                     style={{
@@ -118,8 +117,8 @@ export default function App() {
                       marginBottom: "3rem",
                     }}
                   >
-                    ¡Bienvenido de vuelta, {getDisplayName()}! Selecciona el
-                    banco para monitorear sus bots.
+                    ¡Bienvenido al panel de administración, {getDisplayName()}!
+                    Aquí puedes gestionar todas las funcionalidades del sistema.
                   </p>
                 </div>
 
@@ -131,7 +130,7 @@ export default function App() {
                     marginBottom: "3rem",
                   }}
                 >
-                  {/* BNCR Bot Legion */}
+                  {/* Dashboard Applications */}
                   <div
                     style={{
                       background: "var(--bg-secondary)",
@@ -148,7 +147,7 @@ export default function App() {
                         marginBottom: "1rem",
                       }}
                     >
-                      🏦
+                      💼
                     </div>
                     <h3
                       style={{
@@ -156,7 +155,7 @@ export default function App() {
                         marginBottom: "1rem",
                       }}
                     >
-                      BNCR Bot Legion
+                      Panel de Control
                     </h3>
                     <p
                       style={{
@@ -164,10 +163,69 @@ export default function App() {
                         marginBottom: "1.5rem",
                       }}
                     >
-                      Monitoreo y control de bots del Banco Nacional de Costa
-                      Rica
+                      Gestiona y monitorea todas las operaciones del sistema
                     </p>
-                    <a href="/bot-monitor">
+                    <button
+                      style={{
+                        padding: "12px 24px",
+                        backgroundColor: "var(--brand-primary)",
+                        color: "var(--brand-white)",
+                        border: "none",
+                        borderRadius: "6px",
+                        cursor: "pointer",
+                        fontSize: "16px",
+                        width: "100%",
+                        transition: "all 0.2s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor =
+                          "var(--brand-secondary)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor =
+                          "var(--brand-primary)";
+                      }}
+                    >
+                      Acceder al Panel
+                    </button>
+                  </div>
+
+                  {/* Reports & Analytics */}
+                  <div
+                    style={{
+                      background: "var(--bg-secondary)",
+                      padding: "2rem",
+                      borderRadius: "12px",
+                      border: "1px solid var(--border-color)",
+                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: "4rem",
+                        marginBottom: "1rem",
+                      }}
+                    >
+                      📈
+                    </div>
+                    <h3
+                      style={{
+                        color: "var(--text-primary)",
+                        marginBottom: "1rem",
+                      }}
+                    >
+                      Reportes y Análisis
+                    </h3>
+                    <p
+                      style={{
+                        color: "var(--text-secondary)",
+                        marginBottom: "1.5rem",
+                      }}
+                    >
+                      Visualiza métricas y genera reportes del sistema
+                    </p>
+                    <a href="/reports">
                       <button
                         style={{
                           padding: "12px 24px",
@@ -189,62 +247,9 @@ export default function App() {
                             "var(--brand-primary)";
                         }}
                       >
-                        Acceder a BNCR Bots
+                        Ver Reportes
                       </button>
                     </a>
-                  </div>
-
-                  {/* Popular Bot Legion */}
-                  <div
-                    style={{
-                      background: "var(--bg-secondary)",
-                      padding: "2rem",
-                      borderRadius: "12px",
-                      border: "1px solid var(--border-color)",
-                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                      textAlign: "center",
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontSize: "4rem",
-                        marginBottom: "1rem",
-                      }}
-                    >
-                      🏛️
-                    </div>
-                    <h3
-                      style={{
-                        color: "var(--text-primary)",
-                        marginBottom: "1rem",
-                      }}
-                    >
-                      Popular Bot Legion
-                    </h3>
-                    <p
-                      style={{
-                        color: "var(--text-secondary)",
-                        marginBottom: "1.5rem",
-                      }}
-                    >
-                      Monitoreo y control de bots del Banco Popular
-                    </p>
-                    <button
-                      style={{
-                        padding: "12px 24px",
-                        backgroundColor: "var(--text-secondary)",
-                        color: "var(--brand-white)",
-                        border: "none",
-                        borderRadius: "6px",
-                        cursor: "not-allowed",
-                        fontSize: "16px",
-                        width: "100%",
-                        opacity: 0.6,
-                      }}
-                      disabled
-                    >
-                      Próximamente
-                    </button>
                   </div>
                 </div>
 
