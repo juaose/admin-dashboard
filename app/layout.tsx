@@ -7,9 +7,9 @@ import { ThemeProvider } from "../components/ThemeProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "BotMonitor",
+  title: "Panel de Administración",
   description:
-    "Sistema de monitoreo y control de bots bancarios - BNCR y Popular",
+    "Panel de administración Señor Cruz",
   icons: {
     icon: "/favicon.ico",
   },

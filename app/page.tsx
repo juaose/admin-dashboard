@@ -8,12 +8,15 @@ import {
 import { Amplify } from "aws-amplify";
 import { fetchUserAttributes } from "aws-amplify/auth";
 import "@aws-amplify/ui-react/styles.css";
+import outputs from "../amplify_outputs.json";
+
+// Configure Amplify for client-side authentication
+Amplify.configure(outputs);
+
 import "./app.css";
 import "./spanish-auth.css";
 import Navigation from "../components/Navigation";
 import { formFields, components } from "../lib/authenticator-config";
-
-// Amplify configuration is handled automatically by the new V6 amplify CLI
 
 export default function App() {
   const [userAttributes, setUserAttributes] = useState<any>(null);
