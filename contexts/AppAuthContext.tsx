@@ -8,11 +8,12 @@ import React, {
   ReactNode,
 } from "react";
 import { useAuthenticator } from "@aws-amplify/ui-react";
-import { fetchUserAttributes } from "aws-amplify/auth";
+import { fetchUserAttributes, fetchAuthSession } from "aws-amplify/auth";
 
 interface AppAuthContextType {
   user: any;
   userAttributes: any;
+  userGroups: string[];
   isAppReady: boolean;
   appError: string | null;
   clearAppError: () => void;
@@ -38,6 +39,7 @@ export const AppAuthProvider: React.FC<AppAuthProviderProps> = ({
 }) => {
   const { user } = useAuthenticator((context) => [context.user]);
   const [userAttributes, setUserAttributes] = useState<any>(null);
+  const [userGroups, setUserGroups] = useState<string[]>([]);
   const [isAppReady, setIsAppReady] = useState(false);
   const [appError, setAppError] = useState<string | null>(null);
 
@@ -61,6 +63,18 @@ export const AppAuthProvider: React.FC<AppAuthProviderProps> = ({
           const attributes = await fetchUserAttributes();
           setUserAttributes(attributes);
 
+          // Fetch user groups from Cognito
+          try {
+            const session = await fetchAuthSession();
+            const groups = session.tokens?.accessToken?.payload[
+              "cognito:groups"
+            ] as string[] | undefined;
+            setUserGroups(groups || []);
+          } catch (error) {
+            console.error("Error fetching user groups:", error);
+            setUserGroups([]);
+          }
+
           // Add any other app initialization logic here
           // For example: load user preferences, app configuration, etc.
 
@@ -74,6 +88,7 @@ export const AppAuthProvider: React.FC<AppAuthProviderProps> = ({
       } else {
         // Reset state when user logs out
         setUserAttributes(null);
+        setUserGroups([]);
         setIsAppReady(false);
         setAppError(null);
       }
@@ -89,6 +104,7 @@ export const AppAuthProvider: React.FC<AppAuthProviderProps> = ({
   const value: AppAuthContextType = {
     user,
     userAttributes,
+    userGroups,
     isAppReady,
     appError,
     clearAppError,

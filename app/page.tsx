@@ -1,347 +1,548 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import {
-  Authenticator,
-  ThemeProvider as AmplifyThemeProvider,
-} from "@aws-amplify/ui-react";
-import { Amplify } from "aws-amplify";
-import { fetchUserAttributes } from "aws-amplify/auth";
-import "@aws-amplify/ui-react/styles.css";
-import outputs from "../amplify_outputs.json";
+import { useEffect, useState } from "react";
 
-// Configure Amplify for client-side authentication
-Amplify.configure(outputs);
+interface DashboardStats {
+  deposits: {
+    totalAmount: number;
+    totalCount: number;
+    averageAmount: number;
+    activeCustomers: number;
+    avgDepositsPerCustomer: number;
+    avgAmountPerCustomer: number;
+  };
+  depositReloads: {
+    auto: {
+      totalAmount: number;
+      totalCount: number;
+      averageAmount: number;
+    };
+    manual: {
+      totalAmount: number;
+      totalCount: number;
+      averageAmount: number;
+    };
+    combined: {
+      totalAmount: number;
+      totalCount: number;
+      averageAmount: number;
+      activeCustomers: number;
+      avgReloadsPerCustomer: number;
+      avgAmountPerCustomer: number;
+    };
+  };
+  prizeReloads: {
+    totalAmount: number;
+    totalCount: number;
+    averageAmount: number;
+    activeCustomers: number;
+    avgReloadsPerCustomer: number;
+    avgAmountPerCustomer: number;
+  };
+  redemptions: {
+    totalAmount: number;
+    totalCount: number;
+    averageAmount: number;
+    activeCustomers: number;
+    avgRedemptionsPerCustomer: number;
+  };
+  players: {
+    newRegistrations: number;
+  };
+  period: {
+    type: "today" | "week" | "month";
+    startDate: string;
+    endDate: string;
+  };
+}
 
-import "./app.css";
-import "./spanish-auth.css";
-import Navigation from "../components/Navigation";
-import { formFields, components } from "../lib/authenticator-config";
+interface Shop {
+  shopID: number;
+  nickname: string;
+}
 
-export default function App() {
-  const [userAttributes, setUserAttributes] = useState<any>(null);
-  const [isLoadingAttributes, setIsLoadingAttributes] = useState(false);
-  const [attributeError, setAttributeError] = useState<string | null>(null);
+export default function HomePage() {
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [shops, setShops] = useState<Shop[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [periodType, setPeriodType] = useState<"today" | "week" | "month">(
+    "today"
+  );
+  const [selectedShopId, setSelectedShopId] = useState<string>("");
 
-  // Optimized user attribute fetching with proper loading states
   useEffect(() => {
-    async function getUserAttributes() {
-      setIsLoadingAttributes(true);
-      setAttributeError(null);
+    loadShops();
+  }, []);
 
-      try {
-        const attributes = await fetchUserAttributes();
-        console.log("Main page - Fetched user attributes:", attributes);
-        setUserAttributes(attributes);
-      } catch (error) {
-        console.error("Main page - Error fetching user attributes:", error);
-        setUserAttributes(null);
+  useEffect(() => {
+    loadStats();
+  }, [periodType, selectedShopId]);
 
-        // Set user-friendly error message in Spanish
-        if (error instanceof Error) {
-          setAttributeError("Error al cargar información del usuario");
-        } else {
-          setAttributeError("Error de conexión al cargar datos");
-        }
-      } finally {
-        setIsLoadingAttributes(false);
+  const loadShops = async () => {
+    try {
+      const response = await fetch("/api/admins/shops");
+      if (!response.ok) throw new Error("Failed to fetch shops");
+
+      const data = await response.json();
+      if (data.success) {
+        setShops(data.data || []);
       }
+    } catch (err) {
+      console.error("Error loading shops:", err);
     }
+  };
 
-    // Only fetch if we can (user is authenticated)
-    getUserAttributes();
-  }, []); // Run once when component mounts
+  const loadStats = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const params = new URLSearchParams({ period: periodType });
+      if (selectedShopId) {
+        params.append("shopId", selectedShopId);
+      }
+
+      const response = await fetch(`/api/home/stats?${params}`);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch dashboard stats");
+      }
+
+      const result = await response.json();
+      setStats(result.data);
+    } catch (err) {
+      console.error("Error loading dashboard stats:", err);
+      setError("Error al cargar las estadísticas del dashboard");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat("es-CR", {
+      style: "currency",
+      currency: "CRC",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  };
+
+  const formatNumber = (num: number) => {
+    return new Intl.NumberFormat("es-CR", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    }).format(num);
+  };
+
+  const getPeriodLabel = () => {
+    switch (periodType) {
+      case "today":
+        return "Hoy";
+      case "week":
+        return "Esta Semana";
+      case "month":
+        return "Este Mes";
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="loading-mobile">
+          <p className="text-lg text-gray-600">Cargando estadísticas...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-red-600 mb-2">Error</h2>
+          <p className="text-gray-600">{error}</p>
+          <button
+            onClick={loadStats}
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Reintentar
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!stats) return null;
 
   return (
-    <AmplifyThemeProvider>
-      <Authenticator
-        hideSignUp={true}
-        formFields={formFields}
-        components={components}
-      >
-        {({ signOut, user }) => {
-          // Function to get display name with proper loading states and fallback
-          const getDisplayName = () => {
-            // Show loading indicator while fetching attributes
-            if (isLoadingAttributes) {
-              return "Cargando...";
-            }
+    <div className="space-y-6 p-4 md:p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
+      {/* Header with Filters */}
+      <div className="bg-gradient-to-r from-brand-primary to-brand-primary-alt dark:from-brand-primary-alt dark:to-brand-secondary rounded-xl shadow-lg border border-brand-secondary dark:border-brand-primary p-6 md:p-8">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold text-white flex items-center gap-3">
+              <span className="text-4xl">📊</span>
+              Estadísticas - {getPeriodLabel()}
+            </h1>
+            <p className="text-white/90 mt-2 text-lg">
+              Resumen de operaciones del sistema
+            </p>
+          </div>
 
-            // Show error state if there was an error fetching attributes
-            if (attributeError) {
-              // Fall back to basic user info if attributes failed to load
-              if (user?.signInDetails?.loginId)
-                return user.signInDetails.loginId;
-              return user?.username || "Usuario";
-            }
-
-            // Normal flow - use fetched attributes first, then fallback to user info
-            if (userAttributes?.name) return userAttributes.name;
-            if (userAttributes?.given_name) return userAttributes.given_name;
-            if (user?.signInDetails?.loginId) return user.signInDetails.loginId;
-            return user?.username || "Usuario";
-          };
-
-          return (
-            <div
-              style={{
-                backgroundColor: "var(--bg-primary)",
-                color: "var(--text-primary)",
-                minHeight: "100vh",
-              }}
+          <div className="flex flex-col sm:flex-row gap-3">
+            {/* Period Filter */}
+            <select
+              value={periodType}
+              onChange={(e) =>
+                setPeriodType(e.target.value as "today" | "week" | "month")
+              }
+              className="px-4 py-3 border-2 border-white/30 rounded-xl bg-white/10 backdrop-blur-sm text-white font-semibold focus:outline-none focus:ring-2 focus:ring-accent-mint focus:border-accent-mint hover:bg-white/20 transition-all cursor-pointer shadow-lg"
+              style={{ minWidth: "160px" }}
             >
-              <Navigation user={user} onSignOut={signOut} />
-              <main
-                style={{
-                  padding: "2rem",
-                  maxWidth: "1200px",
-                  margin: "0 auto",
-                }}
-              >
-                <div
-                  style={{
-                    marginBottom: "3rem",
-                  }}
-                >
-                  <h1
-                    style={{
-                      color: "var(--text-primary)",
-                      marginBottom: "1rem",
-                      textAlign: "center",
-                    }}
-                  >
-                    📊 Admin Dashboard
-                  </h1>
-                  <p
-                    style={{
-                      color: "var(--text-secondary)",
-                      fontSize: "1.1rem",
-                      textAlign: "center",
-                      marginBottom: "3rem",
-                    }}
-                  >
-                    ¡Bienvenido al panel de administración, {getDisplayName()}!
-                    Aquí puedes gestionar todas las funcionalidades del sistema.
-                  </p>
-                </div>
+              <option value="today" className="text-gray-900">
+                📅 Hoy
+              </option>
+              <option value="week" className="text-gray-900">
+                📆 Esta Semana
+              </option>
+              <option value="month" className="text-gray-900">
+                🗓️ Este Mes
+              </option>
+            </select>
 
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))",
-                    gap: "2rem",
-                    marginBottom: "3rem",
-                  }}
+            {/* Shop Filter */}
+            <select
+              value={selectedShopId}
+              onChange={(e) => setSelectedShopId(e.target.value)}
+              className="px-4 py-3 border-2 border-white/30 rounded-xl bg-white/10 backdrop-blur-sm text-white font-semibold focus:outline-none focus:ring-2 focus:ring-accent-mint focus:border-accent-mint hover:bg-white/20 transition-all cursor-pointer shadow-lg"
+              style={{ minWidth: "200px" }}
+            >
+              <option value="" className="text-gray-900">
+                🏪 Todas las Tiendas
+              </option>
+              {shops.map((shop) => (
+                <option
+                  key={shop.shopID}
+                  value={shop.shopID}
+                  className="text-gray-900"
                 >
-                  {/* Dashboard Applications */}
-                  <div
-                    style={{
-                      background: "var(--bg-secondary)",
-                      padding: "2rem",
-                      borderRadius: "12px",
-                      border: "1px solid var(--border-color)",
-                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                      textAlign: "center",
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontSize: "4rem",
-                        marginBottom: "1rem",
-                      }}
-                    >
-                      💼
-                    </div>
-                    <h3
-                      style={{
-                        color: "var(--text-primary)",
-                        marginBottom: "1rem",
-                      }}
-                    >
-                      Panel de Control
-                    </h3>
-                    <p
-                      style={{
-                        color: "var(--text-secondary)",
-                        marginBottom: "1.5rem",
-                      }}
-                    >
-                      Gestiona y monitorea todas las operaciones del sistema
-                    </p>
-                    <button
-                      style={{
-                        padding: "12px 24px",
-                        backgroundColor: "var(--brand-primary)",
-                        color: "var(--brand-white)",
-                        border: "none",
-                        borderRadius: "6px",
-                        cursor: "pointer",
-                        fontSize: "16px",
-                        width: "100%",
-                        transition: "all 0.2s ease",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor =
-                          "var(--brand-secondary)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor =
-                          "var(--brand-primary)";
-                      }}
-                    >
-                      Acceder al Panel
-                    </button>
-                  </div>
+                  {shop.nickname} (ID: {shop.shopID})
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
 
-                  {/* Reports & Analytics */}
-                  <div
-                    style={{
-                      background: "var(--bg-secondary)",
-                      padding: "2rem",
-                      borderRadius: "12px",
-                      border: "1px solid var(--border-color)",
-                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                      textAlign: "center",
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontSize: "4rem",
-                        marginBottom: "1rem",
-                      }}
-                    >
-                      📈
-                    </div>
-                    <h3
-                      style={{
-                        color: "var(--text-primary)",
-                        marginBottom: "1rem",
-                      }}
-                    >
-                      Reportes y Análisis
-                    </h3>
-                    <p
-                      style={{
-                        color: "var(--text-secondary)",
-                        marginBottom: "1.5rem",
-                      }}
-                    >
-                      Visualiza métricas y genera reportes del sistema
-                    </p>
-                    <a href="/reports">
-                      <button
-                        style={{
-                          padding: "12px 24px",
-                          backgroundColor: "var(--brand-primary)",
-                          color: "var(--brand-white)",
-                          border: "none",
-                          borderRadius: "6px",
-                          cursor: "pointer",
-                          fontSize: "16px",
-                          width: "100%",
-                          transition: "all 0.2s ease",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor =
-                            "var(--brand-secondary)";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor =
-                            "var(--brand-primary)";
-                        }}
-                      >
-                        Ver Reportes
-                      </button>
-                    </a>
-                  </div>
-                </div>
+      {/* 1. DEPOSITS SECTION */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 md:p-8 hover:shadow-2xl transition-shadow duration-300">
+        <h2 className="text-2xl md:text-3xl font-bold text-brand-dark dark:text-gray-100 mb-6 flex items-center gap-3 pb-4 border-b-2 border-accent-mint/30 dark:border-accent-mint/20">
+          <span className="text-3xl">💰</span>
+          Depósitos
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+          <div className="p-5 bg-gradient-to-br from-accent-mint/10 to-accent-mint/20 dark:from-accent-mint/20 dark:to-accent-mint/30 rounded-xl border-2 border-accent-mint/40 dark:border-accent-mint/30 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-brand-primary dark:text-accent-mint uppercase tracking-wide mb-1">
+              Total Depositado
+            </p>
+            <p className="text-2xl md:text-3xl font-extrabold text-brand-dark dark:text-gray-100">
+              {formatCurrency(stats.deposits.totalAmount)}
+            </p>
+          </div>
+          <div className="p-5 bg-gradient-to-br from-accent-mint/10 to-accent-mint/20 dark:from-accent-mint/20 dark:to-accent-mint/30 rounded-xl border-2 border-accent-mint/40 dark:border-accent-mint/30 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-brand-primary dark:text-accent-mint uppercase tracking-wide mb-1">
+              Total Depósitos
+            </p>
+            <p className="text-2xl md:text-3xl font-extrabold text-brand-dark dark:text-gray-100">
+              {formatNumber(stats.deposits.totalCount)}
+            </p>
+          </div>
+          <div className="p-5 bg-gradient-to-br from-accent-mint/10 to-accent-mint/20 dark:from-accent-mint/20 dark:to-accent-mint/30 rounded-xl border-2 border-accent-mint/40 dark:border-accent-mint/30 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-brand-primary dark:text-accent-mint uppercase tracking-wide mb-1">
+              Promedio por Depósito
+            </p>
+            <p className="text-2xl md:text-3xl font-extrabold text-brand-dark dark:text-gray-100">
+              {formatCurrency(stats.deposits.averageAmount)}
+            </p>
+          </div>
+          <div className="p-5 bg-gradient-to-br from-brand-secondary/10 to-brand-secondary/20 dark:from-brand-secondary/20 dark:to-brand-secondary/30 rounded-xl border-2 border-brand-secondary/40 dark:border-brand-secondary/30 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-brand-primary-alt dark:text-brand-secondary uppercase tracking-wide mb-1">
+              Clientes Activos
+            </p>
+            <p className="text-2xl md:text-3xl font-extrabold text-brand-dark dark:text-gray-100">
+              {formatNumber(stats.deposits.activeCustomers)}
+            </p>
+          </div>
+          <div className="p-5 bg-gradient-to-br from-brand-secondary/10 to-brand-secondary/20 dark:from-brand-secondary/20 dark:to-brand-secondary/30 rounded-xl border-2 border-brand-secondary/40 dark:border-brand-secondary/30 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-brand-primary-alt dark:text-brand-secondary uppercase tracking-wide mb-1">
+              Depósitos por Cliente
+            </p>
+            <p className="text-2xl md:text-3xl font-extrabold text-brand-dark dark:text-gray-100">
+              {formatNumber(stats.deposits.avgDepositsPerCustomer)}
+            </p>
+          </div>
+          <div className="p-5 bg-gradient-to-br from-brand-secondary/10 to-brand-secondary/20 dark:from-brand-secondary/20 dark:to-brand-secondary/30 rounded-xl border-2 border-brand-secondary/40 dark:border-brand-secondary/30 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-brand-primary-alt dark:text-brand-secondary uppercase tracking-wide mb-1">
+              Monto Promedio por Cliente
+            </p>
+            <p className="text-2xl md:text-3xl font-extrabold text-brand-dark dark:text-gray-100">
+              {formatCurrency(stats.deposits.avgAmountPerCustomer)}
+            </p>
+          </div>
+        </div>
+      </div>
 
-                {/* Development Tools Section */}
-                <div
-                  style={{
-                    background: "var(--bg-secondary)",
-                    padding: "2rem",
-                    borderRadius: "12px",
-                    border: "1px solid var(--border-color)",
-                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                  }}
-                >
-                  <h3
-                    style={{
-                      color: "var(--text-primary)",
-                      marginBottom: "1rem",
-                      textAlign: "center",
-                    }}
-                  >
-                    🛠️ Herramientas de Desarrollo
-                  </h3>
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns:
-                        "repeat(auto-fit, minmax(200px, 1fr))",
-                      gap: "1rem",
-                    }}
-                  >
-                    <a href="/color-palette-demo">
-                      <button
-                        style={{
-                          padding: "10px 20px",
-                          backgroundColor: "transparent",
-                          color: "var(--text-primary)",
-                          border: "1px solid var(--border-color)",
-                          borderRadius: "6px",
-                          cursor: "pointer",
-                          fontSize: "14px",
-                          width: "100%",
-                          transition: "all 0.2s ease",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor =
-                            "var(--brand-primary)";
-                          e.currentTarget.style.color = "var(--brand-white)";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = "transparent";
-                          e.currentTarget.style.color = "var(--text-primary)";
-                        }}
-                      >
-                        🎨 Paleta de Colores
-                      </button>
-                    </a>
-                    <a href="/test-theme">
-                      <button
-                        style={{
-                          padding: "10px 20px",
-                          backgroundColor: "transparent",
-                          color: "var(--text-primary)",
-                          border: "1px solid var(--border-color)",
-                          borderRadius: "6px",
-                          cursor: "pointer",
-                          fontSize: "14px",
-                          width: "100%",
-                          transition: "all 0.2s ease",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor =
-                            "var(--brand-primary)";
-                          e.currentTarget.style.color = "var(--brand-white)";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = "transparent";
-                          e.currentTarget.style.color = "var(--text-primary)";
-                        }}
-                      >
-                        🎭 Test de Temas
-                      </button>
-                    </a>
-                  </div>
-                </div>
-              </main>
+      {/* 2. DEPOSIT RELOADS SECTION */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 md:p-8 hover:shadow-2xl transition-shadow duration-300">
+        <h2 className="text-2xl md:text-3xl font-bold text-brand-dark dark:text-gray-100 mb-6 flex items-center gap-3 pb-4 border-b-2 border-brand-secondary/30 dark:border-brand-secondary/20">
+          <span className="text-3xl">🏦 </span>
+          Recargas - Depósitos
+        </h2>
+
+        {/* Auto Deposits */}
+        <div className="mb-8">
+          <h3 className="text-xl font-bold text-brand-primary dark:text-accent-mint mb-4 flex items-center gap-2">
+            <span className="text-2xl">🤖</span>
+            Depósitos Automáticos
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+            <div className="p-5 bg-gradient-to-br from-brand-primary/5 to-brand-primary/10 dark:from-brand-primary/10 dark:to-brand-primary/20 rounded-xl border-2 border-brand-primary/30 dark:border-brand-primary/20 hover:shadow-lg transition-all duration-200 hover:scale-105">
+              <p className="text-sm font-semibold text-brand-primary dark:text-accent-mint uppercase tracking-wide mb-1">
+                Total Recargado
+              </p>
+              <p className="text-2xl md:text-3xl font-extrabold text-brand-dark dark:text-gray-100">
+                {formatCurrency(stats.depositReloads.auto.totalAmount)}
+              </p>
             </div>
-          );
-        }}
-      </Authenticator>
-    </AmplifyThemeProvider>
+            <div className="p-5 bg-gradient-to-br from-brand-primary/5 to-brand-primary/10 dark:from-brand-primary/10 dark:to-brand-primary/20 rounded-xl border-2 border-brand-primary/30 dark:border-brand-primary/20 hover:shadow-lg transition-all duration-200 hover:scale-105">
+              <p className="text-sm font-semibold text-brand-primary dark:text-accent-mint uppercase tracking-wide mb-1">
+                Total Recargas
+              </p>
+              <p className="text-2xl md:text-3xl font-extrabold text-brand-dark dark:text-gray-100">
+                {formatNumber(stats.depositReloads.auto.totalCount)}
+              </p>
+            </div>
+            <div className="p-5 bg-gradient-to-br from-brand-primary/5 to-brand-primary/10 dark:from-brand-primary/10 dark:to-brand-primary/20 rounded-xl border-2 border-brand-primary/30 dark:border-brand-primary/20 hover:shadow-lg transition-all duration-200 hover:scale-105">
+              <p className="text-sm font-semibold text-brand-primary dark:text-accent-mint uppercase tracking-wide mb-1">
+                Promedio
+              </p>
+              <p className="text-2xl md:text-3xl font-extrabold text-brand-dark dark:text-gray-100">
+                {formatCurrency(stats.depositReloads.auto.averageAmount)}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Manual Deposits */}
+        <div className="mb-8">
+          <h3 className="text-xl font-bold text-brand-primary-alt dark:text-brand-secondary mb-4 flex items-center gap-2">
+            <span className="text-2xl">✍️</span>
+            Depósitos Manuales
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+            <div className="p-5 bg-gradient-to-br from-brand-primary-alt/5 to-brand-primary-alt/10 dark:from-brand-primary-alt/10 dark:to-brand-primary-alt/20 rounded-xl border-2 border-brand-primary-alt/30 dark:border-brand-primary-alt/20 hover:shadow-lg transition-all duration-200 hover:scale-105">
+              <p className="text-sm font-semibold text-brand-primary-alt dark:text-brand-secondary uppercase tracking-wide mb-1">
+                Total Recargado
+              </p>
+              <p className="text-2xl md:text-3xl font-extrabold text-brand-dark dark:text-gray-100">
+                {formatCurrency(stats.depositReloads.manual.totalAmount)}
+              </p>
+            </div>
+            <div className="p-5 bg-gradient-to-br from-brand-primary-alt/5 to-brand-primary-alt/10 dark:from-brand-primary-alt/10 dark:to-brand-primary-alt/20 rounded-xl border-2 border-brand-primary-alt/30 dark:border-brand-primary-alt/20 hover:shadow-lg transition-all duration-200 hover:scale-105">
+              <p className="text-sm font-semibold text-brand-primary-alt dark:text-brand-secondary uppercase tracking-wide mb-1">
+                Total Recargas
+              </p>
+              <p className="text-2xl md:text-3xl font-extrabold text-brand-dark dark:text-gray-100">
+                {formatNumber(stats.depositReloads.manual.totalCount)}
+              </p>
+            </div>
+            <div className="p-5 bg-gradient-to-br from-brand-primary-alt/5 to-brand-primary-alt/10 dark:from-brand-primary-alt/10 dark:to-brand-primary-alt/20 rounded-xl border-2 border-brand-primary-alt/30 dark:border-brand-primary-alt/20 hover:shadow-lg transition-all duration-200 hover:scale-105">
+              <p className="text-sm font-semibold text-brand-primary-alt dark:text-brand-secondary uppercase tracking-wide mb-1">
+                Promedio
+              </p>
+              <p className="text-2xl md:text-3xl font-extrabold text-brand-dark dark:text-gray-100">
+                {formatCurrency(stats.depositReloads.manual.averageAmount)}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Combined Stats */}
+        <div className="border-t-2 border-gray-200 dark:border-gray-700 pt-6">
+          <h3 className="text-xl font-bold text-brand-dark dark:text-gray-100 mb-4 flex items-center gap-2">
+            <span className="text-2xl">➕</span>
+            Total
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+            <div className="p-5 bg-gradient-to-br from-accent-emerald/10 to-accent-emerald/20 dark:from-accent-emerald/20 dark:to-accent-emerald/30 rounded-xl border-2 border-accent-emerald/40 dark:border-accent-emerald/30 hover:shadow-lg transition-all duration-200 hover:scale-105">
+              <p className="text-sm font-semibold text-accent-emerald dark:text-accent-mint uppercase tracking-wide mb-1">
+                Total Recargado
+              </p>
+              <p className="text-xl md:text-2xl font-extrabold text-brand-dark dark:text-gray-100">
+                {formatCurrency(stats.depositReloads.combined.totalAmount)}
+              </p>
+            </div>
+            <div className="p-5 bg-gradient-to-br from-accent-emerald/10 to-accent-emerald/20 dark:from-accent-emerald/20 dark:to-accent-emerald/30 rounded-xl border-2 border-accent-emerald/40 dark:border-accent-emerald/30 hover:shadow-lg transition-all duration-200 hover:scale-105">
+              <p className="text-sm font-semibold text-accent-emerald dark:text-accent-mint uppercase tracking-wide mb-1">
+                Total Recargas
+              </p>
+              <p className="text-xl md:text-2xl font-extrabold text-brand-dark dark:text-gray-100">
+                {formatNumber(stats.depositReloads.combined.totalCount)}
+              </p>
+            </div>
+            <div className="p-5 bg-gradient-to-br from-accent-emerald/10 to-accent-emerald/20 dark:from-accent-emerald/20 dark:to-accent-emerald/30 rounded-xl border-2 border-accent-emerald/40 dark:border-accent-emerald/30 hover:shadow-lg transition-all duration-200 hover:scale-105">
+              <p className="text-sm font-semibold text-accent-emerald dark:text-accent-mint uppercase tracking-wide mb-1">
+                Clientes Activos
+              </p>
+              <p className="text-xl md:text-2xl font-extrabold text-brand-dark dark:text-gray-100">
+                {formatNumber(stats.depositReloads.combined.activeCustomers)}
+              </p>
+            </div>
+            <div className="p-5 bg-gradient-to-br from-accent-emerald/10 to-accent-emerald/20 dark:from-accent-emerald/20 dark:to-accent-emerald/30 rounded-xl border-2 border-accent-emerald/40 dark:border-accent-emerald/30 hover:shadow-lg transition-all duration-200 hover:scale-105">
+              <p className="text-sm font-semibold text-accent-emerald dark:text-accent-mint uppercase tracking-wide mb-1">
+                Recargas por Cliente
+              </p>
+              <p className="text-xl md:text-2xl font-extrabold text-brand-dark dark:text-gray-100">
+                {formatNumber(
+                  stats.depositReloads.combined.avgReloadsPerCustomer
+                )}
+              </p>
+            </div>
+            <div className="p-5 bg-gradient-to-br from-accent-emerald/10 to-accent-emerald/20 dark:from-accent-emerald/20 dark:to-accent-emerald/30 rounded-xl border-2 border-accent-emerald/40 dark:border-accent-emerald/30 hover:shadow-lg transition-all duration-200 hover:scale-105">
+              <p className="text-sm font-semibold text-accent-emerald dark:text-accent-mint uppercase tracking-wide mb-1">
+                Monto por Cliente
+              </p>
+              <p className="text-xl md:text-2xl font-extrabold text-brand-dark dark:text-gray-100">
+                {formatCurrency(
+                  stats.depositReloads.combined.avgAmountPerCustomer
+                )}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. PRIZE RELOADS SECTION */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 md:p-8 hover:shadow-2xl transition-shadow duration-300">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-3 pb-4 border-b-2 border-amber-200 dark:border-amber-700">
+          <span className="text-3xl">🎰</span>
+          Recargas - Premios
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+          <div className="p-5 bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 rounded-xl border-2 border-amber-300 dark:border-amber-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wide mb-1">
+              Total Recargado
+            </p>
+            <p className="text-2xl md:text-3xl font-extrabold text-amber-800 dark:text-amber-300">
+              {formatCurrency(stats.prizeReloads.totalAmount)}
+            </p>
+          </div>
+          <div className="p-5 bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 rounded-xl border-2 border-amber-300 dark:border-amber-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wide mb-1">
+              Total Recargas
+            </p>
+            <p className="text-2xl md:text-3xl font-extrabold text-amber-800 dark:text-amber-300">
+              {formatNumber(stats.prizeReloads.totalCount)}
+            </p>
+          </div>
+          <div className="p-5 bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 rounded-xl border-2 border-amber-300 dark:border-amber-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wide mb-1">
+              Promedio
+            </p>
+            <p className="text-2xl md:text-3xl font-extrabold text-amber-800 dark:text-amber-300">
+              {formatCurrency(stats.prizeReloads.averageAmount)}
+            </p>
+          </div>
+          <div className="p-5 bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 rounded-xl border-2 border-amber-300 dark:border-amber-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wide mb-1">
+              Clientes Activos
+            </p>
+            <p className="text-2xl md:text-3xl font-extrabold text-amber-800 dark:text-amber-300">
+              {formatNumber(stats.prizeReloads.activeCustomers)}
+            </p>
+          </div>
+          <div className="p-5 bg-gradient-to-br from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 rounded-xl border-2 border-amber-300 dark:border-amber-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wide mb-1">
+              Recargas por Cliente
+            </p>
+            <p className="text-2xl md:text-3xl font-extrabold text-amber-800 dark:text-amber-300">
+              {formatNumber(stats.prizeReloads.avgReloadsPerCustomer)}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. REDEMPTIONS SECTION */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 md:p-8 hover:shadow-2xl transition-shadow duration-300">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-3 pb-4 border-b-2 border-red-200 dark:border-red-700">
+          <span className="text-3xl">💸</span>
+          Retiros
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+          <div className="p-5 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-xl border-2 border-red-300 dark:border-red-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-red-700 dark:text-red-400 uppercase tracking-wide mb-1">
+              Total Retirado
+            </p>
+            <p className="text-2xl md:text-3xl font-extrabold text-red-800 dark:text-red-300">
+              {formatCurrency(stats.redemptions.totalAmount)}
+            </p>
+          </div>
+          <div className="p-5 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-xl border-2 border-red-300 dark:border-red-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-red-700 dark:text-red-400 uppercase tracking-wide mb-1">
+              Total Retiros
+            </p>
+            <p className="text-2xl md:text-3xl font-extrabold text-red-800 dark:text-red-300">
+              {formatNumber(stats.redemptions.totalCount)}
+            </p>
+          </div>
+          <div className="p-5 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-xl border-2 border-red-300 dark:border-red-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-red-700 dark:text-red-400 uppercase tracking-wide mb-1">
+              Promedio por Retiro
+            </p>
+            <p className="text-2xl md:text-3xl font-extrabold text-red-800 dark:text-red-300">
+              {formatCurrency(stats.redemptions.averageAmount)}
+            </p>
+          </div>
+          <div className="p-5 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-xl border-2 border-red-300 dark:border-red-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-red-700 dark:text-red-400 uppercase tracking-wide mb-1">
+              Clientes Activos
+            </p>
+            <p className="text-2xl md:text-3xl font-extrabold text-red-800 dark:text-red-300">
+              {formatNumber(stats.redemptions.activeCustomers)}
+            </p>
+          </div>
+          <div className="p-5 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-xl border-2 border-red-300 dark:border-red-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-red-700 dark:text-red-400 uppercase tracking-wide mb-1">
+              Retiros por Cliente
+            </p>
+            <p className="text-2xl md:text-3xl font-extrabold text-red-800 dark:text-red-300">
+              {formatNumber(stats.redemptions.avgRedemptionsPerCustomer)}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* 5. PLAYERS SECTION */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 md:p-8 hover:shadow-2xl transition-shadow duration-300">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-3 pb-4 border-b-2 border-cyan-200 dark:border-cyan-700">
+          <span className="text-3xl">👥</span>
+          Jugadores
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+          <div className="p-6 md:p-8 bg-gradient-to-br from-cyan-50 to-cyan-100 dark:from-cyan-900/20 dark:to-cyan-800/20 rounded-xl border-2 border-cyan-300 dark:border-cyan-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-cyan-700 dark:text-cyan-400 uppercase tracking-wide mb-2">
+              Nuevos Registros
+            </p>
+            <p className="text-4xl md:text-5xl font-extrabold text-cyan-800 dark:text-cyan-300">
+              {formatNumber(stats.players.newRegistrations)}
+            </p>
+            <p className="text-xs text-cyan-600 dark:text-cyan-500 mt-2 font-medium">
+              Registros en el período seleccionado
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

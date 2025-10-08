@@ -1,0 +1,226 @@
+/* Spanish Navigation Styles */
+
+.sidebar {
+  width: 280px;
+  height: 100vh;
+  background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
+  color: white;
+  position: fixed;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+/* Logo Section */
+.logo {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logoLink {
+  color: white;
+  text-decoration: none;
+  font-size: 1.25rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Navigation List */
+.navList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  padding-top: 1rem;
+}
+
+.navItem {
+  margin-bottom: 0.125rem;
+}
+
+/* Navigation Links */
+.navLink {
+  display: block;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-radius: 0 8px 8px 0;
+  margin: 0 8px;
+}
+
+.navLink:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.navLink.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-right: 3px solid #fbbf24;
+}
+
+.expandableLink,
+.link {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  color: white;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.icon {
+  font-size: 1.25rem;
+  min-width: 1.25rem;
+}
+
+.label {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.arrow {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+  transform-origin: center;
+}
+
+.arrow.expanded {
+  transform: rotate(90deg);
+}
+
+/* Sub Menu */
+.subMenu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 0 0 8px 8px;
+  margin: 0 8px;
+  overflow: hidden;
+}
+
+.subItem {
+  border-left: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.subLink {
+  display: block;
+  padding: 0.5rem 0.75rem 0.5rem 2.5rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+  border-radius: 0 4px 4px 0;
+}
+
+.subLink:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.subLink.active {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: white;
+  border-left-color: #fbbf24;
+}
+
+/* Footer */
+.footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.statusIndicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 240px;
+  }
+
+  .logoLink {
+    font-size: 1.1rem;
+  }
+
+  .label {
+    font-size: 0.85rem;
+  }
+
+  .subLink {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .sidebar {
+    position: static;
+    height: auto;
+    width: 100%;
+    box-shadow: none;
+  }
+
+  .navList {
+    display: flex;
+    overflow-x: auto;
+    padding: 0 1rem;
+    gap: 1rem;
+  }
+
+  .navItem {
+    min-width: max-content;
+    margin-bottom: 0;
+  }
+
+  .navLink {
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .expandableLink,
+  .link {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .subMenu {
+    display: none;
+  }
+
+  .footer {
+    display: none;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .sidebar {
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  }
+}
+
+/* Focus states for accessibility */
+.navLink:focus,
+.subLink:focus {
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+}

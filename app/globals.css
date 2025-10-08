@@ -1,3 +1,10 @@
+/* stylelint-disable-next-line at-rule-no-unknown */
+@tailwind base;
+/* stylelint-disable-next-line at-rule-no-unknown */
+@tailwind components;
+/* stylelint-disable-next-line at-rule-no-unknown */
+@tailwind utilities;
+
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
@@ -125,31 +132,31 @@ a {
 
 /* Dark Theme (Professional Dark) */
 [data-theme="dark"] {
-  --brand-primary: #2d4a2b;
-  --brand-primary-alt: #4a6b47;
-  --brand-secondary: #5a8a4f;
-  --brand-dark: #1a2419;
+  --brand-primary: #4a6b47;
+  --brand-primary-alt: #5a8a4f;
+  --brand-secondary: #7fb069;
+  --brand-dark: #0d0d0d;
   --brand-white: #ffffff;
-  --mint-highlight: #7fb069;
-  --emerald-focus: #5a8a4f;
+  --mint-highlight: #8fc77a;
+  --emerald-focus: #6a9a5f;
 
-  --brand-primary-rgb: 45, 74, 43;
-  --brand-primary-alt-rgb: 74, 107, 71;
-  --brand-secondary-rgb: 90, 138, 79;
-  --brand-dark-rgb: 26, 36, 25;
+  --brand-primary-rgb: 74, 107, 71;
+  --brand-primary-alt-rgb: 90, 138, 79;
+  --brand-secondary-rgb: 127, 176, 105;
+  --brand-dark-rgb: 13, 13, 13;
   --brand-white-rgb: 255, 255, 255;
-  --mint-highlight-rgb: 127, 176, 105;
-  --emerald-focus-rgb: 90, 138, 79;
+  --mint-highlight-rgb: 143, 199, 122;
+  --emerald-focus-rgb: 106, 154, 95;
 
-  /* Dark theme variables */
-  --bg-primary: var(--brand-dark);
-  --bg-secondary: var(--charcoal);
-  --bg-elevated: var(--slate);
-  --text-primary: var(--off-white);
-  --text-secondary: var(--fog);
-  --text-tertiary: var(--mist);
-  --border-color: var(--ash);
-  --hover-bg: rgba(var(--brand-primary-rgb), 0.1);
+  /* Dark theme variables - Enhanced contrast */
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --bg-elevated: #2a2a2a;
+  --text-primary: #f0f0f0;
+  --text-secondary: #b8b8b8;
+  --text-tertiary: #909090;
+  --border-color: #404040;
+  --hover-bg: rgba(var(--brand-primary-rgb), 0.15);
 }
 
 /* Apply theme to body */

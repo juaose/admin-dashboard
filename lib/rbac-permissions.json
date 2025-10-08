@@ -1,0 +1,178 @@
+{
+  "_comment": "IMPORTANT: Operation names must match PlayerOperation enum VALUES (lowercase with underscores). The buildPermissionMatrix() function validates these at runtime.",
+  "metadata": {
+    "version": "1.0.0",
+    "lastUpdated": "2025-10-06T09:04:00Z",
+    "description": "RBAC Permission Matrix for Admin Dashboard",
+    "environment": "production",
+    "author": "Admin Dashboard Team"
+  },
+  "roles": {
+    "admin": {
+      "displayName": "Administrador",
+      "description": "Acceso completo al sistema con todas las operaciones disponibles",
+      "isActive": true,
+      "level": 3
+    },
+    "treasury": {
+      "displayName": "Tesorería",
+      "description": "Operaciones financieras, gestión de cuentas bancarias y jugadores",
+      "isActive": true,
+      "level": 2
+    },
+    "store_manager": {
+      "displayName": "Gerente de Puesto",
+      "description": "Gestión básica de jugadores sin acceso a operaciones financieras sensibles",
+      "isActive": true,
+      "level": 1
+    }
+  },
+  "operations": {
+    "update_codename": {
+      "displayName": "Actualizar Insignia",
+      "description": "Modificar la insignia/codename de un jugador",
+      "riskLevel": "low"
+    },
+    "update_notes": {
+      "displayName": "Actualizar Notas",
+      "description": "Modificar notas de servicio al cliente",
+      "riskLevel": "low"
+    },
+    "update_sinpe": {
+      "displayName": "Actualizar SINPE",
+      "description": "Modificar número SINPE del jugador",
+      "riskLevel": "medium"
+    },
+    "update_whatsapp": {
+      "displayName": "Actualizar WhatsApp",
+      "description": "Modificar número WhatsApp del jugador",
+      "riskLevel": "medium"
+    },
+    "update_withdrawal_instructions": {
+      "displayName": "Actualizar Instrucciones de Retiro",
+      "description": "Modificar instrucciones de tesorería para retiros",
+      "riskLevel": "medium"
+    },
+    "change_shop": {
+      "displayName": "Cambiar Puesto",
+      "description": "Reasignar jugador a otro puesto (afecta comisiones)",
+      "riskLevel": "high"
+    },
+    "add_bank_account": {
+      "displayName": "Agregar Cuenta Bancaria",
+      "description": "Añadir nueva cuenta bancaria al jugador",
+      "riskLevel": "high"
+    },
+    "delete_bank_account": {
+      "displayName": "Eliminar Cuenta Bancaria",
+      "description": "Remover cuenta bancaria del jugador",
+      "riskLevel": "high"
+    },
+    "toggle_bank_account_status": {
+      "displayName": "Activar/Desactivar Cuenta",
+      "description": "Cambiar estado activo/inactivo de cuenta bancaria",
+      "riskLevel": "medium"
+    },
+    "toggle_bank_account_favorite": {
+      "displayName": "Marcar Cuenta Favorita",
+      "description": "Establecer cuenta bancaria como favorita",
+      "riskLevel": "low"
+    },
+    "add_host_account": {
+      "displayName": "Agregar Cuenta Host",
+      "description": "Añadir cuenta de recepción autorizada",
+      "riskLevel": "high"
+    },
+    "remove_host_account": {
+      "displayName": "Remover Cuenta Host",
+      "description": "Quitar cuenta de recepción autorizada",
+      "riskLevel": "high"
+    },
+    "toggle_auto_recarga": {
+      "displayName": "Bot de Recargas Automáticas",
+      "description": "Activar/desactivar sistema de recargas automáticas",
+      "riskLevel": "medium"
+    },
+    "add_footprint": {
+      "displayName": "Agregar Huella de Depósito",
+      "description": "Añadir patrón de depósito del jugador",
+      "riskLevel": "low"
+    },
+    "remove_footprint": {
+      "displayName": "Remover Huella de Depósito",
+      "description": "Quitar patrón de depósito del jugador",
+      "riskLevel": "low"
+    },
+    "set_footprints": {
+      "displayName": "Establecer Huellas de Depósito",
+      "description": "Configurar conjunto completo de patrones de depósito",
+      "riskLevel": "medium"
+    },
+    "add_authorized_account": {
+      "displayName": "Agregar Cuenta Autorizada",
+      "description": "Añadir cuenta autorizada para recibir recargas",
+      "riskLevel": "high"
+    },
+    "remove_authorized_account": {
+      "displayName": "Remover Cuenta Autorizada",
+      "description": "Quitar cuenta autorizada para recibir recargas",
+      "riskLevel": "high"
+    },
+    "set_authorized_accounts": {
+      "displayName": "Establecer Cuentas Autorizadas",
+      "description": "Configurar conjunto completo de cuentas autorizadas",
+      "riskLevel": "high"
+    }
+  },
+  "rolePermissions": {
+    "admin": [
+      "update_codename",
+      "update_notes",
+      "update_sinpe",
+      "update_whatsapp",
+      "update_withdrawal_instructions",
+      "change_shop",
+      "add_bank_account",
+      "delete_bank_account",
+      "toggle_bank_account_status",
+      "toggle_bank_account_favorite",
+      "add_host_account",
+      "remove_host_account",
+      "toggle_auto_recarga",
+      "add_footprint",
+      "remove_footprint",
+      "set_footprints",
+      "add_authorized_account",
+      "remove_authorized_account",
+      "set_authorized_accounts"
+    ],
+    "treasury": [
+      "update_codename",
+      "update_notes",
+      "update_sinpe",
+      "update_whatsapp",
+      "update_withdrawal_instructions",
+      "add_bank_account",
+      "delete_bank_account",
+      "toggle_bank_account_status",
+      "toggle_bank_account_favorite",
+      "add_host_account",
+      "remove_host_account",
+      "toggle_auto_recarga",
+      "add_footprint",
+      "remove_footprint",
+      "set_footprints"
+    ],
+    "store_manager": [
+      "update_codename",
+      "update_notes",
+      "update_sinpe",
+      "update_whatsapp",
+      "update_withdrawal_instructions",
+      "toggle_auto_recarga",
+      "add_footprint",
+      "remove_footprint",
+      "set_footprints"
+    ]
+  }
+}

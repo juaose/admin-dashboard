@@ -38,6 +38,14 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   // Apply theme to document and save to localStorage
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
+
+    // Toggle Tailwind dark mode class
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+
     localStorage.setItem("app-theme", theme);
   }, [theme]);
 
