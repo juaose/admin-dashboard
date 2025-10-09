@@ -19,3 +19,17 @@ if (
     },
   });
 }
+
+// Use existing pool only in production
+if (
+  process.env.NODE_ENV?.toLowerCase() === "dev" ||
+  process.env.NODE_ENV?.toLowerCase() === "development"
+) {
+  backend.addOutput({
+    auth: {
+      user_pool_id: process.env.DEVELOPMENT_USER_POOL_ID!,
+      user_pool_client_id: process.env.DEVELOPMENT_USER_POOL_CLIENT_ID!,
+      aws_region: process.env.AWS_REGION || "us-east-1",
+    },
+  });
+}
