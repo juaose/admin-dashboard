@@ -1,0 +1,848 @@
+2025-10-09T18:52:35.970Z [INFO]: # Build environment configured with Standard build compute type: 8GiB Memory, 4vCPUs, 128GB Disk Space
+2025-10-09T18:52:36.432Z [INFO]: # Cloning repository: git@github.com:juaose/admin-dashboard.git
+2025-10-09T18:52:37.325Z [INFO]: 
+2025-10-09T18:52:37.325Z [INFO]: Cloning into 'admin-dashboard'...
+2025-10-09T18:52:37.326Z [INFO]: # Switching to commit: dd8247d82cd4b0d972b4029e75b5a6c748af55dd
+2025-10-09T18:52:37.363Z [INFO]: Note: switching to 'dd8247d82cd4b0d972b4029e75b5a6c748af55dd'.
+                                 You are in 'detached HEAD' state. You can look around, make experimental
+                                 changes and commit them, and you can discard any commits you make in this
+                                 state without impacting any branches by switching back to a branch.
+                                 If you want to create a new branch to retain commits you create, you may
+                                 do so (now or later) by using -c with the switch command. Example:
+                                 git switch -c <new-branch-name>
+                                 Or undo this operation with:
+                                 git switch -
+                                 Turn off this advice by setting config variable advice.detachedHead to false
+                                 HEAD is now at dd8247d chore: update dependencies for lotto packages and build log
+2025-10-09T18:52:37.420Z [INFO]: Successfully cleaned up Git credentials
+2025-10-09T18:52:37.420Z [INFO]: # Checking for Git submodules at: /codebuild/output/src2894038025/src/admin-dashboard/.gitmodules
+2025-10-09T18:52:37.430Z [INFO]: # Retrieving environment cache...
+2025-10-09T18:52:37.525Z [INFO]: # Retrieved environment cache
+2025-10-09T18:52:37.526Z [INFO]: ---- Setting Up SSM Secrets ----
+2025-10-09T18:52:37.526Z [INFO]: SSM params {"Path":"/amplify/dfihv4zw0wt9e/master/","WithDecryption":true}
+2025-10-09T18:52:38.449Z [INFO]: # No package override configuration found.
+2025-10-09T18:52:38.454Z [INFO]: # Retrieving cache...
+2025-10-09T18:53:13.055Z [INFO]: # Extracting cache...
+2025-10-09T18:54:00.519Z [INFO]: # Extraction completed
+2025-10-09T18:54:00.792Z [INFO]: # Retrieved cache
+2025-10-09T18:54:05.279Z [INFO]: ## Starting Backend Build
+                                 # Starting phase: preBuild
+                                 # Executing command: nvm use 20
+2025-10-09T18:54:12.693Z [INFO]: Now using node v20.19.4 (npm v10.8.2)
+2025-10-09T18:54:12.698Z [INFO]: # Executing command: node --version
+2025-10-09T18:54:12.706Z [INFO]: v20.19.4
+                                 # Executing command: npm --version
+2025-10-09T18:54:12.793Z [INFO]: 10.8.2
+2025-10-09T18:54:12.797Z [INFO]: # Completed phase: preBuild
+                                 # Starting phase: build
+2025-10-09T18:54:12.797Z [INFO]: # Executing command: envsubst < .npmrc.template > .npmrc
+2025-10-09T18:54:12.800Z [INFO]: # Executing command: npm install --cache .npm --prefer-offline
+2025-10-09T18:54:26.054Z [WARNING]: npm warn ERESOLVE overriding peer dependency
+2025-10-09T18:54:26.061Z [WARNING]: npm warn While resolving: @aws-amplify/plugin-types@1.10.1
+                                    npm warn Found: @aws-sdk/types@3.821.0
+                                    npm warn node_modules/@aws-amplify/data-construct/node_modules/@aws-amplify/ai-constructs/node_modules/@aws-amplify/plugin-types/node_modules/@aws-sdk/types
+                                    npm warn
+                                    npm warn Could not resolve dependency:
+                                    npm warn peer @aws-sdk/types@"^3.734.0" from @aws-amplify/plugin-types@1.10.1
+                                    npm warn node_modules/@aws-amplify/data-construct/node_modules/@aws-amplify/ai-constructs/node_modules/@aws-amplify/plugin-types
+                                    npm warn   @aws-amplify/plugin-types@"^1.10.1" from @aws-amplify/ai-constructs@1.5.3
+                                    npm warn   node_modules/@aws-amplify/data-construct/node_modules/@aws-amplify/ai-constructs
+2025-10-09T18:54:26.205Z [WARNING]: npm warn ERESOLVE overriding peer dependency
+2025-10-09T18:54:26.205Z [WARNING]: npm warn While resolving: @aws-amplify/plugin-types@1.10.1
+                                    npm warn Found: @aws-sdk/types@3.821.0
+                                    npm warn node_modules/@aws-amplify/graphql-api-construct/node_modules/@aws-amplify/ai-constructs/node_modules/@aws-amplify/plugin-types/node_modules/@aws-sdk/types
+                                    npm warn
+                                    npm warn Could not resolve dependency:
+                                    npm warn peer @aws-sdk/types@"^3.734.0" from @aws-amplify/plugin-types@1.10.1
+                                    npm warn node_modules/@aws-amplify/graphql-api-construct/node_modules/@aws-amplify/ai-constructs/node_modules/@aws-amplify/plugin-types
+                                    npm warn   @aws-amplify/plugin-types@"^1.10.1" from @aws-amplify/ai-constructs@1.5.3
+                                    npm warn   node_modules/@aws-amplify/graphql-api-construct/node_modules/@aws-amplify/ai-constructs
+2025-10-09T18:54:50.611Z [INFO]: added 381 packages, removed 124 packages, changed 301 packages, and audited 2834 packages in 38s
+2025-10-09T18:54:50.618Z [INFO]: 245 packages are looking for funding
+                                 run `npm fund` for details
+                                 found 0 vulnerabilities
+2025-10-09T18:54:50.644Z [INFO]: # Executing command: npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
+2025-10-09T18:54:55.074Z [INFO]: 6:54:54 PM Synthesizing backend...
+2025-10-09T18:54:55.079Z [INFO]: 
+2025-10-09T18:54:56.856Z [WARNING]: Bundling asset amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2/AmplifyBranchLinker/CustomResourceLambda/Code/Stage...
+2025-10-09T18:54:57.239Z [WARNING]: ...e5f306947b2b3d4149d85467eb871912382c1a868194c1-building/index.js  931.5kb
+                                    ⚡ Done in 72ms
+2025-10-09T18:54:57.566Z [INFO]: 6:54:57 PM ✔ Backend synthesized in 2.83 seconds
+2025-10-09T18:54:57.566Z [INFO]: 6:54:57 PM Running type checks...
+2025-10-09T18:54:58.365Z [INFO]: 6:54:58 PM ✔ Type checks completed in 0.79 seconds
+2025-10-09T18:54:58.371Z [INFO]: 6:54:58 PM Building and publishing assets...
+2025-10-09T18:54:58.371Z [INFO]: 
+2025-10-09T18:54:58.749Z [INFO]: 6:54:58 PM ✔ Built and published assets
+2025-10-09T18:55:01.773Z [INFO]: amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2 |   0 | 6:54:59 PM | UPDATE_IN_PROGRESS | AWS::CloudFormation::Stack | amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2 User Initiated
+2025-10-09T18:55:03.863Z [INFO]: amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2 |   0 | 6:55:03 PM | UPDATE_IN_PROGRESS | AWS::CloudFormation::Stack | auth.NestedStack/auth.NestedStackResource (auth179371D7)
+2025-10-09T18:55:05.952Z [INFO]: amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2 |   1 | 6:55:04 PM | UPDATE_COMPLETE | AWS::CloudFormation::Stack | auth.NestedStack/auth.NestedStackResource (auth179371D7)
+2025-10-09T18:55:05.957Z [INFO]: amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2 |   2 | 6:55:05 PM | UPDATE_COMPLETE_CLEANUP_IN_PROGRESS | AWS::CloudFormation::Stack | amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2
+2025-10-09T18:55:08.043Z [INFO]: amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2 |   1 | 6:55:06 PM | UPDATE_COMPLETE | AWS::CloudFormation::Stack | auth.NestedStack/auth.NestedStackResource (auth179371D7)
+2025-10-09T18:55:08.043Z [INFO]: amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2 |   2 | 6:55:07 PM | UPDATE_COMPLETE | AWS::CloudFormation::Stack | amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2
+2025-10-09T18:55:09.865Z [INFO]: 6:55:09 PM ✔ Deployment completed in 11.116 seconds
+2025-10-09T18:55:10.106Z [INFO]: 6:55:10 PM File written: amplify_outputs.json
+2025-10-09T18:55:10.345Z [INFO]: # Completed phase: build
+                                 ## Completed Backend Build
+2025-10-09T18:55:10.351Z [INFO]: ## Starting Frontend Build
+                                 # Starting phase: preBuild
+                                 # Executing command: nvm use 20
+2025-10-09T18:55:10.561Z [INFO]: Now using node v20.19.4 (npm v10.8.2)
+2025-10-09T18:55:10.562Z [INFO]: # Executing command: node --version
+2025-10-09T18:55:10.565Z [INFO]: v20.19.4
+2025-10-09T18:55:10.566Z [INFO]: # Executing command: npm --version
+2025-10-09T18:55:10.659Z [INFO]: 10.8.2
+2025-10-09T18:55:10.662Z [INFO]: # Executing command: envsubst < .npmrc.template > .npmrc
+2025-10-09T18:55:10.664Z [INFO]: # Completed phase: preBuild
+                                 # Starting phase: build
+2025-10-09T18:55:10.664Z [INFO]: # Executing command: npm install --cache .npm --prefer-offline
+2025-10-09T18:55:14.133Z [WARNING]: npm warn ERESOLVE overriding peer dependency
+2025-10-09T18:55:14.140Z [WARNING]: npm warn While resolving: @aws-amplify/plugin-types@1.10.1
+                                    npm warn Found: @aws-sdk/types@3.821.0
+                                    npm warn node_modules/@aws-amplify/data-construct/node_modules/@aws-amplify/ai-constructs/node_modules/@aws-amplify/plugin-types/node_modules/@aws-sdk/types
+                                    npm warn
+                                    npm warn Could not resolve dependency:
+                                    npm warn peer @aws-sdk/types@"^3.734.0" from @aws-amplify/plugin-types@1.10.1
+                                    npm warn node_modules/@aws-amplify/data-construct/node_modules/@aws-amplify/ai-constructs/node_modules/@aws-amplify/plugin-types
+                                    npm warn   @aws-amplify/plugin-types@"^1.10.1" from @aws-amplify/ai-constructs@1.5.3
+                                    npm warn   node_modules/@aws-amplify/data-construct/node_modules/@aws-amplify/ai-constructs
+2025-10-09T18:55:14.288Z [WARNING]: npm warn ERESOLVE overriding peer dependency
+2025-10-09T18:55:14.288Z [WARNING]: npm warn While resolving: @aws-amplify/plugin-types@1.10.1
+                                    npm warn Found: @aws-sdk/types@3.821.0
+                                    npm warn node_modules/@aws-amplify/graphql-api-construct/node_modules/@aws-amplify/ai-constructs/node_modules/@aws-amplify/plugin-types/node_modules/@aws-sdk/types
+                                    npm warn
+                                    npm warn Could not resolve dependency:
+                                    npm warn peer @aws-sdk/types@"^3.734.0" from @aws-amplify/plugin-types@1.10.1
+                                    npm warn node_modules/@aws-amplify/graphql-api-construct/node_modules/@aws-amplify/ai-constructs/node_modules/@aws-amplify/plugin-types
+                                    npm warn   @aws-amplify/plugin-types@"^1.10.1" from @aws-amplify/ai-constructs@1.5.3
+                                    npm warn   node_modules/@aws-amplify/graphql-api-construct/node_modules/@aws-amplify/ai-constructs
+2025-10-09T18:55:17.486Z [INFO]: up to date, audited 2834 packages in 7s
+2025-10-09T18:55:17.492Z [INFO]: 245 packages are looking for funding
+                                 run `npm fund` for details
+                                 found 0 vulnerabilities
+2025-10-09T18:55:17.504Z [INFO]: # Executing command: npm run build
+2025-10-09T18:55:17.629Z [INFO]: > admin-dashboard@1.0.0 build
+                                 > next build
+2025-10-09T18:55:18.247Z [INFO]: ▲ Next.js 14.2.33
+2025-10-09T18:55:18.247Z [INFO]: 
+2025-10-09T18:55:18.262Z [INFO]: Creating an optimized production build ...
+2025-10-09T18:55:58.413Z [INFO]: ✓ Compiled successfully
+2025-10-09T18:55:58.419Z [INFO]: Linting and checking validity of types ...
+2025-10-09T18:56:05.105Z [INFO]: Collecting page data ...
+2025-10-09T18:56:05.609Z [INFO]: ✅ RBAC matrix loaded: 19 operations
+2025-10-09T18:56:05.898Z [INFO]: ✅ All required environment variables are set for module: lotto-core
+2025-10-09T18:56:07.604Z [INFO]: Generating static pages (0/11) ...
+2025-10-09T18:56:08.039Z [INFO]: Invoking Lambda: lotto-backend-dev-getPhoneLines
+                                 Invoking Lambda: lotto-backend-dev-getHostAccounts
+                                 Generating static pages (2/11)
+2025-10-09T18:56:08.039Z [WARNING]: Error invoking Lambda getHostAccounts: AccessDeniedException: User: arn:aws:sts::681730164872:assumed-role/AmplifySSRLoggingRole-73448f9b-43e4-4337-b470-e6aa7ded042f/BuildSession is not authorized to perform: lambda:InvokeFunction on resource: arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getHostAccounts because no identity-based policy allows the lambda:InvokeFunction action
+                                    at a (/codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:26:19400)
+                                    at /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:26:19545
+                                    at ei (/codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:9:36989)
+                                    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:24:42214
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:24:23472
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:24:40963
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:24:8299
+                                    at async n (/codebuild/output/src2894038025/src/admin-dashboard/.next/server/app/api/directorios/cuentas/route.js:1:2475)
+                                    at async c (/codebuild/output/src2894038025/src/admin-dashboard/.next/server/app/api/directorios/cuentas/route.js:1:1123) {
+                                    '$fault': 'client',
+                                    '$response': n {
+                                    statusCode: 403,
+                                    reason: 'Forbidden',
+                                    headers: {
+                                    date: 'Thu, 09 Oct 2025 18:56:07 GMT',
+                                    'content-type': 'application/json',
+                                    'content-length': '349',
+                                    connection: 'keep-alive',
+                                    'x-amzn-requestid': '55666c5e-9f93-4537-9222-c190dda70c6b',
+                                    'x-amzn-errortype': 'AccessDeniedException'
+                                    },
+                                    body: IncomingMessage {
+                                    _events: [Object],
+                                    _readableState: [ReadableState],
+                                    _maxListeners: undefined,
+                                    socket: null,
+                                    httpVersionMajor: 1,
+                                    httpVersionMinor: 1,
+                                    httpVersion: '1.1',
+                                    complete: true,
+                                    rawHeaders: [Array],
+                                    rawTrailers: [],
+                                    joinDuplicateHeaders: undefined,
+                                    aborted: false,
+                                    upgrade: false,
+                                    url: '',
+                                    method: null,
+                                    statusCode: 403,
+                                    statusMessage: 'Forbidden',
+                                    client: [TLSSocket],
+                                    _consuming: false,
+                                    _dumped: false,
+                                    req: [ClientRequest],
+                                    _eventsCount: 2,
+                                    [Symbol(shapeMode)]: true,
+                                    [Symbol(kCapture)]: false,
+                                    [Symbol(kHeaders)]: [Object],
+                                    [Symbol(kHeadersCount)]: 12,
+                                    [Symbol(kTrailers)]: null,
+                                    [Symbol(kTrailersCount)]: 0
+                                    }
+                                    },
+                                    '$retryable': undefined,
+                                    '$metadata': {
+                                    httpStatusCode: 403,
+                                    requestId: '55666c5e-9f93-4537-9222-c190dda70c6b',
+                                    extendedRequestId: undefined,
+                                    cfId: undefined,
+                                    attempts: 1,
+                                    totalRetryDelay: 0
+                                    }
+                                    }
+                                    Error fetching host accounts: AccessDeniedException: User: arn:aws:sts::681730164872:assumed-role/AmplifySSRLoggingRole-73448f9b-43e4-4337-b470-e6aa7ded042f/BuildSession is not authorized to perform: lambda:InvokeFunction on resource: arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getHostAccounts because no identity-based policy allows the lambda:InvokeFunction action
+                                    at a (/codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:26:19400)
+                                    at /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:26:19545
+                                    at ei (/codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:9:36989)
+                                    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:24:42214
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:24:23472
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:24:40963
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:24:8299
+                                    at async n (/codebuild/output/src2894038025/src/admin-dashboard/.next/server/app/api/directorios/cuentas/route.js:1:2475)
+                                    at async c (/codebuild/output/src2894038025/src/admin-dashboard/.next/server/app/api/directorios/cuentas/route.js:1:1123) {
+                                    '$fault': 'client',
+                                    '$response': n {
+                                    statusCode: 403,
+                                    reason: 'Forbidden',
+                                    headers: {
+                                    date: 'Thu, 09 Oct 2025 18:56:07 GMT',
+                                    'content-type': 'application/json',
+                                    'content-length': '349',
+                                    connection: 'keep-alive',
+                                    'x-amzn-requestid': '55666c5e-9f93-4537-9222-c190dda70c6b',
+                                    'x-amzn-errortype': 'AccessDeniedException'
+                                    },
+                                    body: IncomingMessage {
+                                    _events: [Object],
+                                    _readableState: [ReadableState],
+                                    _maxListeners: undefined,
+                                    socket: null,
+                                    httpVersionMajor: 1,
+                                    httpVersionMinor: 1,
+                                    httpVersion: '1.1',
+                                    complete: true,
+                                    rawHeaders: [Array],
+                                    rawTrailers: [],
+                                    joinDuplicateHeaders: undefined,
+                                    aborted: false,
+                                    upgrade: false,
+                                    url: '',
+                                    method: null,
+                                    statusCode: 403,
+                                    statusMessage: 'Forbidden',
+                                    client: [TLSSocket],
+                                    _consuming: false,
+                                    _dumped: false,
+                                    req: [ClientRequest],
+                                    _eventsCount: 2,
+                                    [Symbol(shapeMode)]: true,
+                                    [Symbol(kCapture)]: false,
+                                    [Symbol(kHeaders)]: [Object],
+                                    [Symbol(kHeadersCount)]: 12,
+                                    [Symbol(kTrailers)]: null,
+                                    [Symbol(kTrailersCount)]: 0
+                                    }
+                                    },
+                                    '$retryable': undefined,
+                                    '$metadata': {
+                                    httpStatusCode: 403,
+                                    requestId: '55666c5e-9f93-4537-9222-c190dda70c6b',
+                                    extendedRequestId: undefined,
+                                    cfId: undefined,
+                                    attempts: 1,
+                                    totalRetryDelay: 0
+                                    }
+                                    }
+                                    Error invoking Lambda getPhoneLines: AccessDeniedException: User: arn:aws:sts::681730164872:assumed-role/AmplifySSRLoggingRole-73448f9b-43e4-4337-b470-e6aa7ded042f/BuildSession is not authorized to perform: lambda:InvokeFunction on resource: arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getPhoneLines because no identity-based policy allows the lambda:InvokeFunction action
+                                    at a (/codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:26:19400)
+                                    at /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:26:19545
+                                    at ei (/codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:9:36989)
+                                    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:24:42214
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:24:23472
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:24:40963
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:24:8299
+                                    at async n (/codebuild/output/src2894038025/src/admin-dashboard/.next/server/app/api/directorios/cuentas/[bankId]/route.js:1:2698)
+                                    at async p (/codebuild/output/src2894038025/src/admin-dashboard/.next/server/app/api/directorios/telefonos/route.js:1:1122) {
+                                    '$fault': 'client',
+                                    '$response': n {
+                                    statusCode: 403,
+                                    reason: 'Forbidden',
+                                    headers: {
+                                    date: 'Thu, 09 Oct 2025 18:56:07 GMT',
+                                    'content-type': 'application/json',
+                                    'content-length': '347',
+                                    connection: 'keep-alive',
+                                    'x-amzn-requestid': '584238de-3cf6-4597-a805-ce6676151d2c',
+                                    'x-amzn-errortype': 'AccessDeniedException'
+                                    },
+                                    body: IncomingMessage {
+                                    _events: [Object],
+                                    _readableState: [ReadableState],
+                                    _maxListeners: undefined,
+                                    socket: null,
+                                    httpVersionMajor: 1,
+                                    httpVersionMinor: 1,
+                                    httpVersion: '1.1',
+                                    complete: true,
+                                    rawHeaders: [Array],
+                                    rawTrailers: [],
+                                    joinDuplicateHeaders: undefined,
+                                    aborted: false,
+                                    upgrade: false,
+                                    url: '',
+                                    method: null,
+                                    statusCode: 403,
+                                    statusMessage: 'Forbidden',
+                                    client: [TLSSocket],
+                                    _consuming: false,
+                                    _dumped: false,
+                                    req: [ClientRequest],
+                                    _eventsCount: 2,
+                                    [Symbol(shapeMode)]: true,
+                                    [Symbol(kCapture)]: false,
+                                    [Symbol(kHeaders)]: [Object],
+                                    [Symbol(kHeadersCount)]: 12,
+                                    [Symbol(kTrailers)]: null,
+                                    [Symbol(kTrailersCount)]: 0
+                                    }
+                                    },
+                                    '$retryable': undefined,
+                                    '$metadata': {
+                                    httpStatusCode: 403,
+                                    requestId: '584238de-3cf6-4597-a805-ce6676151d2c',
+                                    extendedRequestId: undefined,
+                                    cfId: undefined,
+                                    attempts: 1,
+                                    totalRetryDelay: 0
+                                    }
+                                    }
+                                    Error fetching phone lines: AccessDeniedException: User: arn:aws:sts::681730164872:assumed-role/AmplifySSRLoggingRole-73448f9b-43e4-4337-b470-e6aa7ded042f/BuildSession is not authorized to perform: lambda:InvokeFunction on resource: arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getPhoneLines because no identity-based policy allows the lambda:InvokeFunction action
+                                    at a (/codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:26:19400)
+                                    at /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:26:19545
+                                    at ei (/codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:9:36989)
+                                    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:24:42214
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:24:23472
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:24:40963
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/.next/server/chunks/8524.js:24:8299
+                                    at async n (/codebuild/output/src2894038025/src/admin-dashboard/.next/server/app/api/directorios/cuentas/[bankId]/route.js:1:2698)
+                                    at async p (/codebuild/output/src2894038025/src/admin-dashboard/.next/server/app/api/directorios/telefonos/route.js:1:1122) {
+                                    '$fault': 'client',
+                                    '$response': n {
+                                    statusCode: 403,
+                                    reason: 'Forbidden',
+                                    headers: {
+                                    date: 'Thu, 09 Oct 2025 18:56:07 GMT',
+                                    'content-type': 'application/json',
+                                    'content-length': '347',
+                                    connection: 'keep-alive',
+                                    'x-amzn-requestid': '584238de-3cf6-4597-a805-ce6676151d2c',
+                                    'x-amzn-errortype': 'AccessDeniedException'
+                                    },
+                                    body: IncomingMessage {
+                                    _events: [Object],
+                                    _readableState: [ReadableState],
+                                    _maxListeners: undefined,
+                                    socket: null,
+                                    httpVersionMajor: 1,
+                                    httpVersionMinor: 1,
+                                    httpVersion: '1.1',
+                                    complete: true,
+                                    rawHeaders: [Array],
+                                    rawTrailers: [],
+                                    joinDuplicateHeaders: undefined,
+                                    aborted: false,
+                                    upgrade: false,
+                                    url: '',
+                                    method: null,
+                                    statusCode: 403,
+                                    statusMessage: 'Forbidden',
+                                    client: [TLSSocket],
+                                    _consuming: false,
+                                    _dumped: false,
+                                    req: [ClientRequest],
+                                    _eventsCount: 2,
+                                    [Symbol(shapeMode)]: true,
+                                    [Symbol(kCapture)]: false,
+                                    [Symbol(kHeaders)]: [Object],
+                                    [Symbol(kHeadersCount)]: 12,
+                                    [Symbol(kTrailers)]: null,
+                                    [Symbol(kTrailersCount)]: 0
+                                    }
+                                    },
+                                    '$retryable': undefined,
+                                    '$metadata': {
+                                    httpStatusCode: 403,
+                                    requestId: '584238de-3cf6-4597-a805-ce6676151d2c',
+                                    extendedRequestId: undefined,
+                                    cfId: undefined,
+                                    attempts: 1,
+                                    totalRetryDelay: 0
+                                    }
+                                    }
+2025-10-09T18:56:08.256Z [INFO]: Generating static pages (5/11)
+2025-10-09T18:56:08.660Z [INFO]: Generating static pages (8/11)
+2025-10-09T18:56:09.012Z [INFO]: ✅ All required environment variables are set for module: lotto-core
+2025-10-09T18:56:09.102Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.100:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+                                    [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.100:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:09.102Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.100:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:12.193Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.58:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+                                    [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.40:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:12.222Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.104:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+                                    [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.110:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:15.276Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:15.373Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.36:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:15.378Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.54:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+                                    [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:18.903Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.58:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+                                    [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.110:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:18.908Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.40:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+                                    [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.100:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:21.597Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.104:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:21.853Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+                                    [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:21.854Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.36:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:24.852Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.40:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:24.856Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.40:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:25.176Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.104:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:25.176Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:28.180Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.100:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:28.212Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.54:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:28.532Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.36:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:28.532Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:31.540Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.58:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:31.636Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.110:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:31.956Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.40:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:31.956Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:34.964Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.104:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:35.092Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.100:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:35.412Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:35.412Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.54:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:38.420Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.36:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:38.612Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.58:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:38.932Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.110:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:38.932Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+                                    [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.110:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:42.164Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.104:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:42.484Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.110:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:42.516Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.40:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:42.516Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.36:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:45.780Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.100:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:46.100Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.58:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:46.132Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:46.132Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:49.460Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.54:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:49.780Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.104:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:49.812Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.36:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:49.812Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.110:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:53.172Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.40:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:53.492Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.100:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:53.524Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:53.524Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.58:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:56.948Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:56.952Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:57.268Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.58:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:56:57.300Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:00.756Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.100:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:00.760Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.54:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:01.076Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.36:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:01.108Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.40:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:04.628Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.110:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:04.633Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.104:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:04.948Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.58:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:04.980Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:08.532Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:08.536Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.100:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:08.661Z [WARNING]: ⚠ Sending SIGTERM signal to Next.js build worker due to timeout of 60 seconds. Subsequent errors may be a result of the worker exiting.
+2025-10-09T18:57:08.852Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.54:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:08.884Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.36:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:09.167Z [WARNING]: ⨯ Next.js build worker exited with code: null and signal: SIGTERM
+2025-10-09T18:57:09.168Z [WARNING]: ⨯ Next.js build worker exited with code: null and signal: SIGTERM
+2025-10-09T18:57:09.184Z [WARNING]: ⚠ Restarted static page generation for /api/admins/shops because it took more than 60 seconds
+2025-10-09T18:57:09.184Z [WARNING]: ⚠ See more info here https://nextjs.org/docs/messages/static-page-generation-timeout
+2025-10-09T18:57:09.586Z [INFO]: ✅ All required environment variables are set for module: lotto-core
+2025-10-09T18:57:12.725Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:12.729Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:15.828Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:15.828Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.40:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:18.996Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.54:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:19.001Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:22.228Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.58:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:22.232Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.100:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:25.492Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.36:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:25.497Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.104:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:28.820Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:28.824Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:32.180Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:32.185Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.104:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:35.604Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.110:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:35.608Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.58:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:39.060Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.100:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:39.064Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.36:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:42.580Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:42.584Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.54:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:46.164Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:46.169Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:49.780Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:49.784Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.54:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:53.460Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.110:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:53.464Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.104:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:57.172Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.40:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:57:57.177Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.58:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:00.948Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.36:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:00.952Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:04.756Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:04.760Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:08.628Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:08.632Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.40:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:09.185Z [WARNING]: ⚠ Sending SIGTERM signal to Next.js build worker due to timeout of 60 seconds. Subsequent errors may be a result of the worker exiting.
+2025-10-09T18:58:09.690Z [WARNING]: ⨯ Next.js build worker exited with code: null and signal: SIGTERM
+2025-10-09T18:58:09.703Z [WARNING]: ⚠ Restarted static page generation for /api/admins/shops because it took more than 60 seconds
+2025-10-09T18:58:10.103Z [INFO]: ✅ All required environment variables are set for module: lotto-core
+2025-10-09T18:58:13.237Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.100:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:13.241Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.104:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:16.340Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.58:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:16.344Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.36:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:19.508Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.100:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:19.513Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.54:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:22.740Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.40:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:22.744Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.40:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:26.004Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.40:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:26.008Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.104:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:29.332Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.110:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:29.336Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:32.692Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:32.696Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.58:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:36.116Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.110:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:36.120Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.110:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:39.572Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.110:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:39.576Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:43.092Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:43.096Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.54:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:46.644Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.58:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:46.648Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.36:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:50.260Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.100:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:50.264Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.104:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:53.940Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.104:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:53.944Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.104:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:57.652Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.104:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:58:57.656Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.110:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:59:01.428Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.58:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:59:01.432Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:59:05.236Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.36:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:59:05.240Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.56:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:59:09.108Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:59:09.114Z [WARNING]: [ioredis] Unhandled error event: Error: connect EHOSTUNREACH 10.0.1.44:6379
+                                    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16)
+                                    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)
+2025-10-09T18:59:09.705Z [WARNING]: ⚠ Sending SIGTERM signal to Next.js build worker due to timeout of 60 seconds. Subsequent errors may be a result of the worker exiting.
+2025-10-09T18:59:10.209Z [WARNING]: ⨯ Next.js build worker exited with code: null and signal: SIGTERM
+2025-10-09T18:59:10.223Z [WARNING]: 
+2025-10-09T18:59:10.223Z [WARNING]: > Build error occurred
+2025-10-09T18:59:10.225Z [WARNING]: Error: Static page generation for /api/admins/shops is still timing out after 3 attempts. See more info here https://nextjs.org/docs/messages/static-page-generation-timeout
+                                    at onRestart (/codebuild/output/src2894038025/src/admin-dashboard/node_modules/next/dist/build/index.js:292:27)
+                                    at /codebuild/output/src2894038025/src/admin-dashboard/node_modules/next/dist/lib/worker.js:104:40
+                                    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/node_modules/next/dist/export/index.js:450:20
+                                    at async Span.traceAsyncFn (/codebuild/output/src2894038025/src/admin-dashboard/node_modules/next/dist/trace/trace.js:154:20)
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/node_modules/next/dist/export/index.js:448:24
+                                    at async Promise.all (index 10)
+                                    at async exportAppImpl (/codebuild/output/src2894038025/src/admin-dashboard/node_modules/next/dist/export/index.js:440:21)
+                                    at async /codebuild/output/src2894038025/src/admin-dashboard/node_modules/next/dist/export/index.js:623:16
+                                    at async Span.traceAsyncFn (/codebuild/output/src2894038025/src/admin-dashboard/node_modules/next/dist/trace/trace.js:154:20)
+2025-10-09T18:59:10.245Z [ERROR]: !!! Build failed
+2025-10-09T18:59:10.245Z [INFO]: Please read more about Amplify Hosting's support for SSR frameworks to find if your build failure is related to an unsupported feature: https://docs.aws.amazon.com/amplify/latest/userguide/amplify-ssr-framework-support.html. You may also find this troubleshooting guide useful: https://docs.aws.amazon.com/amplify/latest/userguide/troubleshooting-ssr-deployment.html
+2025-10-09T18:59:10.245Z [ERROR]: !!! Error: Command failed with exit code 1
+2025-10-09T18:59:10.245Z [INFO]: # Starting environment caching...
+2025-10-09T18:59:10.245Z [INFO]: # Uploading environment cache artifact...
+2025-10-09T18:59:10.333Z [INFO]: # Uploaded environment cache artifact
+2025-10-09T18:59:10.334Z [INFO]: # Environment caching completed
+

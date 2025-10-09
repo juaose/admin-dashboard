@@ -1,0 +1,168 @@
+2025-10-09T16:28:11.220Z [INFO]: # Build environment configured with Standard build compute type: 8GiB Memory, 4vCPUs, 128GB Disk Space
+2025-10-09T16:28:11.706Z [INFO]: # Cloning repository: git@github.com:juaose/admin-dashboard.git
+2025-10-09T16:28:12.548Z [INFO]: 
+2025-10-09T16:28:12.548Z [INFO]: Cloning into 'admin-dashboard'...
+2025-10-09T16:28:12.549Z [INFO]: # Switching to commit: 6a7b9bec363feefbcb7de0d36b62d895ae58d891
+2025-10-09T16:28:12.587Z [INFO]: Note: switching to '6a7b9bec363feefbcb7de0d36b62d895ae58d891'.
+                                 You are in 'detached HEAD' state. You can look around, make experimental
+                                 changes and commit them, and you can discard any commits you make in this
+                                 state without impacting any branches by switching back to a branch.
+                                 If you want to create a new branch to retain commits you create, you may
+                                 do so (now or later) by using -c with the switch command. Example:
+                                 git switch -c <new-branch-name>
+                                 Or undo this operation with:
+                                 git switch -
+                                 Turn off this advice by setting config variable advice.detachedHead to false
+                                 HEAD is now at 6a7b9be Implement feature X to enhance user experience and fix bug Y in module Z
+2025-10-09T16:28:12.641Z [INFO]: Successfully cleaned up Git credentials
+2025-10-09T16:28:12.641Z [INFO]: # Checking for Git submodules at: /codebuild/output/src1875287864/src/admin-dashboard/.gitmodules
+2025-10-09T16:28:12.652Z [INFO]: # Retrieving environment cache...
+2025-10-09T16:28:12.744Z [INFO]: # Retrieved environment cache
+2025-10-09T16:28:12.744Z [INFO]: ---- Setting Up SSM Secrets ----
+2025-10-09T16:28:12.744Z [INFO]: SSM params {"Path":"/amplify/dfihv4zw0wt9e/master/","WithDecryption":true}
+2025-10-09T16:28:13.537Z [INFO]: # No package override configuration found.
+2025-10-09T16:28:13.541Z [INFO]: # Retrieving cache...
+2025-10-09T16:28:49.744Z [INFO]: # Extracting cache...
+2025-10-09T16:29:37.128Z [INFO]: # Extraction completed
+2025-10-09T16:29:37.436Z [INFO]: # Retrieved cache
+2025-10-09T16:29:41.748Z [INFO]: ## Starting Backend Build
+                                 # Starting phase: preBuild
+                                 # Executing command: nvm use 20
+2025-10-09T16:29:49.032Z [INFO]: Now using node v20.19.4 (npm v10.8.2)
+2025-10-09T16:29:49.037Z [INFO]: # Executing command: node --version
+2025-10-09T16:29:49.037Z [INFO]: v20.19.4
+2025-10-09T16:29:49.038Z [INFO]: # Executing command: npm --version
+2025-10-09T16:29:49.131Z [INFO]: 10.8.2
+2025-10-09T16:29:49.135Z [INFO]: # Completed phase: preBuild
+                                 # Starting phase: build
+2025-10-09T16:29:49.135Z [INFO]: # Executing command: envsubst < .npmrc.template > .npmrc
+2025-10-09T16:29:49.167Z [INFO]: # Executing command: npm install --cache .npm --prefer-offline
+2025-10-09T16:30:02.221Z [WARNING]: npm warn ERESOLVE overriding peer dependency
+2025-10-09T16:30:02.227Z [WARNING]: npm warn While resolving: @aws-amplify/plugin-types@1.10.1
+                                    npm warn Found: @aws-sdk/types@3.821.0
+                                    npm warn node_modules/@aws-amplify/data-construct/node_modules/@aws-amplify/ai-constructs/node_modules/@aws-amplify/plugin-types/node_modules/@aws-sdk/types
+                                    npm warn
+                                    npm warn Could not resolve dependency:
+                                    npm warn peer @aws-sdk/types@"^3.734.0" from @aws-amplify/plugin-types@1.10.1
+                                    npm warn node_modules/@aws-amplify/data-construct/node_modules/@aws-amplify/ai-constructs/node_modules/@aws-amplify/plugin-types
+                                    npm warn   @aws-amplify/plugin-types@"^1.10.1" from @aws-amplify/ai-constructs@1.5.3
+                                    npm warn   node_modules/@aws-amplify/data-construct/node_modules/@aws-amplify/ai-constructs
+2025-10-09T16:30:02.345Z [WARNING]: npm warn ERESOLVE overriding peer dependency
+2025-10-09T16:30:02.346Z [WARNING]: npm warn While resolving: @aws-amplify/plugin-types@1.10.1
+                                    npm warn Found: @aws-sdk/types@3.821.0
+                                    npm warn node_modules/@aws-amplify/graphql-api-construct/node_modules/@aws-amplify/ai-constructs/node_modules/@aws-amplify/plugin-types/node_modules/@aws-sdk/types
+                                    npm warn
+                                    npm warn Could not resolve dependency:
+                                    npm warn peer @aws-sdk/types@"^3.734.0" from @aws-amplify/plugin-types@1.10.1
+                                    npm warn node_modules/@aws-amplify/graphql-api-construct/node_modules/@aws-amplify/ai-constructs/node_modules/@aws-amplify/plugin-types
+                                    npm warn   @aws-amplify/plugin-types@"^1.10.1" from @aws-amplify/ai-constructs@1.5.3
+                                    npm warn   node_modules/@aws-amplify/graphql-api-construct/node_modules/@aws-amplify/ai-constructs
+2025-10-09T16:30:07.743Z [INFO]: added 81 packages, removed 10 packages, changed 2 packages, and audited 2713 packages in 19s
+2025-10-09T16:30:07.747Z [INFO]: 250 packages are looking for funding
+                                 run `npm fund` for details
+                                 1 high severity vulnerability
+                                 To address all issues, run:
+                                 npm audit fix
+                                 Run `npm audit` for details.
+2025-10-09T16:30:07.762Z [INFO]: # Executing command: npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
+2025-10-09T16:30:11.732Z [INFO]: 4:30:11 PM Synthesizing backend...
+2025-10-09T16:30:11.736Z [INFO]: 
+2025-10-09T16:30:13.526Z [WARNING]: Bundling asset amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2/AmplifyBranchLinker/CustomResourceLambda/Code/Stage...
+2025-10-09T16:30:13.923Z [WARNING]: ...0883096c4d01acad14c581095b5da63226e0d75da93586-building/index.js  1.0mb ⚠️
+                                    ⚡ Done in 82ms
+2025-10-09T16:30:14.216Z [INFO]: 4:30:14 PM ✔ Backend synthesized in 2.78 seconds
+2025-10-09T16:30:14.217Z [INFO]: 4:30:14 PM Running type checks...
+2025-10-09T16:30:15.045Z [INFO]: 4:30:15 PM ✔ Type checks completed in 0.82 seconds
+2025-10-09T16:30:15.051Z [INFO]: 4:30:15 PM Building and publishing assets...
+2025-10-09T16:30:15.460Z [INFO]: 4:30:15 PM ✔ Built and published assets
+2025-10-09T16:30:18.413Z [INFO]: amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2 |   0 | 4:30:16 PM | UPDATE_IN_PROGRESS | AWS::CloudFormation::Stack | amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2 User Initiated
+2025-10-09T16:30:20.523Z [INFO]: amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2 |   0 | 4:30:19 PM | UPDATE_IN_PROGRESS | AWS::CloudFormation::Stack | auth.NestedStack/auth.NestedStackResource (auth179371D7)
+2025-10-09T16:30:22.615Z [INFO]: amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2 |   1 | 4:30:20 PM | UPDATE_COMPLETE | AWS::CloudFormation::Stack | auth.NestedStack/auth.NestedStackResource (auth179371D7)
+2025-10-09T16:30:22.619Z [INFO]: amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2 |   2 | 4:30:22 PM | UPDATE_COMPLETE_CLEANUP_IN_PROGRESS | AWS::CloudFormation::Stack | amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2
+2025-10-09T16:30:24.710Z [INFO]: amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2 |   1 | 4:30:23 PM | UPDATE_COMPLETE | AWS::CloudFormation::Stack | auth.NestedStack/auth.NestedStackResource (auth179371D7)
+2025-10-09T16:30:24.710Z [INFO]: amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2 |   2 | 4:30:23 PM | UPDATE_COMPLETE | AWS::CloudFormation::Stack | amplify-dfihv4zw0wt9e-master-branch-838ca0f6b2
+2025-10-09T16:30:26.553Z [INFO]: 4:30:26 PM ✔ Deployment completed in 11.094 seconds
+2025-10-09T16:30:26.812Z [INFO]: 4:30:26 PM File written: amplify_outputs.json
+2025-10-09T16:30:27.057Z [INFO]: # Completed phase: build
+                                 ## Completed Backend Build
+2025-10-09T16:30:27.063Z [INFO]: ## Starting Frontend Build
+2025-10-09T16:30:27.063Z [INFO]: # Starting phase: preBuild
+                                 # Executing command: nvm use 20
+2025-10-09T16:30:27.277Z [INFO]: Now using node v20.19.4 (npm v10.8.2)
+2025-10-09T16:30:27.279Z [INFO]: # Executing command: node --version
+2025-10-09T16:30:27.282Z [INFO]: v20.19.4
+2025-10-09T16:30:27.283Z [INFO]: # Executing command: npm --version
+2025-10-09T16:30:27.376Z [INFO]: 10.8.2
+2025-10-09T16:30:27.380Z [INFO]: # Executing command: envsubst < .npmrc.template > .npmrc
+2025-10-09T16:30:27.381Z [INFO]: # Completed phase: preBuild
+                                 # Starting phase: build
+2025-10-09T16:30:27.382Z [INFO]: # Executing command: npm install --cache .npm --prefer-offline
+2025-10-09T16:30:30.322Z [WARNING]: npm warn ERESOLVE overriding peer dependency
+2025-10-09T16:30:30.326Z [WARNING]: npm warn While resolving: @aws-amplify/plugin-types@1.10.1
+                                    npm warn Found: @aws-sdk/types@3.821.0
+                                    npm warn node_modules/@aws-amplify/data-construct/node_modules/@aws-amplify/ai-constructs/node_modules/@aws-amplify/plugin-types/node_modules/@aws-sdk/types
+                                    npm warn
+                                    npm warn Could not resolve dependency:
+                                    npm warn peer @aws-sdk/types@"^3.734.0" from @aws-amplify/plugin-types@1.10.1
+                                    npm warn node_modules/@aws-amplify/data-construct/node_modules/@aws-amplify/ai-constructs/node_modules/@aws-amplify/plugin-types
+                                    npm warn   @aws-amplify/plugin-types@"^1.10.1" from @aws-amplify/ai-constructs@1.5.3
+                                    npm warn   node_modules/@aws-amplify/data-construct/node_modules/@aws-amplify/ai-constructs
+2025-10-09T16:30:30.447Z [WARNING]: npm warn ERESOLVE overriding peer dependency
+2025-10-09T16:30:30.447Z [WARNING]: npm warn While resolving: @aws-amplify/plugin-types@1.10.1
+                                    npm warn Found: @aws-sdk/types@3.821.0
+                                    npm warn node_modules/@aws-amplify/graphql-api-construct/node_modules/@aws-amplify/ai-constructs/node_modules/@aws-amplify/plugin-types/node_modules/@aws-sdk/types
+                                    npm warn
+                                    npm warn Could not resolve dependency:
+                                    npm warn peer @aws-sdk/types@"^3.734.0" from @aws-amplify/plugin-types@1.10.1
+                                    npm warn node_modules/@aws-amplify/graphql-api-construct/node_modules/@aws-amplify/ai-constructs/node_modules/@aws-amplify/plugin-types
+                                    npm warn   @aws-amplify/plugin-types@"^1.10.1" from @aws-amplify/ai-constructs@1.5.3
+                                    npm warn   node_modules/@aws-amplify/graphql-api-construct/node_modules/@aws-amplify/ai-constructs
+2025-10-09T16:30:32.804Z [INFO]: changed 3 packages, and audited 2713 packages in 5s
+2025-10-09T16:30:32.805Z [INFO]: 250 packages are looking for funding
+                                 run `npm fund` for details
+2025-10-09T16:30:32.808Z [INFO]: 1 high severity vulnerability
+                                 To address all issues, run:
+                                 npm audit fix
+                                 Run `npm audit` for details.
+2025-10-09T16:30:32.819Z [INFO]: # Executing command: npm run build
+2025-10-09T16:30:32.981Z [INFO]: > admin-dashboard@1.0.0 build
+                                 > next build
+2025-10-09T16:30:33.575Z [INFO]: ▲ Next.js 14.2.32
+2025-10-09T16:30:33.581Z [INFO]: 
+2025-10-09T16:30:33.655Z [INFO]: Creating an optimized production build ...
+2025-10-09T16:30:34.153Z [WARNING]: ⚠ Found lockfile missing swc dependencies, run next locally to automatically patch
+2025-10-09T16:30:51.770Z [WARNING]: Failed to compile.
+2025-10-09T16:30:51.787Z [WARNING]: ./components/jugadores/AddBankAccountModal.tsx
+                                    Module not found: Can't resolve '@juaose/lotto-shared-types'
+                                    https://nextjs.org/docs/messages/module-not-found
+                                    Import trace for requested module:
+                                    ./components/jugadores/BankAccountsCard.tsx
+                                    ./app/jugadores/page.tsx
+                                    ./components/jugadores/AddBankAccountModal.tsx
+                                    Module not found: Can't resolve '@juaose/lotto-utils'
+                                    https://nextjs.org/docs/messages/module-not-found
+                                    Import trace for requested module:
+                                    ./components/jugadores/BankAccountsCard.tsx
+                                    ./app/jugadores/page.tsx
+                                    ./components/jugadores/DepositsModal.tsx
+                                    Module not found: Can't resolve '@juaose/lotto-shared-types'
+                                    https://nextjs.org/docs/messages/module-not-found
+                                    Import trace for requested module:
+                                    ./app/jugadores/page.tsx
+                                    ./components/jugadores/utils/playerUtils.ts
+                                    Module not found: Can't resolve '@juaose/lotto-shared-types'
+                                    https://nextjs.org/docs/messages/module-not-found
+                                    Import trace for requested module:
+                                    ./app/jugadores/page.tsx
+                                    ./app/api/admins/shops/route.ts
+                                    Module not found: Can't resolve '@juaose/lotto-core'
+                                    https://nextjs.org/docs/messages/module-not-found
+                                    > Build failed because of webpack errors
+2025-10-09T16:30:51.979Z [ERROR]: !!! Build failed
+2025-10-09T16:30:51.979Z [INFO]: Please read more about Amplify Hosting's support for SSR frameworks to find if your build failure is related to an unsupported feature: https://docs.aws.amazon.com/amplify/latest/userguide/amplify-ssr-framework-support.html. You may also find this troubleshooting guide useful: https://docs.aws.amazon.com/amplify/latest/userguide/troubleshooting-ssr-deployment.html
+2025-10-09T16:30:51.979Z [ERROR]: !!! Error: Command failed with exit code 1
+2025-10-09T16:30:51.979Z [INFO]: # Starting environment caching...
+2025-10-09T16:30:51.979Z [INFO]: # Uploading environment cache artifact...
+2025-10-09T16:30:52.067Z [INFO]: # Uploaded environment cache artifact
+2025-10-09T16:30:52.068Z [INFO]: # Environment caching completed
+

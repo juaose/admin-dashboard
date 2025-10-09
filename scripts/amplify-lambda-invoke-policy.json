@@ -1,0 +1,33 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowAmplifyToInvokeLambdaFunctions",
+      "Effect": "Allow",
+      "Action": "lambda:InvokeFunction",
+      "Resource": [
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getPhoneLines",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getHostAccounts",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getPhoneLinesCached",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getHostAccountsCached",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getAdminsCached",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getTelegramChatsCached",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getHomeStats",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getPlayers",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getPlayerById",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getDepositsByBank",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getDepositsByClient",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getDepositsByAccount",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getRedemptionsByBank",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getRedemptionsByCustomer",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getRedemptionsByShop",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getReloadsByCustomer",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getReloadsByShop",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getPromotionsByCustomer",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getPromotionsByPaymentMethod",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getPromotionsByShop",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getPromotionsByTier"
+      ]
+    }
+  ]
+}
