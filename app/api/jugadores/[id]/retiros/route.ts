@@ -1,46 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
+import { invokeLambdaWithPath } from "../../../../../lib/lambda-client";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const premayor_acc = parseInt(params.id);
-
-    if (isNaN(premayor_acc)) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "ID de jugador inválido",
-        },
-        { status: 400 }
-      );
-    }
-
-    // Import DAL
-    const { DAL, connect } = await import("@juaose/lotto-core");
-
-    // Get query parameters
     const searchParams = request.nextUrl.searchParams;
-    const limitParam = parseInt(searchParams.get("limit") || "25");
-    const limit = Math.min(Math.max(limitParam, 1), 100); // Clamp between 1 and 100
+    const limit = searchParams.get("limit") || "25";
 
-    // Connect to database
-    await connect();
+    const result = await invokeLambdaWithPath(
+      "getPlayerWithdrawals",
+      { id: params.id },
+      { limit }
+    );
 
-    // Query redemptions for this player
-    const RedemptionModel = await DAL.RedemptionModel;
-    const redemptions = await RedemptionModel.find({
-      "customer.premayor_acc": premayor_acc,
-    })
-      .sort({ createdAt: -1 })
-      .limit(limit);
-
-    return NextResponse.json({
-      success: true,
-      data: redemptions,
-      count: redemptions.length,
-    });
+    return NextResponse.json(result);
   } catch (error) {
     console.error("Error fetching player redemptions:", error);
     return NextResponse.json(

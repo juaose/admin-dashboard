@@ -12,6 +12,7 @@
   "dependencies": {
     "@aws-amplify/adapter-nextjs": "^1.6.10",
     "@aws-amplify/ui-react": "^6.5.5",
+    "@aws-sdk/client-lambda": "^3.709.0",
     "@juaose/lotto-core": "file:../npm-packages/lotto-core",
     "@juaose/lotto-utils": "file:../npm-packages/lotto-utils",
     "@juaose/lotto-shared-types": "file:../npm-packages/lotto-shared-types",

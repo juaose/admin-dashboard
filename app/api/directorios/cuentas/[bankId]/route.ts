@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import { invokeLambdaWithPath } from "../../../../../lib/lambda-client";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { bankId: string } }
 ) {
   try {
-    const { hostAccountsGetter } = await import("@juaose/lotto-core");
-
     const bankId = parseInt(params.bankId);
 
     if (isNaN(bankId)) {
@@ -16,13 +15,11 @@ export async function GET(
       );
     }
 
-    // Use lotto-core's cached getter for host accounts by bank
-    const hostAccounts = await hostAccountsGetter(bankId);
-
-    return NextResponse.json({
-      success: true,
-      data: hostAccounts || [],
+    const result = await invokeLambdaWithPath("getHostAccountsByBank", {
+      bankId: params.bankId,
     });
+
+    return NextResponse.json(result);
   } catch (error) {
     console.error("Error fetching host accounts by bank:", error);
     return NextResponse.json(

@@ -40,8 +40,13 @@ interface DashboardStats {
     avgAmountPerCustomer: number;
   };
   redemptions: {
+    totalRedeemAmount: number;
+    totalCashAmount: number;
+    reloadReturnAmount: number;
     totalAmount: number;
     totalCount: number;
+    averageRedeemAmount: number;
+    averageCashAmount: number;
     averageAmount: number;
     activeCustomers: number;
     avgRedemptionsPerCustomer: number;
@@ -477,48 +482,81 @@ export default function HomePage() {
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-100 dark:border-gray-700 p-6 md:p-8 hover:shadow-2xl transition-shadow duration-300">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-3 pb-4 border-b-2 border-red-200 dark:border-red-700">
           <span className="text-3xl">💸</span>
-          Retiros
+          Retiros - Composición
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
-          <div className="p-5 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-xl border-2 border-red-300 dark:border-red-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
-            <p className="text-sm font-semibold text-red-700 dark:text-red-400 uppercase tracking-wide mb-1">
-              Total Retirado
+
+        {/* Breakdown of withdrawal amounts */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8">
+          <div className="p-6 bg-gradient-to-br from-red-100 to-red-200 dark:from-red-900/30 dark:to-red-800/30 rounded-xl border-2 border-red-400 dark:border-red-600 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-red-900 dark:text-red-300 uppercase tracking-wide mb-1">
+              Total en Retiros
             </p>
-            <p className="text-2xl md:text-3xl font-extrabold text-red-800 dark:text-red-300">
-              {formatCurrency(stats.redemptions.totalAmount)}
+            <p className="text-3xl md:text-4xl font-extrabold text-red-900 dark:text-red-200">
+              {formatCurrency(stats.redemptions.totalRedeemAmount)}
             </p>
-          </div>
-          <div className="p-5 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-xl border-2 border-red-300 dark:border-red-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
-            <p className="text-sm font-semibold text-red-700 dark:text-red-400 uppercase tracking-wide mb-1">
-              Total Retiros
-            </p>
-            <p className="text-2xl md:text-3xl font-extrabold text-red-800 dark:text-red-300">
-              {formatNumber(stats.redemptions.totalCount)}
+            <p className="text-xs text-red-700 dark:text-red-400 mt-2 font-medium">
+              Valor total de vouchers redimidos
             </p>
           </div>
-          <div className="p-5 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-xl border-2 border-red-300 dark:border-red-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
-            <p className="text-sm font-semibold text-red-700 dark:text-red-400 uppercase tracking-wide mb-1">
-              Promedio por Retiro
+          <div className="p-6 bg-gradient-to-br from-orange-100 to-orange-200 dark:from-orange-900/30 dark:to-orange-800/30 rounded-xl border-2 border-orange-400 dark:border-orange-600 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-orange-900 dark:text-orange-300 uppercase tracking-wide mb-1">
+              Salidas Efectivo
             </p>
-            <p className="text-2xl md:text-3xl font-extrabold text-red-800 dark:text-red-300">
-              {formatCurrency(stats.redemptions.averageAmount)}
+            <p className="text-3xl md:text-4xl font-extrabold text-orange-900 dark:text-orange-200">
+              {formatCurrency(stats.redemptions.totalCashAmount)}
             </p>
-          </div>
-          <div className="p-5 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-xl border-2 border-red-300 dark:border-red-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
-            <p className="text-sm font-semibold text-red-700 dark:text-red-400 uppercase tracking-wide mb-1">
-              Clientes Activos
-            </p>
-            <p className="text-2xl md:text-3xl font-extrabold text-red-800 dark:text-red-300">
-              {formatNumber(stats.redemptions.activeCustomers)}
+            <p className="text-xs text-orange-700 dark:text-orange-400 mt-2 font-medium">
+              Efectivo pagado a clientes
             </p>
           </div>
-          <div className="p-5 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-xl border-2 border-red-300 dark:border-red-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
-            <p className="text-sm font-semibold text-red-700 dark:text-red-400 uppercase tracking-wide mb-1">
-              Retiros por Cliente
+          <div className="p-6 bg-gradient-to-br from-green-100 to-green-200 dark:from-green-900/30 dark:to-green-800/30 rounded-xl border-2 border-green-400 dark:border-green-600 hover:shadow-lg transition-all duration-200 hover:scale-105">
+            <p className="text-sm font-semibold text-green-900 dark:text-green-300 uppercase tracking-wide mb-1">
+              Reingresa Recarga
             </p>
-            <p className="text-2xl md:text-3xl font-extrabold text-red-800 dark:text-red-300">
-              {formatNumber(stats.redemptions.avgRedemptionsPerCustomer)}
+            <p className="text-3xl md:text-4xl font-extrabold text-green-900 dark:text-green-200">
+              {formatCurrency(stats.redemptions.reloadReturnAmount)}
             </p>
+            <p className="text-xs text-green-700 dark:text-green-400 mt-2 font-medium">
+              Diferencia que vuelve al sistema
+            </p>
+          </div>
+        </div>
+
+        {/* Additional stats */}
+        <div className="border-t-2 border-gray-200 dark:border-gray-700 pt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="p-5 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-xl border-2 border-red-300 dark:border-red-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
+              <p className="text-sm font-semibold text-red-700 dark:text-red-400 uppercase tracking-wide mb-1">
+                Total Retiros
+              </p>
+              <p className="text-2xl md:text-3xl font-extrabold text-red-800 dark:text-red-300">
+                {formatNumber(stats.redemptions.totalCount)}
+              </p>
+            </div>
+            <div className="p-5 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-xl border-2 border-red-300 dark:border-red-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
+              <p className="text-sm font-semibold text-red-700 dark:text-red-400 uppercase tracking-wide mb-1">
+                Promedio Efectivo
+              </p>
+              <p className="text-2xl md:text-3xl font-extrabold text-red-800 dark:text-red-300">
+                {formatCurrency(stats.redemptions.averageCashAmount)}
+              </p>
+            </div>
+            <div className="p-5 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-xl border-2 border-red-300 dark:border-red-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
+              <p className="text-sm font-semibold text-red-700 dark:text-red-400 uppercase tracking-wide mb-1">
+                Clientes Activos
+              </p>
+              <p className="text-2xl md:text-3xl font-extrabold text-red-800 dark:text-red-300">
+                {formatNumber(stats.redemptions.activeCustomers)}
+              </p>
+            </div>
+            <div className="p-5 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 rounded-xl border-2 border-red-300 dark:border-red-700 hover:shadow-lg transition-all duration-200 hover:scale-105">
+              <p className="text-sm font-semibold text-red-700 dark:text-red-400 uppercase tracking-wide mb-1">
+                Retiros por Cliente
+              </p>
+              <p className="text-2xl md:text-3xl font-extrabold text-red-800 dark:text-red-300">
+                {formatNumber(stats.redemptions.avgRedemptionsPerCustomer)}
+              </p>
+            </div>
           </div>
         </div>
       </div>

@@ -257,11 +257,17 @@ function transformPromocionesData(apiData: any): ReportData {
 function transformDepositosBankData(apiData: any): ReportData {
   const { bankSummaries = [], statistics = {} } = apiData;
 
+  // Calculate total from all banks
+  const totalVolume = bankSummaries.reduce(
+    (sum: number, bank: any) => sum + (bank.totalAmount || 0),
+    0
+  );
+
   // Summary Cards
   const summaryCards: SummaryCard[] = [
     {
       title: "Total Depositado",
-      value: statistics.topVolumeBankAmount || 0,
+      value: totalVolume,
       format: "currency",
       icon: "💰",
       subtitle: `${statistics.totalBanks || 0} bancos`,
@@ -352,14 +358,14 @@ function transformRetirosCustomerData(apiData: any): ReportData {
       value: statistics.avgWithdrawalAmount || 0,
       format: "currency",
       icon: "📊",
-      subtitle: "Monto promedio",
+      subtitle: "Por transacción",
     },
     {
-      title: "Retiros por Día",
-      value: statistics.avgWithdrawalsPerDay || 0,
-      format: "number",
-      icon: "🔄",
-      subtitle: "Promedio diario",
+      title: "Promedio por Cliente",
+      value: statistics.totalCustomers > 0 ? statistics.totalVolume / statistics.totalCustomers : 0,
+      format: "currency",
+      icon: "👤",
+      subtitle: "Total retirado",
     },
   ];
 
@@ -562,6 +568,12 @@ function transformRetirosBankData(apiData: any): ReportData {
 function transformDepositosBankAccountData(apiData: any): ReportData {
   const { accountSummaries = [], statistics = {} } = apiData;
 
+  // Calculate total from all accounts
+  const totalVolume = accountSummaries.reduce(
+    (sum: number, acc: any) => sum + (acc.totalAmount || 0),
+    0
+  );
+
   // Calculate total reloads from account summaries
   const totalReloads = accountSummaries.reduce(
     (sum: number, acc: any) => sum + (acc.totalReloads || 0),
@@ -571,7 +583,7 @@ function transformDepositosBankAccountData(apiData: any): ReportData {
   const summaryCards: SummaryCard[] = [
     {
       title: "Total Depositado",
-      value: statistics.topVolumeAccountAmount || 0,
+      value: totalVolume,
       format: "currency",
       icon: "💰",
       subtitle: "Todas las cuentas",
@@ -662,14 +674,14 @@ function transformDepositosCustomerData(apiData: any): ReportData {
       value: statistics.avgDepositAmount || 0,
       format: "currency",
       icon: "📊",
-      subtitle: "Monto promedio",
+      subtitle: "Por transacción",
     },
     {
-      title: "Depósitos por Día",
-      value: statistics.avgDepositsPerDay || 0,
-      format: "number",
-      icon: "🔄",
-      subtitle: "Promedio diario",
+      title: "Promedio por Cliente",
+      value: statistics.totalCustomers > 0 ? statistics.totalVolume / statistics.totalCustomers : 0,
+      format: "currency",
+      icon: "👤",
+      subtitle: "Total depositado",
     },
   ];
 
@@ -810,14 +822,14 @@ function transformRecargasCustomerData(apiData: any): ReportData {
       value: statistics.avgReloadAmount || 0,
       format: "currency",
       icon: "📊",
-      subtitle: "Monto promedio",
+      subtitle: "Por transacción",
     },
     {
-      title: "Recargas por Día",
-      value: statistics.avgReloadsPerDay || 0,
-      format: "number",
-      icon: "🔄",
-      subtitle: "Promedio diario",
+      title: "Promedio por Cliente",
+      value: statistics.totalCustomers > 0 ? statistics.totalVolume / statistics.totalCustomers : 0,
+      format: "currency",
+      icon: "👤",
+      subtitle: "Total recargado",
     },
   ];
 
