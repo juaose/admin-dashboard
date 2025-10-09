@@ -1,0 +1,92 @@
+
+> admin-dashboard@1.0.0 build
+> next build
+
+  ▲ Next.js 14.2.33
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+✅ RBAC matrix loaded: 19 operations
+✅ All required environment variables are set for module: lotto-core
+   Generating static pages (0/27) ...
+   Generating static pages (6/27) 
+Invoking Lambda: lotto-backend-prod-getHostAccounts
+Invoking Lambda: lotto-backend-prod-getPhoneLines
+   Generating static pages (13/27) 
+   Generating static pages (20/27) 
+✅ All required environment variables are set for module: lotto-core
+Redis object is null. OK when running locally...
+Connecting to DB...
+Connected!
+DAL: Auto-bootstrapping on first access...
+Bootstrapping ModelFactory...
+Registering model: Token
+Registering model: Player
+Registering model: Admin
+Registering model: Reload
+Registering model: CryptoReload
+Registering model: Redemption
+Registering model: phoneLine
+Registering model: hostAccount
+Registering model: FireBaseAppCheckToken
+Registering model: authorizedEmailSenders
+Registering model: CryptoCredit
+Registering model: Promotion
+Registering model: telegramGroupChat
+Registering model: BNCRcredit
+Registering model: BCRcredit
+Registering model: POPcredit
+Registering model: MUTcredit
+Registering model: BACcredit
+Registering model: PROcredit
+Registering model: COOPcredit
+Registering model: creditDuplicates
+ModelFactory bootstrap complete
+DAL: Auto-bootstrap complete
+ ✓ Generating static pages (27/27)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    3.2 kB         90.7 kB
+├ ○ /_not-found                          876 B          88.4 kB
+├ ○ /api/admins/shops                    0 B                0 B
+├ ƒ /api/depositos/banco-destino         0 B                0 B
+├ ƒ /api/depositos/banco-procedencia     0 B                0 B
+├ ƒ /api/depositos/bancos                0 B                0 B
+├ ƒ /api/depositos/clientes              0 B                0 B
+├ ƒ /api/depositos/cuenta-destino        0 B                0 B
+├ ƒ /api/directorios/cuentas             0 B                0 B
+├ ƒ /api/directorios/cuentas/[bankId]    0 B                0 B
+├ ƒ /api/directorios/telefonos           0 B                0 B
+├ ƒ /api/home/stats                      0 B                0 B
+├ ƒ /api/jugadores                       0 B                0 B
+├ ƒ /api/jugadores/[id]                  0 B                0 B
+├ ƒ /api/jugadores/[id]/depositos        0 B                0 B
+├ ƒ /api/jugadores/[id]/recargas         0 B                0 B
+├ ƒ /api/jugadores/[id]/retiros          0 B                0 B
+├ ƒ /api/promociones/clientes            0 B                0 B
+├ ƒ /api/promociones/metodo-pago         0 B                0 B
+├ ƒ /api/promociones/nivel               0 B                0 B
+├ ƒ /api/promociones/tiendas             0 B                0 B
+├ ƒ /api/recargas/clientes               0 B                0 B
+├ ƒ /api/recargas/tiendas                0 B                0 B
+├ ƒ /api/retiros/bancos                  0 B                0 B
+├ ƒ /api/retiros/clientes                0 B                0 B
+├ ƒ /api/retiros/tiendas                 0 B                0 B
+├ ○ /directorios/cuentas                 3.15 kB        90.7 kB
+├ ○ /directorios/telefonos               2.08 kB        89.6 kB
+├ ○ /jugadores                           214 kB          317 kB
+└ ○ /reportes                            122 kB          217 kB
++ First Load JS shared by all            87.5 kB
+  ├ chunks/117-27c4e97bfddd6d51.js       31.9 kB
+  ├ chunks/fd9d1056-9234bfb3e9d9c2cd.js  53.6 kB
+  └ other shared chunks (total)          2.02 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
