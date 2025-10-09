@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
+import { adminsGetter } from "@juaose/lotto-core";
 
 export async function GET() {
   try {
-    const { adminsGetter } = await import("@juaose/lotto-core");
-
     // Get all admins from Redis cache (with DB fallback)
     const allAdmins = await adminsGetter();
 
