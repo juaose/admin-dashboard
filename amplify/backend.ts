@@ -1,35 +1,9 @@
 import { defineBackend } from "@aws-amplify/backend";
-import { auth } from "./auth/resource.js";
 
 const backend = defineBackend({
-  auth,
-  // data removed for simplified sandbox
+  // Auth is now configured via environment variables in lib/amplify-config.ts
+  // No backend auth resource defined - using pre-existing Cognito user pool
 });
 
-// Use existing pool only in production
-if (
-  process.env.NODE_ENV?.toLowerCase() === "prod" ||
-  process.env.NODE_ENV?.toLowerCase() === "production"
-) {
-  backend.addOutput({
-    auth: {
-      user_pool_id: process.env.PRODUCTION_USER_POOL_ID!,
-      user_pool_client_id: process.env.PRODUCTION_USER_POOL_CLIENT_ID!,
-      aws_region: process.env.AWS_REGION || "us-east-1",
-    },
-  });
-}
-
-// Use existing pool only in production
-if (
-  process.env.NODE_ENV?.toLowerCase() === "dev" ||
-  process.env.NODE_ENV?.toLowerCase() === "development"
-) {
-  backend.addOutput({
-    auth: {
-      user_pool_id: process.env.DEVELOPMENT_USER_POOL_ID!,
-      user_pool_client_id: process.env.DEVELOPMENT_USER_POOL_CLIENT_ID!,
-      aws_region: process.env.AWS_REGION || "us-east-1",
-    },
-  });
-}
+// Note: Cognito configuration is now handled client-side via environment variables
+// Set USER_POOL_ID, USER_POOL_CLIENT_ID, and IDENTITY_POOL_ID in your deployment environment

@@ -10,16 +10,13 @@ import {
   Authenticator,
   ThemeProvider as AmplifyThemeProvider,
 } from "@aws-amplify/ui-react";
-import { Amplify } from "aws-amplify";
 import "@aws-amplify/ui-react/styles.css";
-import outputs from "../amplify_outputs.json";
 import { formFields, components } from "../lib/authenticator-config";
 import { AppAuthProvider } from "../contexts/AppAuthContext";
+// Import Amplify configuration with environment variable support
+import "../lib/amplify-config";
 
 const inter = Inter({ subsets: ["latin"] });
-
-// Configure Amplify for client-side authentication
-Amplify.configure(outputs);
 
 export default function RootLayout({
   children,
