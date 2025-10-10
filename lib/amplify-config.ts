@@ -5,9 +5,9 @@ import outputs from "../amplify_outputs.json";
 Amplify.configure({
   Auth: {
     Cognito: {
-      userPoolId: process.env.USER_POOL_ID,
-      userPoolClientId: process.env.USER_POOL_CLIENT_ID,
-      identityPoolId: process.env.IDENTITY_POOL_ID,
+      userPoolId: process.env.NEXT_PUBLIC_USER_POOL_ID!,
+      userPoolClientId: process.env.NEXT_PUBLIC_USER_POOL_CLIENT_ID!,
+      identityPoolId: process.env.NEXT_PUBLIC_IDENTITY_POOL_ID!,
       loginWith: {
         email: true,
       },

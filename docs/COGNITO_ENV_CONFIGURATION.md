@@ -9,23 +9,25 @@ The admin-dashboard now supports configuring Cognito User Pool settings via envi
 The `lib/amplify-config.ts` file uses a fallback pattern:
 
 ```typescript
-userPoolId: process.env.USER_POOL_ID || outputs.auth.user_pool_id,
-userPoolClientId: process.env.USER_POOL_CLIENT_ID || outputs.auth.user_pool_client_id,
-identityPoolId: process.env.IDENTITY_POOL_ID || outputs.auth.identity_pool_id,
+userPoolId: process.env.NEXT_PUBLIC_USER_POOL_ID!,
+userPoolClientId: process.env.NEXT_PUBLIC_USER_POOL_CLIENT_ID!,
+identityPoolId: process.env.NEXT_PUBLIC_IDENTITY_POOL_ID!,
 ```
 
 **Behavior:**
 
-- If environment variables are set → Uses the environment variable values
-- If environment variables are NOT set → Falls back to `amplify_outputs.json` values
+- Environment variables are **required** - the app will fail if they're not set
+- No fallback to `amplify_outputs.json` since we removed the auth resource from Amplify backend
 
 ## Environment Variables
 
 Add these to your Amplify backend environment settings:
 
-- `USER_POOL_ID` - The Cognito User Pool ID (e.g., `us-east-1_3QOXrkS9v`)
-- `USER_POOL_CLIENT_ID` - The User Pool Client ID
-- `IDENTITY_POOL_ID` - The Identity Pool ID
+- `NEXT_PUBLIC_USER_POOL_ID` - The Cognito User Pool ID (e.g., `us-east-1_3QOXrkS9v`)
+- `NEXT_PUBLIC_USER_POOL_CLIENT_ID` - The User Pool Client ID
+- `NEXT_PUBLIC_IDENTITY_POOL_ID` - The Identity Pool ID
+
+**Note:** The `NEXT_PUBLIC_` prefix is required because these variables are used in client-side code. Next.js only exposes variables with this prefix to the browser bundle.
 
 ## Deployment Configuration
 
@@ -41,9 +43,9 @@ Add these to your Amplify backend environment settings:
 For local testing, create a `.env.local` file (not tracked in git):
 
 ```bash
-USER_POOL_ID=us-east-1_YourPoolId
-USER_POOL_CLIENT_ID=YourClientId
-IDENTITY_POOL_ID=us-east-1:YourIdentityPoolId
+NEXT_PUBLIC_USER_POOL_ID=us-east-1_YourPoolId
+NEXT_PUBLIC_USER_POOL_CLIENT_ID=YourClientId
+NEXT_PUBLIC_IDENTITY_POOL_ID=us-east-1:YourIdentityPoolId
 ```
 
 ## Testing
