@@ -27,7 +27,7 @@
   /* Input field styling */
   --amplify-components-fieldcontrol-background-color: var(--bg-elevated);
   --amplify-components-fieldcontrol-border-color: var(--border-color);
-  --amplify-components-fieldcontrol-color: var(--off-white);
+  --amplify-components-fieldcontrol-color: var(--text-primary);
   --amplify-components-fieldcontrol-focus-border-color: var(--brand-primary);
   --amplify-components-fieldcontrol-focus-box-shadow: 0 0 0 2px
     rgba(var(--brand-primary-rgb), 0.2);
@@ -210,7 +210,7 @@
   color: var(--text-primary) !important;
 }
 
-/* Style for input fields - Force light text color for visibility with higher specificity */
+/* Style for input fields - Use theme-aware text color for proper contrast */
 .amplify-authenticator input,
 .amplify-authenticator .amplify-input,
 [data-amplify-authenticator] .amplify-input,
@@ -220,9 +220,11 @@
   border: 1px solid var(--border-color) !important;
   border-radius: 6px;
   font-size: 16px;
-  color: var(--off-white) !important;
+  color: var(--text-primary) !important;
   background-color: var(--bg-elevated) !important;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 /* Additional override for input text visibility with maximum specificity */
@@ -236,7 +238,7 @@
 [data-amplify-authenticator] input,
 .amplify-authenticator.amplify-authenticator .amplify-input,
 .amplify-authenticator.amplify-authenticator input {
-  color: var(--off-white) !important;
+  color: var(--text-primary) !important;
 }
 
 .amplify-authenticator input:focus,

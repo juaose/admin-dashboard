@@ -26,7 +26,13 @@
         "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getPromotionsByCustomer",
         "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getPromotionsByPaymentMethod",
         "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getPromotionsByShop",
-        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getPromotionsByTier"
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getPromotionsByTier",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getAdminShops",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-updatePlayer",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getPlayerWithdrawals",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getPlayerDeposits",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getPlayerReloads",
+        "arn:aws:lambda:us-east-1:681730164872:function:lotto-backend-dev-getHostAccountsByBank"
       ]
     }
   ]
