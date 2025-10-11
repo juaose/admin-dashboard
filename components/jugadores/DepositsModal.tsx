@@ -24,10 +24,8 @@ const getBankColorBall = (bankCode: number): string => {
       return "🔵";
     case BANKCODES.MUTUAL: // 803
       return "🟡";
-    case BANKCODES.Promerica: // 116
+    case BANKCODES.PROMERICA: // 116
       return "🟢";
-    case BANKCODES.COOPENAE: // 814
-      return "⚪️";
     default:
       return "❓"; // Unknown banks use question mark to avoid conflict
   }
@@ -45,20 +43,22 @@ export default function DepositsModal({
   if (!isOpen) return null;
 
   // Group deposits by bank
-  const depositsByBank = deposits.reduce((acc, item) => {
-    const bankName = item.bankName;
-    if (!acc[bankName]) {
-      acc[bankName] = [];
-    }
-    acc[bankName].push(item);
-    return acc;
-  }, {} as Record<string, any[]>);
+  const depositsByBank = deposits.reduce(
+    (acc, item) => {
+      const bankName = item.bankName;
+      if (!acc[bankName]) {
+        acc[bankName] = [];
+      }
+      acc[bankName].push(item);
+      return acc;
+    },
+    {} as Record<string, any[]>
+  );
 
   // Calculate totals per bank
-  const bankSummaries = (Object.entries(depositsByBank) as [
-    string,
-    any[]
-  ][]).map(([bankName, items]) => {
+  const bankSummaries = (
+    Object.entries(depositsByBank) as [string, any[]][]
+  ).map(([bankName, items]) => {
     const total = items.reduce(
       (sum: number, item: any) => sum + (item.deposit.credit || 0),
       0

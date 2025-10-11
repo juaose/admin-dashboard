@@ -27,7 +27,7 @@ export default function AuthorizedAccountsCard({
       : "🏦";
 
     const confirmed = window.confirm(
-      `¿Eliminar la cuenta autorizada?\n\n${colorBall} ${accountName}\n\nEl jugador ya no podrá recibir recargas automáticas en esta cuenta.`
+      `¿Eliminar la cuenta autorizada?\n\n${colorBall} ${accountName}\n\nEl jugador ya no tendrá recargas automáticas al depositar en ésta cuenta.`
     );
 
     if (!confirmed) return;

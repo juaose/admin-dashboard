@@ -15,10 +15,8 @@ export const getBankColorBall = (bankCode: number): string => {
       return "🔵";
     case BANKCODES.MUTUAL: // 803
       return "🟡";
-    case BANKCODES.Promerica: // 116
+    case BANKCODES.PROMERICA: // 116
       return "🟢";
-    case BANKCODES.COOPENAE: // 814
-      return "⚪️";
     default:
       return "❓";
   }

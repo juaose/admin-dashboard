@@ -24,8 +24,7 @@ const BANK_OPTIONS = [
   { id: BANKCODES.BCR, name: "Banco de Costa Rica" },
   { id: BANKCODES.POPULAR, name: "Banco Popular" },
   { id: BANKCODES.MUTUAL, name: "Banco Mutual" },
-  { id: BANKCODES.COOPENAE, name: "Coopenae" },
-  { id: BANKCODES.Promerica, name: "Promerica" },
+  { id: BANKCODES.PROMERICA, name: "Promerica" },
 ];
 
 export default function AddBankAccountModal({
@@ -68,7 +67,7 @@ export default function AddBankAccountModal({
     // For BAC and MUTUAL, validate native account format if provided
     const isBAC = formData.bank_id === BANKCODES.BAC;
     const isMUTUAL = formData.bank_id === BANKCODES.MUTUAL;
-    
+
     if (hasNativeAccount) {
       if (isBAC && !/^\d{9,10}$/.test(formData.acc_num)) {
         newErrors.acc_num = "Cuenta BAC debe tener 9-10 dígitos";
@@ -144,21 +143,31 @@ export default function AddBankAccountModal({
       try {
         // Use getBankFromIBAN to detect which bank this IBAN belongs to
         const bankInfo = getBankFromIBAN(value);
-        
+
         if (bankInfo.bank_id) {
           // Auto-detect and set the bank
-          setFormData(prev => ({ ...prev, bank_id: bankInfo.bank_id || "" }));
-          
+          setFormData((prev) => ({ ...prev, bank_id: bankInfo.bank_id || "" }));
+
           // Try to extract native account number for BAC and MUTUAL
           if (bankInfo.bank_id === BANKCODES.BAC) {
             const nativeAccount = IBANtoBACAccount(value);
             if (nativeAccount) {
-              setFormData(prev => ({ ...prev, iban_num: value, acc_num: nativeAccount, bank_id: bankInfo.bank_id || "" }));
+              setFormData((prev) => ({
+                ...prev,
+                iban_num: value,
+                acc_num: nativeAccount,
+                bank_id: bankInfo.bank_id || "",
+              }));
             }
           } else if (bankInfo.bank_id === BANKCODES.MUTUAL) {
             const nativeAccount = IBANtoMutualShort(value);
             if (nativeAccount) {
-              setFormData(prev => ({ ...prev, iban_num: value, acc_num: nativeAccount, bank_id: bankInfo.bank_id || "" }));
+              setFormData((prev) => ({
+                ...prev,
+                iban_num: value,
+                acc_num: nativeAccount,
+                bank_id: bankInfo.bank_id || "",
+              }));
             }
           }
         }
@@ -179,15 +188,25 @@ export default function AddBankAccountModal({
         const iban = bacAccountToIBAN(value);
         if (iban) {
           const bankInfo = getBankFromIBAN(iban);
-          setFormData({ ...formData, acc_num: value, iban_num: iban, bank_id: bankInfo.bank_id || "" });
+          setFormData({
+            ...formData,
+            acc_num: value,
+            iban_num: iban,
+            bank_id: bankInfo.bank_id || "",
+          });
         }
-      } 
+      }
       // MUTUAL: 1XX-XXX-XXXXXXX format
       else if (/^1\d{2}-\d{3}-\d{7}$/.test(value)) {
         const iban = mutualShortToIBAN(value);
         if (iban) {
           const bankInfo = getBankFromIBAN(iban);
-          setFormData({ ...formData, acc_num: value, iban_num: iban, bank_id: bankInfo.bank_id || "" });
+          setFormData({
+            ...formData,
+            acc_num: value,
+            iban_num: iban,
+            bank_id: bankInfo.bank_id || "",
+          });
         }
       }
     } catch (error) {
@@ -232,7 +251,9 @@ export default function AddBankAccountModal({
               IBAN: <span className="text-red-600 dark:text-red-400">*</span>
               {formData.bank_id && (
                 <span className="text-sm font-normal text-gray-600 dark:text-gray-400">
-                  {" "}({getBankColorBall(formData.bank_id as number)} {BANK_OPTIONS.find((b) => b.id === formData.bank_id)?.name})
+                  {" "}
+                  ({getBankColorBall(formData.bank_id as number)}{" "}
+                  {BANK_OPTIONS.find((b) => b.id === formData.bank_id)?.name})
                 </span>
               )}
             </label>
@@ -242,8 +263,8 @@ export default function AddBankAccountModal({
               onChange={(e) => handleIBANChange(e.target.value)}
               placeholder="CR12345678901234567890"
               className={`w-full px-3 py-2 rounded-md border ${
-                errors.iban_num 
-                  ? "border-red-600 dark:border-red-400" 
+                errors.iban_num
+                  ? "border-red-600 dark:border-red-400"
                   : "border-gray-300 dark:border-gray-600"
               } bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-brand-primary dark:focus:ring-brand-secondary`}
             />
@@ -257,7 +278,8 @@ export default function AddBankAccountModal({
           {/* Account Holder Name */}
           <div className="mb-5">
             <label className="block font-semibold mb-2 text-gray-900 dark:text-gray-100">
-              Nombre del Titular: <span className="text-red-600 dark:text-red-400">*</span>
+              Nombre del Titular:{" "}
+              <span className="text-red-600 dark:text-red-400">*</span>
             </label>
             <input
               type="text"
@@ -268,8 +290,8 @@ export default function AddBankAccountModal({
               }}
               placeholder="Juan Pérez Gómez"
               className={`w-full px-3 py-2 rounded-md border ${
-                errors.name_on_acc 
-                  ? "border-red-600 dark:border-red-400" 
+                errors.name_on_acc
+                  ? "border-red-600 dark:border-red-400"
                   : "border-gray-300 dark:border-gray-600"
               } bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary dark:focus:ring-brand-secondary`}
             />
@@ -285,7 +307,8 @@ export default function AddBankAccountModal({
             <label className="block font-semibold mb-2 text-gray-900 dark:text-gray-100">
               Número de Cuenta Nativa:
               <span className="text-sm font-normal text-gray-600 dark:text-gray-400">
-                {" "}(Opcional - solo BAC o Mutual)
+                {" "}
+                (Opcional - solo BAC o Mutual)
               </span>
             </label>
             <input
@@ -296,8 +319,8 @@ export default function AddBankAccountModal({
                 formData.bank_id === BANKCODES.BAC
                   ? "123456789"
                   : formData.bank_id === BANKCODES.MUTUAL
-                  ? "102-100-1234567"
-                  : "123456789"
+                    ? "102-100-1234567"
+                    : "123456789"
               }
               className="w-full px-3 py-2 rounded-md border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-brand-primary dark:focus:ring-brand-secondary"
             />
@@ -332,14 +355,16 @@ export default function AddBankAccountModal({
           {/* Note about host accounts */}
           <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-900 rounded-md border border-gray-200 dark:border-gray-700">
             <div className="text-sm text-gray-600 dark:text-gray-400">
-              💡 <strong>Nota:</strong> Después de crear la cuenta, podrás gestionar las cuentas huésped matriculadas usando el botón "Gestionar Cuentas Huésped" en la tarjeta de la cuenta.
+              💡 <strong>Nota:</strong> Después de crear la cuenta, podrás
+              gestionar las cuentas huésped matriculadas usando el botón
+              "Gestionar Cuentas Huésped" en la tarjeta de la cuenta.
             </div>
           </div>
         </div>
 
         {/* Footer */}
         <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex gap-3 justify-end">
-          <button 
+          <button
             onClick={handleClose}
             className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isSubmitting}
