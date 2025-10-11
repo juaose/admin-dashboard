@@ -22,7 +22,7 @@ export async function invokeLambda(
 ): Promise<any> {
   try {
     // Get the stage from environment variable (e.g., dev, staging, prod)
-    const stage = process.env.ENVIRONMENT || "dev";
+    const stage = process.env.ENV || "dev";
 
     // Construct full function name with stage
     const fullFunctionName = `lotto-backend-${stage}-${functionName}`;
