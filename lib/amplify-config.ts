@@ -27,6 +27,14 @@ Amplify.configure({
       },
     },
   },
+  API: {
+    REST: {
+      "dal-api": {
+        endpoint: process.env.DAL_API_URL || "http://localhost:3100",
+        region: "us-east-1",
+      },
+    },
+  },
   // Keep your existing data configuration if present
   ...((outputs as any).data && { data: (outputs as any).data }),
 });
