@@ -39,6 +39,12 @@ async function signRequestServerSide(
 ): Promise<Response> {
   const urlObj = new URL(url);
 
+  console.debug("Signing with credentials:", {
+    hasAccessKey: !!process.env.DAL_SERVICE_ACCESS_KEY_ID,
+    hasSecretKey: !!process.env.DAL_SERVICE_SECRET_ACCESS_KEY,
+    region: process.env.DAL_SERVICE_REGION || "error with the region!!!",
+    secretKeyLength: process.env.DAL_SERVICE_SECRET_ACCESS_KEY?.length,
+  });
   const request = new HttpRequest({
     method,
     protocol: urlObj.protocol.slice(0, -1) as "http" | "https",
@@ -64,10 +70,13 @@ async function signRequestServerSide(
 
   const signedRequest = await signer.sign(request);
 
+  const headers: Record<string, string> = signedRequest.headers;
+
+  console.debug("headers: ", JSON.stringify(headers, null, " "));
   // Make fetch with signed headers
   return fetch(url, {
     method,
-    headers: signedRequest.headers as Record<string, string>,
+    headers: headers,
     body: signedRequest.body,
     cache: "no-store",
   });
