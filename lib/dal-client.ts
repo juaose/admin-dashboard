@@ -10,6 +10,14 @@ import { Sha256 } from "@aws-crypto/sha256-js";
 import { HttpRequest } from "@aws-sdk/protocol-http";
 
 console.debug("DAL_API_URL from env: ", process.env.DAL_API_URL);
+console.debug(
+  "DAL_SERVICE_ACCESS_KEY_ID from env: ",
+  process.env.DAL_SERVICE_SECRET_ACCESS_KEY?.substring(0, 5).concat("...")
+);
+console.debug(
+  "DAL_SERVICE_ACCESS_KEY_ID from env length: ",
+  process.env.DAL_SERVICE_SECRET_ACCESS_KEY?.length
+);
 
 // Get DAL API base URL from environment
 const DAL_API_URL = process.env.DAL_API_URL || "http://localhost:3100";
