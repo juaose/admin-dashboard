@@ -12,8 +12,11 @@
   "dependencies": {
     "@aws-amplify/adapter-nextjs": "^1.6.10",
     "@aws-amplify/ui-react": "^6.5.5",
-    "@juaose/lotto-utils": "^1.0.17",
+    "@aws-crypto/sha256-js": "^5.2.0",
+    "@aws-sdk/protocol-http": "^3.374.0",
+    "@aws-sdk/signature-v4": "^3.374.0",
     "@juaose/lotto-shared-types": "^2.0.33",
+    "@juaose/lotto-utils": "^1.0.17",
     "aws-amplify": "^6.6.6",
     "date-fns": "^4.1.0",
     "next": "^14.2.32",

@@ -1,9 +1,13 @@
 /**
  * DAL HTTP Client Utility
- * HTTP REST API client for lotto-mongo-dal-api service via API Gateway with IAM auth
+ * HTTP REST API client for lotto-mongo-dal-api service via API Gateway
+ * Supports both server-side (IAM service account) and client-side (IAM user credentials) signing
  */
 
 import { get, post, put, patch, del } from "aws-amplify/api";
+import { SignatureV4 } from "@aws-sdk/signature-v4";
+import { Sha256 } from "@aws-crypto/sha256-js";
+import { HttpRequest } from "@aws-sdk/protocol-http";
 
 // Get DAL API base URL from environment
 const DAL_API_URL = process.env.DAL_API_URL || "http://localhost:3100";
@@ -11,13 +15,56 @@ const DAL_API_URL = process.env.DAL_API_URL || "http://localhost:3100";
 // API name for Amplify configuration
 const API_NAME = "dal-api";
 
-/**
- * Determine if we're using API Gateway (IAM auth) or direct connection (no auth)
- */
+// Determine if we're using API Gateway (IAM auth) or direct connection (no auth)
 const isApiGateway = DAL_API_URL.includes("execute-api");
 
 /**
- * Base fetch wrapper for direct DAL connection (local development)
+ * Sign a request with AWS IAM credentials for Server-Side use
+ * Uses service account credentials from environment variables
+ */
+async function signRequestServerSide(
+  method: string,
+  url: string,
+  body?: any
+): Promise<Response> {
+  const urlObj = new URL(url);
+
+  const request = new HttpRequest({
+    method,
+    protocol: urlObj.protocol.slice(0, -1) as "http" | "https",
+    hostname: urlObj.hostname,
+    path: urlObj.pathname + urlObj.search,
+    headers: {
+      "Content-Type": "application/json",
+      host: urlObj.hostname,
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+
+  const signer = new SignatureV4({
+    service: "execute-api",
+    region: process.env.DAL_SERVICE_REGION || "us-east-1",
+    credentials: {
+      accessKeyId: process.env.DAL_SERVICE_ACCESS_KEY_ID!,
+      secretAccessKey: process.env.DAL_SERVICE_SECRET_ACCESS_KEY!,
+      sessionToken: process.env.DAL_SERVICE_SESSION_TOKEN,
+    },
+    sha256: Sha256,
+  });
+
+  const signedRequest = await signer.sign(request);
+
+  // Make fetch with signed headers
+  return fetch(url, {
+    method,
+    headers: signedRequest.headers as Record<string, string>,
+    body: signedRequest.body,
+    cache: "no-store",
+  });
+}
+
+/**
+ * Base fetch wrapper for direct DAL connection (local development or non-API Gateway)
  * Used when DAL_API_URL points to localhost or internal ALB
  */
 async function dalFetchDirect(
@@ -58,26 +105,53 @@ async function dalFetchDirect(
  * GET request to DAL API
  * @param path - API endpoint path (e.g., "/api/v1/players")
  * @param params - Optional query parameters
+ * @param isClientSide - If true, uses client-side Amplify signing; if false (default), uses server-side signing
  * @returns Response data
  */
 export async function dalGet(
   path: string,
-  params?: Record<string, string>
+  params?: Record<string, string>,
+  isClientSide = false
 ): Promise<any> {
-  console.log(`[DAL Client] GET ${path}`, params);
+  console.log(`[DAL Client] GET ${path}`, {
+    params,
+    isClientSide,
+    isApiGateway,
+  });
 
   if (isApiGateway) {
-    // Use Amplify API with IAM signing for API Gateway
-    const response = await get({
-      apiName: API_NAME,
-      path,
-      options: {
-        queryParams: params,
-      },
-    }).response;
+    if (isClientSide) {
+      // CLIENT-SIDE: Use Amplify API with user's IAM credentials from Cognito
+      const response = await get({
+        apiName: API_NAME,
+        path,
+        options: {
+          queryParams: params,
+        },
+      }).response;
 
-    const data = await response.body.json();
-    return data;
+      const data = await response.body.json();
+      return data;
+    } else {
+      // SERVER-SIDE: Use AWS SDK to sign with service account
+      let url = `${DAL_API_URL}${path}`;
+      if (params && Object.keys(params).length > 0) {
+        const searchParams = new URLSearchParams();
+        Object.entries(params).forEach(([key, value]) => {
+          if (value !== undefined && value !== null && value !== "") {
+            searchParams.append(key, value);
+          }
+        });
+        const queryString = searchParams.toString();
+        if (queryString) {
+          url += `?${queryString}`;
+        }
+      }
+
+      const response = await signRequestServerSide("GET", url);
+      const data = await response.json();
+      return data;
+    }
   } else {
     // Direct connection (local dev or internal ALB)
     let url = path;
@@ -101,23 +175,36 @@ export async function dalGet(
  * POST request to DAL API
  * @param path - API endpoint path
  * @param body - Request body
+ * @param isClientSide - If true, uses client-side Amplify signing; if false (default), uses server-side signing
  * @returns Response data
  */
-export async function dalPost(path: string, body: any): Promise<any> {
-  console.log(`[DAL Client] POST ${path}`, body);
+export async function dalPost(
+  path: string,
+  body: any,
+  isClientSide = false
+): Promise<any> {
+  console.log(`[DAL Client] POST ${path}`, { body, isClientSide });
 
   if (isApiGateway) {
-    // Use Amplify API with IAM signing for API Gateway
-    const response = await post({
-      apiName: API_NAME,
-      path,
-      options: {
-        body,
-      },
-    }).response;
+    if (isClientSide) {
+      // CLIENT-SIDE: Use Amplify API
+      const response = await post({
+        apiName: API_NAME,
+        path,
+        options: {
+          body,
+        },
+      }).response;
 
-    const data = await response.body.json();
-    return data;
+      const data = await response.body.json();
+      return data;
+    } else {
+      // SERVER-SIDE: Use AWS SDK signing
+      const url = `${DAL_API_URL}${path}`;
+      const response = await signRequestServerSide("POST", url, body);
+      const data = await response.json();
+      return data;
+    }
   } else {
     // Direct connection
     return dalFetchDirect(path, {
@@ -131,23 +218,36 @@ export async function dalPost(path: string, body: any): Promise<any> {
  * PUT request to DAL API
  * @param path - API endpoint path
  * @param body - Request body
+ * @param isClientSide - If true, uses client-side Amplify signing; if false (default), uses server-side signing
  * @returns Response data
  */
-export async function dalPut(path: string, body: any): Promise<any> {
-  console.log(`[DAL Client] PUT ${path}`, body);
+export async function dalPut(
+  path: string,
+  body: any,
+  isClientSide = false
+): Promise<any> {
+  console.log(`[DAL Client] PUT ${path}`, { body, isClientSide });
 
   if (isApiGateway) {
-    // Use Amplify API with IAM signing for API Gateway
-    const response = await put({
-      apiName: API_NAME,
-      path,
-      options: {
-        body,
-      },
-    }).response;
+    if (isClientSide) {
+      // CLIENT-SIDE: Use Amplify API
+      const response = await put({
+        apiName: API_NAME,
+        path,
+        options: {
+          body,
+        },
+      }).response;
 
-    const data = await response.body.json();
-    return data;
+      const data = await response.body.json();
+      return data;
+    } else {
+      // SERVER-SIDE: Use AWS SDK signing
+      const url = `${DAL_API_URL}${path}`;
+      const response = await signRequestServerSide("PUT", url, body);
+      const data = await response.json();
+      return data;
+    }
   } else {
     // Direct connection
     return dalFetchDirect(path, {
@@ -161,23 +261,36 @@ export async function dalPut(path: string, body: any): Promise<any> {
  * PATCH request to DAL API
  * @param path - API endpoint path
  * @param body - Request body
+ * @param isClientSide - If true, uses client-side Amplify signing; if false (default), uses server-side signing
  * @returns Response data
  */
-export async function dalPatch(path: string, body: any): Promise<any> {
-  console.log(`[DAL Client] PATCH ${path}`, body);
+export async function dalPatch(
+  path: string,
+  body: any,
+  isClientSide = false
+): Promise<any> {
+  console.log(`[DAL Client] PATCH ${path}`, { body, isClientSide });
 
   if (isApiGateway) {
-    // Use Amplify API with IAM signing for API Gateway
-    const response = await patch({
-      apiName: API_NAME,
-      path,
-      options: {
-        body,
-      },
-    }).response;
+    if (isClientSide) {
+      // CLIENT-SIDE: Use Amplify API
+      const response = await patch({
+        apiName: API_NAME,
+        path,
+        options: {
+          body,
+        },
+      }).response;
 
-    const data = await response.body.json();
-    return data;
+      const data = await response.body.json();
+      return data;
+    } else {
+      // SERVER-SIDE: Use AWS SDK signing
+      const url = `${DAL_API_URL}${path}`;
+      const response = await signRequestServerSide("PATCH", url, body);
+      const data = await response.json();
+      return data;
+    }
   } else {
     // Direct connection
     return dalFetchDirect(path, {
@@ -190,20 +303,32 @@ export async function dalPatch(path: string, body: any): Promise<any> {
 /**
  * DELETE request to DAL API
  * @param path - API endpoint path
+ * @param isClientSide - If true, uses client-side Amplify signing; if false (default), uses server-side signing
  * @returns Response data
  */
-export async function dalDelete(path: string): Promise<any> {
-  console.log(`[DAL Client] DELETE ${path}`);
+export async function dalDelete(
+  path: string,
+  isClientSide = false
+): Promise<any> {
+  console.log(`[DAL Client] DELETE ${path}`, { isClientSide });
 
   if (isApiGateway) {
-    // Use Amplify API with IAM signing for API Gateway
-    const response = await del({
-      apiName: API_NAME,
-      path,
-    }).response;
+    if (isClientSide) {
+      // CLIENT-SIDE: Use Amplify API
+      const response = await del({
+        apiName: API_NAME,
+        path,
+      }).response;
 
-    const data = await response.body.json();
-    return data;
+      const data = await response.body.json();
+      return data;
+    } else {
+      // SERVER-SIDE: Use AWS SDK signing
+      const url = `${DAL_API_URL}${path}`;
+      const response = await signRequestServerSide("DELETE", url);
+      const data = await response.json();
+      return data;
+    }
   } else {
     // Direct connection
     return dalFetchDirect(path, { method: "DELETE" });
