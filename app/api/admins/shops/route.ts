@@ -1,9 +1,18 @@
 import { NextResponse } from "next/server";
-import { invokeLambda } from "../../../../lib/lambda-client";
+import { dalGet } from "../../../../lib/dal-client";
 
 export async function GET() {
   try {
-    const result = await invokeLambda("getAdminShops");
+    // Fetch only admins with active shops using query parameter
+    const result = await dalGet("/api/v1/admins?hasActiveShop=true");
+
+    // Extra safety: filter on frontend too (defense in depth)
+    if (result.success && result.data) {
+      result.data = result.data.filter(
+        (admin: any) => admin.hasActiveShop === true && admin.shopID
+      );
+    }
+
     return NextResponse.json(result);
   } catch (error) {
     console.error("Error fetching active shops:", error);

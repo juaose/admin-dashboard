@@ -42,27 +42,33 @@ export default function DepositsModal({
 }: DepositsModalProps) {
   if (!isOpen) return null;
 
-  // Group deposits by bank
-  const depositsByBank = deposits.reduce(
-    (acc, item) => {
-      const bankName = item.bankName;
-      if (!acc[bankName]) {
-        acc[bankName] = [];
-      }
-      acc[bankName].push(item);
-      return acc;
-    },
-    {} as Record<string, any[]>
-  );
+  // Handle both old array format and new grouped object format
+  const depositsByBank: Record<string, any[]> = Array.isArray(deposits)
+    ? // Old format: array of { deposit, bankName }
+      deposits.reduce(
+        (acc, item) => {
+          const bankName = item.bankName;
+          if (!acc[bankName]) {
+            acc[bankName] = [];
+          }
+          acc[bankName].push(item);
+          return acc;
+        },
+        {} as Record<string, any[]>
+      )
+    : // New format: already grouped by bank { "BAC": [...], "BCR": [...] }
+      deposits;
 
   // Calculate totals per bank
   const bankSummaries = (
     Object.entries(depositsByBank) as [string, any[]][]
   ).map(([bankName, items]) => {
-    const total = items.reduce(
-      (sum: number, item: any) => sum + (item.deposit.credit || 0),
-      0
-    );
+    // Check if items have the old wrapped format or new direct format
+    const total = items.reduce((sum: number, item: any) => {
+      // Old format: item.deposit.credit, New format: item.credit
+      const credit = item.deposit?.credit || item.credit || 0;
+      return sum + credit;
+    }, 0);
     return { bankName, count: items.length, total };
   });
 
@@ -121,8 +127,9 @@ export default function DepositsModal({
                   {/* Bank Deposits */}
                   <div className="flex flex-col gap-4">
                     {bankItems.map((item: any, idx: number) => {
-                      const deposit = item.deposit;
-                      const bankName = item.bankName;
+                      // Handle both old wrapped format and new direct format
+                      const deposit = item.deposit || item;
+                      const bankName = item.bankName || summary.bankName;
                       return (
                         <div
                           key={idx}

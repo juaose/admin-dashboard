@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { invokeLambdaWithPath } from "../../../../../lib/lambda-client";
+import { dalGet } from "../../../../../lib/dal-client";
 
 export async function GET(
   request: NextRequest,
@@ -15,7 +15,7 @@ export async function GET(
       );
     }
 
-    const result = await invokeLambdaWithPath("getHostAccountsByBank", {
+    const result = await dalGet("/api/v1/host-accounts", {
       bankId: params.bankId,
     });
 

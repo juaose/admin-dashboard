@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
-import type { BankAccountDocument, hostAccountDoc } from "@juaose/lotto-shared-types";
+import type {
+  BankAccountDocument,
+  hostAccountDoc,
+} from "@juaose/lotto-shared-types";
 import { getAuthHeaders } from "@/lib/client-auth";
 import { getBankColorBall } from "./utils/playerUtils";
 
@@ -8,7 +11,7 @@ interface ManageHostAccountsModalProps {
   onClose: () => void;
   account: BankAccountDocument;
   playerAccNumber: number;
-  onUpdate: () => void;
+  onUpdate: (updatedPlayer: any) => void;
 }
 
 export default function ManageHostAccountsModal({
@@ -22,9 +25,9 @@ export default function ManageHostAccountsModal({
   const [loadingHostAccounts, setLoadingHostAccounts] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   // Local state for matriculated accounts - updates immediately for hot-updates
-  const [localMatriculatedAccounts, setLocalMatriculatedAccounts] = useState<any[]>(
-    account.includedIn || []
-  );
+  const [localMatriculatedAccounts, setLocalMatriculatedAccounts] = useState<
+    any[]
+  >(account.includedIn || []);
 
   // Reset local state when account changes or modal opens
   useEffect(() => {
@@ -83,7 +86,9 @@ export default function ManageHostAccountsModal({
         method: "PUT",
         headers,
         body: JSON.stringify({
-          updateType: isCurrentlyMatriculated ? "removeHostAccount" : "addHostAccount",
+          updateType: isCurrentlyMatriculated
+            ? "removeHostAccount"
+            : "addHostAccount",
           data: {
             accountIban: account.iban_num,
             hostAccount: hostAccountData,
@@ -105,8 +110,9 @@ export default function ManageHostAccountsModal({
           setLocalMatriculatedAccounts((prev) => [...prev, hostAccountData]);
         }
 
-        // Refresh parent component to update main panel
-        onUpdate();
+        // Pass updated player data from response to parent
+        // Modern REST best practice: mutation endpoints return updated resource
+        onUpdate(result.data);
       } else {
         alert(`Error: ${result.error}`);
       }
@@ -120,8 +126,12 @@ export default function ManageHostAccountsModal({
 
   if (!isOpen) return null;
 
-  const matriculatedHosts = hostAccounts.filter((h) => isHostMatriculated(h.iban_num));
-  const availableHosts = hostAccounts.filter((h) => !isHostMatriculated(h.iban_num));
+  const matriculatedHosts = hostAccounts.filter((h) =>
+    isHostMatriculated(h.iban_num)
+  );
+  const availableHosts = hostAccounts.filter(
+    (h) => !isHostMatriculated(h.iban_num)
+  );
 
   return (
     <div
@@ -229,18 +239,19 @@ export default function ManageHostAccountsModal({
                 </div>
               )}
 
-              {matriculatedHosts.length === 0 && availableHosts.length === 0 && (
-                <div className="text-center py-8 text-gray-600 dark:text-gray-400">
-                  No hay cuentas disponibles
-                </div>
-              )}
+              {matriculatedHosts.length === 0 &&
+                availableHosts.length === 0 && (
+                  <div className="text-center py-8 text-gray-600 dark:text-gray-400">
+                    No hay cuentas disponibles
+                  </div>
+                )}
             </>
           )}
         </div>
 
         {/* Footer */}
         <div className="p-6 border-t border-gray-200 dark:border-gray-700 flex justify-end">
-          <button 
+          <button
             onClick={onClose}
             className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium"
           >

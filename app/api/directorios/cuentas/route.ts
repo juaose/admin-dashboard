@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { invokeLambda } from "../../../../lib/lambda-client";
+import { dalGet } from "../../../../lib/dal-client";
 
 export async function GET(request: NextRequest) {
   try {
-    const result = await invokeLambda("getHostAccounts");
+    const result = await dalGet("/api/v1/host-accounts");
     return NextResponse.json(result);
   } catch (error) {
     console.error("Error fetching host accounts:", error);

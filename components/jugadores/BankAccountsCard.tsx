@@ -1,5 +1,8 @@
 import { useState } from "react";
-import type { PlayerDocument, BankAccountDocument } from "@juaose/lotto-shared-types";
+import type {
+  PlayerDocument,
+  BankAccountDocument,
+} from "@juaose/lotto-shared-types";
 import { getAuthHeaders } from "@/lib/client-auth";
 import { getBankColorBall } from "./utils/playerUtils";
 import AddBankAccountModal from "./AddBankAccountModal";
@@ -18,7 +21,8 @@ export default function BankAccountsCard({
 }: BankAccountsCardProps) {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showManageHostModal, setShowManageHostModal] = useState(false);
-  const [selectedAccount, setSelectedAccount] = useState<BankAccountDocument | null>(null);
+  const [selectedAccount, setSelectedAccount] =
+    useState<BankAccountDocument | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [deletingAccount, setDeletingAccount] = useState<string | null>(null);
   const [togglingStatus, setTogglingStatus] = useState<string | null>(null);
@@ -26,7 +30,7 @@ export default function BankAccountsCard({
 
   const handleAddBankAccount = async (newAccount: BankAccountDocument) => {
     setIsAdding(true);
-    
+
     try {
       const headers = await getAuthHeaders();
       const response = await fetch(`/api/jugadores/${player.premayor_acc}`, {
@@ -60,30 +64,25 @@ export default function BankAccountsCard({
     setShowManageHostModal(true);
   };
 
-  const handleHostAccountsUpdate = async () => {
-    // Refresh player data after host account changes
-    try {
-      const response = await fetch(`/api/jugadores/${player.premayor_acc}`);
-      const result = await response.json();
-      if (result.success) {
-        onUpdate(result.data);
-        
-        // Update selectedAccount with the refreshed data
-        if (selectedAccount) {
-          const updatedAccount = result.data.bank_accounts?.find(
-            (acc: BankAccountDocument) => acc.iban_num === selectedAccount.iban_num
-          );
-          if (updatedAccount) {
-            setSelectedAccount(updatedAccount);
-          }
-        }
+  const handleHostAccountsUpdate = async (updatedPlayer: PlayerDocument) => {
+    // Use the updated player data directly from the mutation response
+    // No need for a separate GET request - modern REST best practice
+    onUpdate(updatedPlayer);
+
+    // Update selectedAccount with the refreshed data
+    if (selectedAccount) {
+      const updatedAccount = updatedPlayer.bank_accounts?.find(
+        (acc: BankAccountDocument) => acc.iban_num === selectedAccount.iban_num
+      );
+      if (updatedAccount) {
+        setSelectedAccount(updatedAccount);
       }
-    } catch (error) {
-      console.error("Error refreshing player data:", error);
     }
   };
 
-  const handleToggleBankAccountStatus = async (account: BankAccountDocument) => {
+  const handleToggleBankAccountStatus = async (
+    account: BankAccountDocument
+  ) => {
     const newStatus = !account.isActive;
     setTogglingStatus(account.iban_num);
 
@@ -113,7 +112,9 @@ export default function BankAccountsCard({
     }
   };
 
-  const handleToggleBankAccountFavorite = async (account: BankAccountDocument) => {
+  const handleToggleBankAccountFavorite = async (
+    account: BankAccountDocument
+  ) => {
     const newFavoriteStatus = !account.isFavorite;
 
     // Show confirmation dialog when setting as favorite
@@ -133,7 +134,10 @@ export default function BankAccountsCard({
         headers,
         body: JSON.stringify({
           updateType: "toggleBankAccountFavorite",
-          data: { accountIban: account.iban_num, isFavorite: newFavoriteStatus },
+          data: {
+            accountIban: account.iban_num,
+            isFavorite: newFavoriteStatus,
+          },
         }),
       });
 
@@ -248,8 +252,8 @@ export default function BankAccountsCard({
                     {togglingStatus === account.iban_num
                       ? "..."
                       : account.isActive !== false
-                      ? "✓ Activa"
-                      : "✗ Inactiva"}
+                        ? "✓ Activa"
+                        : "✗ Inactiva"}
                   </button>
                   {/* Delete Button */}
                   <button
@@ -280,8 +284,8 @@ export default function BankAccountsCard({
                     {togglingFavorite === account.iban_num
                       ? "..."
                       : account.isFavorite
-                      ? "⭐ Favorita"
-                      : "☆ Favorita"}
+                        ? "⭐ Favorita"
+                        : "☆ Favorita"}
                   </button>
                 </div>
               </div>

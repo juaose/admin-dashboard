@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
-import { invokeLambdaWithPath } from "../../../../../lib/lambda-client";
+import { dalGet } from "../../../../../lib/dal-client";
 
 export async function GET(
   request: NextRequest,
@@ -10,13 +10,13 @@ export async function GET(
   try {
     const searchParams = request.nextUrl.searchParams;
     const limit = searchParams.get("limit") || "25";
-    const type = searchParams.get("type") || "ANY";
+    const type = searchParams.get("type") || "0"; // 0 = ANY
 
-    const result = await invokeLambdaWithPath(
-      "getPlayerReloads",
-      { id: params.id },
-      { limit, type }
-    );
+    const result = await dalGet("/api/v1/reloads/recent", {
+      premayor_acc: params.id,
+      limit,
+      reloadTypeFilter: type,
+    });
 
     return NextResponse.json(result);
   } catch (error) {

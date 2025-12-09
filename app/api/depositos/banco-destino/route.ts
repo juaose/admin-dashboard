@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
-import { invokeLambdaWithQuery } from "../../../../lib/lambda-client";
+import { dalGet } from "../../../../lib/dal-client";
 
 export async function GET(request: NextRequest) {
   try {
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     }
 
     // For now, use the banks endpoint - can be enhanced later if needed
-    const result = await invokeLambdaWithQuery("getDepositsByBank", {
+    const result = await dalGet("/api/v1/credits/deposits/by-bank", {
       startDate,
       endDate,
     });

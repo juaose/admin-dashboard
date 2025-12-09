@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { invokeLambda } from "../../../../lib/lambda-client";
+import { dalGet } from "../../../../lib/dal-client";
 
 export async function GET() {
   try {
-    const result = await invokeLambda("getPhoneLines");
+    const result = await dalGet("/api/v1/phone-lines");
     return NextResponse.json(result);
   } catch (error) {
     console.error("Error fetching phone lines:", error);

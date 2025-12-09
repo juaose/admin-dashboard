@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
-import { invokeLambdaWithPath } from "../../../../../lib/lambda-client";
+import { dalGet } from "../../../../../lib/dal-client";
 
 export async function GET(
   request: NextRequest,
@@ -9,21 +9,20 @@ export async function GET(
 ) {
   try {
     const searchParams = request.nextUrl.searchParams;
-    const limit = searchParams.get("limit") || "25";
+    const limitPerBank = searchParams.get("limitPerBank") || "25";
 
-    const result = await invokeLambdaWithPath(
-      "getPlayerWithdrawals",
-      { id: params.id },
-      { limit }
-    );
+    const result = await dalGet("/api/v1/credits/by-player", {
+      playerId: params.id,
+      limitPerBank,
+    });
 
     return NextResponse.json(result);
   } catch (error) {
-    console.error("Error fetching player redemptions:", error);
+    console.error("Error fetching player credits:", error);
     return NextResponse.json(
       {
         success: false,
-        error: "Error al cargar retiros del jugador",
+        error: "Error al cargar depósitos del jugador",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }

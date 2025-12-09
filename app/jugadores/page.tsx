@@ -14,48 +14,51 @@ import PlayerDataForm from "@/components/jugadores/PlayerDataForm";
 import BankAccountsCard from "@/components/jugadores/BankAccountsCard";
 import { getBankColorBall } from "@/components/jugadores/utils/playerUtils";
 
-
-
 export default function JugadoresPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<PlayerDocument[]>([]);
-  const [selectedPlayer, setSelectedPlayer] = useState<PlayerDocument | null>(null);
+  const [selectedPlayer, setSelectedPlayer] = useState<PlayerDocument | null>(
+    null
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [totalMatches, setTotalMatches] = useState(0);
 
   const [isEditing, setIsEditing] = useState(false);
   const [editedPlayer, setEditedPlayer] = useState<PlayerDocument | null>(null);
-  
+
   // Reloads modal state
   const [showReloadsModal, setShowReloadsModal] = useState(false);
   const [reloads, setReloads] = useState<any[]>([]);
   const [loadingReloads, setLoadingReloads] = useState(false);
-  
+
   // Redemptions modal state
   const [showRedemptionsModal, setShowRedemptionsModal] = useState(false);
   const [redemptions, setRedemptions] = useState<any[]>([]);
   const [loadingRedemptions, setLoadingRedemptions] = useState(false);
-  
+
   // Deposits modal state
   const [showDepositsModal, setShowDepositsModal] = useState(false);
   const [deposits, setDeposits] = useState<any[]>([]);
   const [loadingDeposits, setLoadingDeposits] = useState(false);
-  
+
   // Host accounts for mapping IBANs to codenames
   const [hostAccounts, setHostAccounts] = useState<any[]>([]);
   const [loadingHostAccounts, setLoadingHostAccounts] = useState(false);
-  
+
   // Active shops for shop selector
   const [activeShops, setActiveShops] = useState<any[]>([]);
   const [loadingShops, setLoadingShops] = useState(false);
-  
+
   // Record limit for reports
   const [recordLimit, setRecordLimit] = useState(25);
-  
+
   // Account selection modal state
-  const [showAccountSelectionModal, setShowAccountSelectionModal] = useState(false);
-  const [selectedAccountsForAuth, setSelectedAccountsForAuth] = useState<string[]>([]);
+  const [showAccountSelectionModal, setShowAccountSelectionModal] =
+    useState(false);
+  const [selectedAccountsForAuth, setSelectedAccountsForAuth] = useState<
+    string[]
+  >([]);
 
   const handleSearch = async () => {
     if (searchTerm.trim().length < 2) {
@@ -133,12 +136,12 @@ export default function JugadoresPage() {
     setSelectedPlayer(player);
     setEditedPlayer(player);
     setIsEditing(false);
-    
+
     // Fetch host accounts if not already loaded
     if (hostAccounts.length === 0) {
       fetchHostAccounts();
     }
-    
+
     // Fetch active shops if not already loaded
     if (activeShops.length === 0) {
       fetchActiveShops();
@@ -151,48 +154,74 @@ export default function JugadoresPage() {
     if (isEditing) {
       // Save mode - send updates to API
       if (!editedPlayer || !selectedPlayer) return;
-      
+
       setIsSaving(true);
       try {
         const updates: any[] = [];
-        
+
         // Check what changed and prepare updates
         if (editedPlayer.codename !== selectedPlayer.codename) {
-          updates.push({ type: "codename", data: { codename: editedPlayer.codename } });
+          updates.push({
+            type: "codename",
+            data: { codename: editedPlayer.codename },
+          });
         }
         // screenName is immutable - created at account creation time
         if (editedPlayer.shopID !== selectedPlayer.shopID) {
-          updates.push({ type: "shopID", data: { shopID: editedPlayer.shopID } });
+          updates.push({
+            type: "shopID",
+            data: { shopID: editedPlayer.shopID },
+          });
         }
         if (editedPlayer.sinpe_num !== selectedPlayer.sinpe_num) {
-          updates.push({ type: "sinpe_num", data: { sinpe_num: editedPlayer.sinpe_num } });
+          updates.push({
+            type: "sinpe_num",
+            data: { sinpe_num: editedPlayer.sinpe_num },
+          });
         }
         if (editedPlayer.whatsapp_num !== selectedPlayer.whatsapp_num) {
-          updates.push({ type: "whatsapp_num", data: { whatsapp_num: editedPlayer.whatsapp_num } });
+          updates.push({
+            type: "whatsapp_num",
+            data: { whatsapp_num: editedPlayer.whatsapp_num },
+          });
         }
         if (editedPlayer.notes !== selectedPlayer.notes) {
           updates.push({ type: "notes", data: { notes: editedPlayer.notes } });
         }
-        if (editedPlayer.withdrawalInstructions !== selectedPlayer.withdrawalInstructions) {
-          updates.push({ type: "withdrawalInstructions", data: { withdrawalInstructions: editedPlayer.withdrawalInstructions } });
+        if (
+          editedPlayer.withdrawalInstructions !==
+          selectedPlayer.withdrawalInstructions
+        ) {
+          updates.push({
+            type: "withdrawalInstructions",
+            data: {
+              withdrawalInstructions: editedPlayer.withdrawalInstructions,
+            },
+          });
         }
-        
+
         // Execute all updates
         for (const update of updates) {
           const headers = await getAuthHeaders();
-          const response = await fetch(`/api/jugadores/${selectedPlayer.premayor_acc}`, {
-            method: "PUT",
-            headers,
-            body: JSON.stringify({ updateType: update.type, data: update.data }),
-          });
-          
+          const response = await fetch(
+            `/api/jugadores/${selectedPlayer.premayor_acc}`,
+            {
+              method: "PUT",
+              headers,
+              body: JSON.stringify({
+                updateType: update.type,
+                data: update.data,
+              }),
+            }
+          );
+
           const result = await response.json();
           if (!result.success) {
             alert(`Error al actualizar ${update.type}: ${result.error}`);
             return;
           }
         }
-        
+
         // Refresh player data
         const refreshResponse = await fetch(
           `/api/jugadores?search=${selectedPlayer.premayor_acc}`
@@ -203,7 +232,7 @@ export default function JugadoresPage() {
           setSelectedPlayer(updatedPlayer);
           setEditedPlayer(updatedPlayer);
         }
-        
+
         alert("✅ Cambios guardados exitosamente");
         setIsEditing(false);
       } catch (error) {
@@ -253,7 +282,7 @@ export default function JugadoresPage() {
     try {
       setLoadingReloads(true);
       const response = await fetch(
-        `/api/jugadores/${selectedPlayer.premayor_acc}/recargas?limit=${recordLimit}`
+        `/api/jugadores/${selectedPlayer.premayor_acc}/reloads?limit=${recordLimit}`
       );
       const result = await response.json();
 
@@ -277,7 +306,7 @@ export default function JugadoresPage() {
     try {
       setLoadingRedemptions(true);
       const response = await fetch(
-        `/api/jugadores/${selectedPlayer.premayor_acc}/retiros?limit=${recordLimit}`
+        `/api/jugadores/${selectedPlayer.premayor_acc}/redemptions?limit=${recordLimit}`
       );
       const result = await response.json();
 
@@ -301,7 +330,7 @@ export default function JugadoresPage() {
     try {
       setLoadingDeposits(true);
       const response = await fetch(
-        `/api/jugadores/${selectedPlayer.premayor_acc}/depositos?limitPerBank=${recordLimit}`
+        `/api/jugadores/${selectedPlayer.premayor_acc}/credits?limitPerBank=${recordLimit}`
       );
       const result = await response.json();
 
@@ -354,8 +383,12 @@ export default function JugadoresPage() {
     <div className="p-4 md:p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
       {/* Search Section */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-6 border border-gray-200 dark:border-gray-700">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">🔍 Búsqueda de Jugadores</h1>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">Herramienta de búsqueda y gestión individual de jugadores</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+          🔍 Búsqueda de Jugadores
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400 mb-6">
+          Herramienta de búsqueda y gestión individual de jugadores
+        </p>
 
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1">
@@ -434,14 +467,14 @@ export default function JugadoresPage() {
                   <button
                     onClick={async () => {
                       if (!selectedPlayer) return;
-                      
+
                       const newStatus = !selectedPlayer.auto_recarga;
                       const action = newStatus ? "encenderán" : "apagarán";
-                      
+
                       const confirmed = window.confirm(
                         `¿Se ${action} las recargas automáticas para jugador ${selectedPlayer.screenName}?`
                       );
-                      
+
                       if (confirmed) {
                         try {
                           const headers = await getAuthHeaders();
@@ -456,23 +489,28 @@ export default function JugadoresPage() {
                               }),
                             }
                           );
-                          
+
                           const result = await response.json();
-                          
+
                           if (result.success) {
                             // Refresh player data
                             const refreshResponse = await fetch(
                               `/api/jugadores?search=${selectedPlayer.premayor_acc}`
                             );
                             const refreshResult = await refreshResponse.json();
-                            
-                            if (refreshResult.success && refreshResult.data.length > 0) {
+
+                            if (
+                              refreshResult.success &&
+                              refreshResult.data.length > 0
+                            ) {
                               const updatedPlayer = refreshResult.data[0];
                               setSelectedPlayer(updatedPlayer);
                               setEditedPlayer(updatedPlayer);
                             }
-                            
-                            alert(`✅ Recargas automáticas ${newStatus ? "activadas" : "desactivadas"} exitosamente`);
+
+                            alert(
+                              `✅ Recargas automáticas ${newStatus ? "activadas" : "desactivadas"} exitosamente`
+                            );
                           } else {
                             alert(`Error: ${result.error}`);
                           }
@@ -516,21 +554,21 @@ export default function JugadoresPage() {
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  <button 
+                  <button
                     className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleVerRecargas}
                     disabled={loadingReloads}
                   >
                     {loadingReloads ? "Cargando..." : "🔄 Ver Recargas"}
                   </button>
-                  <button 
+                  <button
                     className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleVerRetiros}
                     disabled={loadingRedemptions}
                   >
                     {loadingRedemptions ? "Cargando..." : "💰 Ver Retiros"}
                   </button>
-                  <button 
+                  <button
                     className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium col-span-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleVerDepositos}
                     disabled={loadingDeposits}
@@ -564,7 +602,9 @@ export default function JugadoresPage() {
                   setEditedPlayer(updatedPlayer);
                 }}
                 onOpenModal={() => {
-                  setSelectedAccountsForAuth(editedPlayer.authorizedNumbers || []);
+                  setSelectedAccountsForAuth(
+                    editedPlayer.authorizedNumbers || []
+                  );
                   setShowAccountSelectionModal(true);
                 }}
               />
@@ -578,7 +618,6 @@ export default function JugadoresPage() {
                   setEditedPlayer(updatedPlayer);
                 }}
               />
-
             </div>
           </div>
         </div>
@@ -647,18 +686,23 @@ export default function JugadoresPage() {
           // Build confirmation message with account names
           const selectedAccountNames = selectedAccountsForAuth
             .map((iban) => {
-              const account = hostAccounts.find((acc: any) => acc.iban_num === iban);
+              const account = hostAccounts.find(
+                (acc: any) => acc.iban_num === iban
+              );
               if (account) {
-                const colorBall = account.bank_id ? getBankColorBall(account.bank_id) : '🏦';
+                const colorBall = account.bank_id
+                  ? getBankColorBall(account.bank_id)
+                  : "🏦";
                 return `${colorBall} ${account.codename}`;
               }
               return `🏦 ${iban}`;
             })
-            .join('\n');
+            .join("\n");
 
-          const message = selectedAccountsForAuth.length > 0
-            ? `El jugador sólo tendrá servicio de recargas automáticas en las siguientes cuentas:\n\n${selectedAccountNames}\n\n¿Confirmar cambios?`
-            : `El jugador NO tendrá ninguna cuenta autorizada para recargas automáticas.\n\n¿Confirmar cambios?`;
+          const message =
+            selectedAccountsForAuth.length > 0
+              ? `El jugador sólo tendrá servicio de recargas automáticas en las siguientes cuentas:\n\n${selectedAccountNames}\n\n¿Confirmar cambios?`
+              : `El jugador NO tendrá ninguna cuenta autorizada para recargas automáticas.\n\n¿Confirmar cambios?`;
 
           const confirmed = window.confirm(message);
 
@@ -682,13 +726,13 @@ export default function JugadoresPage() {
               if (result.success) {
                 // Update local state
                 handleFieldChange("authorizedNumbers", selectedAccountsForAuth);
-                
+
                 // Refresh player data
                 const refreshResponse = await fetch(
                   `/api/jugadores?search=${selectedPlayer.premayor_acc}`
                 );
                 const refreshResult = await refreshResponse.json();
-                
+
                 if (refreshResult.success && refreshResult.data.length > 0) {
                   const updatedPlayer = refreshResult.data[0];
                   setSelectedPlayer(updatedPlayer);
