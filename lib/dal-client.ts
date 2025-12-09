@@ -9,6 +9,8 @@ import { SignatureV4 } from "@aws-sdk/signature-v4";
 import { Sha256 } from "@aws-crypto/sha256-js";
 import { HttpRequest } from "@aws-sdk/protocol-http";
 
+console.debug("DAL_API_URL from env: ", process.env.DAL_API_URL);
+
 // Get DAL API base URL from environment
 const DAL_API_URL = process.env.DAL_API_URL || "http://localhost:3100";
 
