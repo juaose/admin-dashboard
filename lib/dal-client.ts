@@ -10,16 +10,6 @@ import { Sha256 } from "@aws-crypto/sha256-js";
 import { HttpRequest } from "@aws-sdk/protocol-http";
 import { fromEnv } from "@aws-sdk/credential-providers";
 
-// console.debug("DAL_API_URL from env: ", process.env.DAL_API_URL);
-// console.debug(
-//   "DAL_SERVICE_ACCESS_KEY_ID from env: ",
-//   process.env.DAL_SERVICE_ACCESS_KEY_ID?.substring(0, 5).concat("...")
-// );
-// console.debug(
-//   "DAL_SERVICE_ACCESS_KEY_ID from env length: ",
-//   process.env.DAL_SERVICE_ACCESS_KEY_ID?.length
-// );
-
 // Get DAL API base URL from environment
 const DAL_API_URL = process.env.DAL_API_URL || "http://localhost:3100";
 
@@ -40,12 +30,6 @@ async function signRequestServerSide(
 ): Promise<Response> {
   const urlObj = new URL(url);
 
-  // console.debug("Signing with credentials:", {
-  //   hasAccessKey: !!process.env.DAL_SERVICE_ACCESS_KEY_ID,
-  //   hasSecretKey: !!process.env.DAL_SERVICE_SECRET_ACCESS_KEY,
-  //   region: process.env.DAL_SERVICE_REGION || "error with the region!!!",
-  //   secretKeyLength: process.env.DAL_SERVICE_SECRET_ACCESS_KEY?.length,
-  // });
   const request = new HttpRequest({
     method,
     protocol: urlObj.protocol.slice(0, -1) as "http" | "https",
@@ -69,8 +53,12 @@ async function signRequestServerSide(
   const signedRequest = await signer.sign(request);
 
   const headers: Record<string, string> = signedRequest.headers;
-
-  //console.debug("headers: ", JSON.stringify(headers, null, " "));
+  console.debug("fromEnv() values: ", fromEnv());
+  console.debug("signedRequest Headers: ", JSON.stringify(headers, null, " "));
+  console.debug(
+    "signedRequest Body: ",
+    JSON.stringify(signedRequest.body, null, " ")
+  );
   // Make fetch with signed headers
   return fetch(url, {
     method,
