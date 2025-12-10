@@ -1,4 +1,5 @@
 import { Amplify } from "aws-amplify";
+import { fetchAuthSession } from "aws-amplify/auth";
 import outputs from "../amplify_outputs.json";
 
 // Configure Amplify with environment variable overrides
@@ -32,6 +33,18 @@ Amplify.configure({
       "dal-api": {
         endpoint: process.env.DAL_API_URL || "http://localhost:3100",
         region: "us-east-1",
+        headers: async () => {
+          try {
+            const session = await fetchAuthSession();
+            const idToken = session.tokens?.idToken?.toString();
+            if (idToken) {
+              return { Authorization: idToken };
+            }
+          } catch (error) {
+            console.warn("No Cognito session available:", error);
+          }
+          return {};
+        },
       },
     },
   },
