@@ -19,6 +19,24 @@ const API_NAME = "dal-api";
 // Determine if we're using API Gateway (IAM auth) or direct connection (no auth)
 const isApiGateway = DAL_API_URL.includes("execute-api");
 
+let alreadyRan = false;
+async function testOneTime() {
+  if (alreadyRan) {
+    return;
+  }
+  console.log("Running for the 1st time: ", Date.now());
+  alreadyRan = true;
+  try {
+    const response = await signRequestServerSide(
+      "GET",
+      "https://zanttjd6zj.execute-api.us-east-1.amazonaws.com/debug/admins"
+    );
+    console.log("[response] Error: ", response);
+  } catch (error) {
+    console.log("[testOneTime] Error: ", error);
+  }
+}
+
 /**
  * Sign a request with AWS IAM credentials for Server-Side use
  * Uses service account credentials from environment variables
@@ -28,6 +46,7 @@ async function signRequestServerSide(
   url: string,
   body?: any
 ): Promise<Response> {
+  await testOneTime();
   const urlObj = new URL(url);
 
   const request = new HttpRequest({
