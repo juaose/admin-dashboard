@@ -8,16 +8,17 @@ import { get, post, put, patch, del } from "aws-amplify/api";
 import { SignatureV4 } from "@aws-sdk/signature-v4";
 import { Sha256 } from "@aws-crypto/sha256-js";
 import { HttpRequest } from "@aws-sdk/protocol-http";
+import { fromEnv } from "@aws-sdk/credential-providers";
 
-console.debug("DAL_API_URL from env: ", process.env.DAL_API_URL);
-console.debug(
-  "DAL_SERVICE_ACCESS_KEY_ID from env: ",
-  process.env.DAL_SERVICE_SECRET_ACCESS_KEY?.substring(0, 5).concat("...")
-);
-console.debug(
-  "DAL_SERVICE_ACCESS_KEY_ID from env length: ",
-  process.env.DAL_SERVICE_SECRET_ACCESS_KEY?.length
-);
+// console.debug("DAL_API_URL from env: ", process.env.DAL_API_URL);
+// console.debug(
+//   "DAL_SERVICE_ACCESS_KEY_ID from env: ",
+//   process.env.DAL_SERVICE_ACCESS_KEY_ID?.substring(0, 5).concat("...")
+// );
+// console.debug(
+//   "DAL_SERVICE_ACCESS_KEY_ID from env length: ",
+//   process.env.DAL_SERVICE_ACCESS_KEY_ID?.length
+// );
 
 // Get DAL API base URL from environment
 const DAL_API_URL = process.env.DAL_API_URL || "http://localhost:3100";
@@ -39,12 +40,12 @@ async function signRequestServerSide(
 ): Promise<Response> {
   const urlObj = new URL(url);
 
-  console.debug("Signing with credentials:", {
-    hasAccessKey: !!process.env.DAL_SERVICE_ACCESS_KEY_ID,
-    hasSecretKey: !!process.env.DAL_SERVICE_SECRET_ACCESS_KEY,
-    region: process.env.DAL_SERVICE_REGION || "error with the region!!!",
-    secretKeyLength: process.env.DAL_SERVICE_SECRET_ACCESS_KEY?.length,
-  });
+  // console.debug("Signing with credentials:", {
+  //   hasAccessKey: !!process.env.DAL_SERVICE_ACCESS_KEY_ID,
+  //   hasSecretKey: !!process.env.DAL_SERVICE_SECRET_ACCESS_KEY,
+  //   region: process.env.DAL_SERVICE_REGION || "error with the region!!!",
+  //   secretKeyLength: process.env.DAL_SERVICE_SECRET_ACCESS_KEY?.length,
+  // });
   const request = new HttpRequest({
     method,
     protocol: urlObj.protocol.slice(0, -1) as "http" | "https",
@@ -59,12 +60,9 @@ async function signRequestServerSide(
 
   const signer = new SignatureV4({
     service: "execute-api",
-    region: process.env.DAL_SERVICE_REGION || "us-east-1",
-    credentials: {
-      accessKeyId: process.env.DAL_SERVICE_ACCESS_KEY_ID!,
-      secretAccessKey: process.env.DAL_SERVICE_SECRET_ACCESS_KEY!,
-      sessionToken: process.env.DAL_SERVICE_SESSION_TOKEN,
-    },
+    region:
+      process.env.AWS_REGION || process.env.DAL_SERVICE_REGION || "us-east-1",
+    credentials: fromEnv(), // Automatically uses AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN from Lambda environment
     sha256: Sha256,
   });
 
@@ -72,7 +70,7 @@ async function signRequestServerSide(
 
   const headers: Record<string, string> = signedRequest.headers;
 
-  console.debug("headers: ", JSON.stringify(headers, null, " "));
+  //console.debug("headers: ", JSON.stringify(headers, null, " "));
   // Make fetch with signed headers
   return fetch(url, {
     method,
