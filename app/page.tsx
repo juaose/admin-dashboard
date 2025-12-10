@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { dalGet } from "@/lib/dal-client";
 
 interface DashboardStats {
   deposits: {
@@ -86,12 +87,17 @@ export default function HomePage() {
 
   const loadShops = async () => {
     try {
-      const response = await fetch("/api/admins/shops");
-      if (!response.ok) throw new Error("Failed to fetch shops");
+      // Call DAL directly - filter admins with active shops
+      const result = await dalGet("/api/v1/admins", {
+        hasActiveShop: "true",
+      });
 
-      const data = await response.json();
-      if (data.success) {
-        setShops(data.data || []);
+      if (result.success && result.data) {
+        // Filter shops that have active shops
+        const activeShops = result.data.filter(
+          (admin: any) => admin.hasActiveShop === true && admin.shopID
+        );
+        setShops(activeShops);
       }
     } catch (err) {
       console.error("Error loading shops:", err);
@@ -103,19 +109,18 @@ export default function HomePage() {
       setLoading(true);
       setError(null);
 
-      const params = new URLSearchParams({ period: periodType });
+      // Build query params
+      const params: Record<string, string> = { period: periodType };
       if (selectedShopId) {
-        params.append("shopId", selectedShopId);
+        params.shopId = selectedShopId;
       }
 
-      const response = await fetch(`/api/home/stats?${params}`);
+      // Call DAL directly
+      const result = await dalGet("/api/v1/stats", params);
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch dashboard stats");
+      if (result.success) {
+        setStats(result.data);
       }
-
-      const result = await response.json();
-      setStats(result.data);
     } catch (err) {
       console.error("Error loading dashboard stats:", err);
       setError("Error al cargar las estadísticas del dashboard");
