@@ -94,7 +94,7 @@ export async function PUT(
     // Route to dedicated endpoints
     if (updateType === "addHostAccount") {
       const result = await fetch(
-        `${process.env.DAL_API_URL}/api/v1/players/${params.id}/host-accounts`,
+        `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}/host-accounts`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -109,7 +109,7 @@ export async function PUT(
 
     if (updateType === "removeHostAccount") {
       const result = await fetch(
-        `${process.env.DAL_API_URL}/api/v1/players/${params.id}/host-accounts/${data.hostAccount.iban_num}?bankAccountIban=${data.accountIban}`,
+        `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}/host-accounts/${data.hostAccount.iban_num}?bankAccountIban=${data.accountIban}`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
@@ -120,7 +120,7 @@ export async function PUT(
 
     if (updateType === "toggleBankAccountStatus") {
       const result = await fetch(
-        `${process.env.DAL_API_URL}/api/v1/players/${params.id}/bank-accounts/${data.accountIban}/toggle-status`,
+        `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}/bank-accounts/${data.accountIban}/toggle-status`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -132,7 +132,7 @@ export async function PUT(
 
     if (updateType === "toggleBankAccountFavorite") {
       const result = await fetch(
-        `${process.env.DAL_API_URL}/api/v1/players/${params.id}/bank-accounts/${data.accountIban}/toggle-favorite`,
+        `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}/bank-accounts/${data.accountIban}/toggle-favorite`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -144,7 +144,7 @@ export async function PUT(
 
     if (updateType === "addFootprint") {
       const result = await fetch(
-        `${process.env.DAL_API_URL}/api/v1/players/${params.id}/footprints`,
+        `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}/footprints`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -156,7 +156,7 @@ export async function PUT(
 
     if (updateType === "removeFootprint") {
       const result = await fetch(
-        `${process.env.DAL_API_URL}/api/v1/players/${params.id}/footprints/${encodeURIComponent(data.footprint)}`,
+        `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}/footprints/${encodeURIComponent(data.footprint)}`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
@@ -167,7 +167,7 @@ export async function PUT(
 
     if (updateType === "removeAuthorizedAccount") {
       const result = await fetch(
-        `${process.env.DAL_API_URL}/api/v1/players/${params.id}/authorized-numbers/${encodeURIComponent(data.iban)}`,
+        `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}/authorized-numbers/${encodeURIComponent(data.iban)}`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
@@ -178,7 +178,7 @@ export async function PUT(
 
     if (updateType === "addBankAccount") {
       const result = await fetch(
-        `${process.env.DAL_API_URL}/api/v1/players/${params.id}/bank-accounts`,
+        `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}/bank-accounts`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -192,7 +192,7 @@ export async function PUT(
 
     if (updateType === "deleteBankAccount") {
       const result = await fetch(
-        `${process.env.DAL_API_URL}/api/v1/players/${params.id}/bank-accounts/${data.accountIban}`,
+        `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}/bank-accounts/${data.accountIban}`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
@@ -231,7 +231,7 @@ export async function PUT(
 
     // Call DAL API with clean field-based PATCH
     const result = await fetch(
-      `${process.env.DAL_API_URL}/api/v1/players/${params.id}`,
+      `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}`,
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },

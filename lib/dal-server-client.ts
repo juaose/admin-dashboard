@@ -5,7 +5,7 @@
  */
 
 const DAL_API_URL =
-  process.env.DAL_API_URL ||
+  process.env.NEXT_PUBLIC_DAL_API_URL ||
   "https://zanttjd6zj.execute-api.us-east-1.amazonaws.com";
 
 /**
