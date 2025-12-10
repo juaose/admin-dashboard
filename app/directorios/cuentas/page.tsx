@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { dalGet } from "@/lib/dal-client";
 
 interface HostAccount {
   accountID: number;
@@ -77,10 +78,9 @@ export default function CuentasDirectoryPage() {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("/api/directorios/cuentas");
-      const result = await response.json();
+      const result = await dalGet("/api/v1/host-accounts");
 
-      if (!response.ok || !result.success) {
+      if (!result.success) {
         throw new Error(result.error || "Error al cargar cuentas");
       }
 

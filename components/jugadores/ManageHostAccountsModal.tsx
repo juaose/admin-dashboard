@@ -5,6 +5,7 @@ import type {
 } from "@juaose/lotto-shared-types";
 import { getAuthHeaders } from "@/lib/client-auth";
 import { getBankColorBall } from "./utils/playerUtils";
+import { dalGet } from "@/lib/dal-client";
 
 interface ManageHostAccountsModalProps {
   isOpen: boolean;
@@ -43,10 +44,11 @@ export default function ManageHostAccountsModal({
   const fetchHostAccounts = async (bankId: number) => {
     try {
       setLoadingHostAccounts(true);
-      const response = await fetch(`/api/directorios/cuentas/${bankId}`);
-      const result = await response.json();
+      const result = await dalGet("/api/v1/host-accounts", {
+        bankId: bankId.toString(),
+      });
 
-      if (response.ok && result.success) {
+      if (result.success) {
         setHostAccounts(result.data || []);
       } else {
         console.error("Error fetching host accounts:", result.error);

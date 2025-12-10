@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { PlayerDocument } from "@juaose/lotto-shared-types";
 import { getAuthHeaders } from "@/lib/client-auth";
+import { dalGet } from "@/lib/dal-client";
 import ReloadsModal from "@/components/jugadores/ReloadsModal";
 import RedemptionsModal from "@/components/jugadores/RedemptionsModal";
 import DepositsModal from "@/components/jugadores/DepositsModal";
@@ -70,12 +71,11 @@ export default function JugadoresPage() {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(
-        `/api/jugadores?search=${encodeURIComponent(searchTerm)}`
-      );
-      const result = await response.json();
+      const result = await dalGet("/api/v1/players", {
+        search: searchTerm,
+      });
 
-      if (!response.ok || !result.success) {
+      if (!result.success) {
         throw new Error(result.error || "Error al buscar jugadores");
       }
 
@@ -98,10 +98,9 @@ export default function JugadoresPage() {
   const fetchHostAccounts = async () => {
     try {
       setLoadingHostAccounts(true);
-      const response = await fetch("/api/directorios/cuentas");
-      const result = await response.json();
+      const result = await dalGet("/api/v1/host-accounts");
 
-      if (response.ok && result.success) {
+      if (result.success) {
         setHostAccounts(result.data || []);
       }
     } catch (err) {
@@ -114,11 +113,16 @@ export default function JugadoresPage() {
   const fetchActiveShops = async () => {
     try {
       setLoadingShops(true);
-      const response = await fetch("/api/admins/shops");
-      const result = await response.json();
+      const result = await dalGet("/api/v1/admins", {
+        hasActiveShop: "true",
+      });
 
-      if (response.ok && result.success) {
-        setActiveShops(result.data || []);
+      if (result.success) {
+        // Apply client-side filter (defense in depth)
+        const filtered = result.data.filter(
+          (admin: any) => admin.hasActiveShop === true && admin.shopID
+        );
+        setActiveShops(filtered || []);
       }
     } catch (err) {
       console.error("Error fetching active shops:", err);
@@ -223,10 +227,9 @@ export default function JugadoresPage() {
         }
 
         // Refresh player data
-        const refreshResponse = await fetch(
-          `/api/jugadores?search=${selectedPlayer.premayor_acc}`
-        );
-        const refreshResult = await refreshResponse.json();
+        const refreshResult = await dalGet("/api/v1/players", {
+          search: selectedPlayer.premayor_acc.toString(),
+        });
         if (refreshResult.success && refreshResult.data.length > 0) {
           const updatedPlayer = refreshResult.data[0];
           setSelectedPlayer(updatedPlayer);
@@ -281,12 +284,12 @@ export default function JugadoresPage() {
 
     try {
       setLoadingReloads(true);
-      const response = await fetch(
-        `/api/jugadores/${selectedPlayer.premayor_acc}/reloads?limit=${recordLimit}`
+      const result = await dalGet(
+        `/api/v1/players/${selectedPlayer.premayor_acc}/reloads`,
+        { limit: recordLimit.toString() }
       );
-      const result = await response.json();
 
-      if (!response.ok || !result.success) {
+      if (!result.success) {
         throw new Error(result.error || "Error al cargar recargas");
       }
 
@@ -305,12 +308,12 @@ export default function JugadoresPage() {
 
     try {
       setLoadingRedemptions(true);
-      const response = await fetch(
-        `/api/jugadores/${selectedPlayer.premayor_acc}/redemptions?limit=${recordLimit}`
+      const result = await dalGet(
+        `/api/v1/players/${selectedPlayer.premayor_acc}/redemptions`,
+        { limit: recordLimit.toString() }
       );
-      const result = await response.json();
 
-      if (!response.ok || !result.success) {
+      if (!result.success) {
         throw new Error(result.error || "Error al cargar retiros");
       }
 
@@ -329,12 +332,12 @@ export default function JugadoresPage() {
 
     try {
       setLoadingDeposits(true);
-      const response = await fetch(
-        `/api/jugadores/${selectedPlayer.premayor_acc}/credits?limitPerBank=${recordLimit}`
+      const result = await dalGet(
+        `/api/v1/players/${selectedPlayer.premayor_acc}/credits`,
+        { limitPerBank: recordLimit.toString() }
       );
-      const result = await response.json();
 
-      if (!response.ok || !result.success) {
+      if (!result.success) {
         throw new Error(result.error || "Error al cargar depósitos");
       }
 
@@ -494,10 +497,12 @@ export default function JugadoresPage() {
 
                           if (result.success) {
                             // Refresh player data
-                            const refreshResponse = await fetch(
-                              `/api/jugadores?search=${selectedPlayer.premayor_acc}`
+                            const refreshResult = await dalGet(
+                              "/api/v1/players",
+                              {
+                                search: selectedPlayer.premayor_acc.toString(),
+                              }
                             );
-                            const refreshResult = await refreshResponse.json();
 
                             if (
                               refreshResult.success &&
@@ -728,10 +733,9 @@ export default function JugadoresPage() {
                 handleFieldChange("authorizedNumbers", selectedAccountsForAuth);
 
                 // Refresh player data
-                const refreshResponse = await fetch(
-                  `/api/jugadores?search=${selectedPlayer.premayor_acc}`
-                );
-                const refreshResult = await refreshResponse.json();
+                const refreshResult = await dalGet("/api/v1/players", {
+                  search: selectedPlayer.premayor_acc.toString(),
+                });
 
                 if (refreshResult.success && refreshResult.data.length > 0) {
                   const updatedPlayer = refreshResult.data[0];
