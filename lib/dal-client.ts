@@ -61,13 +61,13 @@ async function signRequestServerSide(
     body: body ? JSON.stringify(body) : undefined,
   });
 
-  // Debug: Check what AWS credentials are available
-  console.log("AWS env vars:", {
-    hasAWS_ACCESS_KEY_ID: !!process.env.AWS_ACCESS_KEY_ID,
-    hasAWS_SECRET_ACCESS_KEY: !!process.env.AWS_SECRET_ACCESS_KEY,
-    hasAWS_SESSION_TOKEN: !!process.env.AWS_SESSION_TOKEN,
-    hasAWS_REGION: !!process.env.AWS_REGION,
-  });
+  // Debug: Log ACTUAL credentials (REMOVE THIS AFTER DEBUGGING!)
+  console.log("=== ACTUAL CREDENTIALS (DELETE AFTER DEBUG) ===");
+  console.log("AWS_ACCESS_KEY_ID:", process.env.AWS_ACCESS_KEY_ID);
+  console.log("AWS_SECRET_ACCESS_KEY:", process.env.AWS_SECRET_ACCESS_KEY);
+  console.log("AWS_SESSION_TOKEN:", process.env.AWS_SESSION_TOKEN);
+  console.log("AWS_REGION:", process.env.AWS_REGION);
+  console.log("=== END CREDENTIALS ===");
 
   const signer = new SignatureV4({
     service: "execute-api",
