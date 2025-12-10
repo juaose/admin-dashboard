@@ -1,7 +1,7 @@
 /**
  * DAL HTTP Client Utility
  * HTTP REST API client for lotto-mongo-dal-api service via API Gateway
- * Uses Amplify API with Cognito authentication
+ * Client-side only - uses Amplify API with automatic Cognito JWT authentication
  */
 
 import { get, post, put, patch, del } from "aws-amplify/api";
