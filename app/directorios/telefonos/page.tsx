@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { dalGet } from "@/lib/dal-client";
 
 interface PhoneLine {
   number: number;
@@ -38,14 +39,11 @@ export default function TelefonosPage() {
       setLoading(true);
       setError(null);
 
-      console.log("📡 Fetching from API...");
-      const response = await fetch("/api/directorios/telefonos");
-      console.log("📥 Response received:", response.status, response.ok);
-
-      const result: ApiResponse = await response.json();
+      console.log("📡 Fetching from DAL API...");
+      const result: ApiResponse = await dalGet("/api/v1/phone-lines");
       console.log("📦 Data received:", result);
 
-      if (!response.ok || !result.success) {
+      if (!result.success) {
         throw new Error(result.error || "Error al cargar teléfonos");
       }
 
