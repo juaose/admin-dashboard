@@ -61,19 +61,22 @@ async function signRequestServerSide(
     body: body ? JSON.stringify(body) : undefined,
   });
 
-  // Debug: Log ACTUAL credentials (REMOVE THIS AFTER DEBUGGING!)
-  console.log("=== ACTUAL CREDENTIALS (DELETE AFTER DEBUG) ===");
-  console.log("AWS_ACCESS_KEY_ID:", process.env.AWS_ACCESS_KEY_ID);
-  console.log("AWS_SECRET_ACCESS_KEY:", process.env.AWS_SECRET_ACCESS_KEY);
-  console.log("AWS_SESSION_TOKEN:", process.env.AWS_SESSION_TOKEN);
-  console.log("AWS_REGION:", process.env.AWS_REGION);
-  console.log("=== END CREDENTIALS ===");
+  // Use service account credentials from environment variables
+  const credentials = {
+    accessKeyId: process.env.DAL_SERVICE_ACCESS_KEY_ID || "",
+    secretAccessKey: process.env.DAL_SERVICE_SECRET_ACCESS_KEY || "",
+  };
+
+  console.log("Using service account credentials:", {
+    hasAccessKeyId: !!credentials.accessKeyId,
+    hasSecretAccessKey: !!credentials.secretAccessKey,
+    accessKeyId: credentials.accessKeyId.substring(0, 10) + "...",
+  });
 
   const signer = new SignatureV4({
     service: "execute-api",
-    region:
-      process.env.AWS_REGION || process.env.DAL_SERVICE_REGION || "us-east-1",
-    credentials: fromEnv(), // Automatically uses AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN from Lambda environment
+    region: process.env.DAL_SERVICE_REGION || "us-east-1",
+    credentials: credentials,
     sha256: Sha256,
   });
 
