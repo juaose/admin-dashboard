@@ -9,6 +9,7 @@ import { SignatureV4 } from "@aws-sdk/signature-v4";
 import { Sha256 } from "@aws-crypto/sha256-js";
 import { HttpRequest } from "@aws-sdk/protocol-http";
 import { fromEnv } from "@aws-sdk/credential-providers";
+import https from "https";
 
 // Get DAL API base URL from environment
 const DAL_API_URL = process.env.DAL_API_URL || "http://localhost:3100";
@@ -88,12 +89,45 @@ async function signRequestServerSide(
     "signedRequest Body: ",
     JSON.stringify(signedRequest.body, null, " ")
   );
-  // Make fetch with signed headers
-  return fetch(url, {
-    method,
-    headers: headers,
-    body: signedRequest.body,
-    cache: "no-store",
+
+  // Use Node's https module to bypass any fetch interceptors
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: urlObj.hostname,
+      port: 443,
+      path: urlObj.pathname + urlObj.search,
+      method: method,
+      headers: headers,
+    };
+
+    const req = https.request(options, (res) => {
+      let data = "";
+      res.on("data", (chunk) => {
+        data += chunk;
+      });
+      res.on("end", () => {
+        // Create a Response-like object
+        resolve({
+          status: res.statusCode || 0,
+          statusText: res.statusMessage || "",
+          ok: (res.statusCode || 0) >= 200 && (res.statusCode || 0) < 300,
+          headers: res.headers,
+          json: async () => JSON.parse(data),
+          text: async () => data,
+        } as any);
+      });
+    });
+
+    req.on("error", (error) => {
+      console.error("[HTTPS Request Error]:", error);
+      reject(error);
+    });
+
+    if (signedRequest.body) {
+      req.write(signedRequest.body);
+    }
+
+    req.end();
   });
 }
 
