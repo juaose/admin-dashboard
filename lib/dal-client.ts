@@ -1,13 +1,40 @@
 /**
  * DAL HTTP Client Utility
  * HTTP REST API client for lotto-mongo-dal-api service via API Gateway
- * Client-side only - uses Amplify API with automatic Cognito JWT authentication
+ * Client-side only - uses fetch with Cognito JWT Bearer authentication
  */
 
-import { get, post, put, patch, del } from "aws-amplify/api";
+import { fetchAuthSession } from "aws-amplify/auth";
 
-// API name for Amplify configuration
-const API_NAME = "dal-api";
+// API Gateway endpoint - must be set via NEXT_PUBLIC_DAL_API_URL
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_DAL_API_URL || "http://localhost:3100";
+
+/**
+ * Get Cognito ID token for authentication
+ */
+async function getAuthToken(): Promise<string | undefined> {
+  try {
+    const session = await fetchAuthSession();
+    return session.tokens?.idToken?.toString();
+  } catch (error) {
+    console.warn("No Cognito session available:", error);
+    return undefined;
+  }
+}
+
+/**
+ * Build full URL with query parameters
+ */
+function buildUrl(path: string, params?: Record<string, string>): string {
+  const url = new URL(path, API_BASE_URL);
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => {
+      url.searchParams.append(key, value);
+    });
+  }
+  return url.toString();
+}
 
 /**
  * GET request to DAL API
@@ -21,16 +48,28 @@ export async function dalGet(
 ): Promise<any> {
   console.log(`[DAL Client] GET ${path}`, { params });
 
-  const response = await get({
-    apiName: API_NAME,
-    path,
-    options: {
-      queryParams: params,
-    },
-  }).response;
+  const token = await getAuthToken();
+  const url = buildUrl(path, params);
 
-  const data = await response.body.json();
-  return data;
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(url, {
+    method: "GET",
+    headers,
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`DAL API error: ${response.status} - ${error}`);
+  }
+
+  return response.json();
 }
 
 /**
@@ -42,16 +81,29 @@ export async function dalGet(
 export async function dalPost(path: string, body: any): Promise<any> {
   console.log(`[DAL Client] POST ${path}`, { body });
 
-  const response = await post({
-    apiName: API_NAME,
-    path,
-    options: {
-      body,
-    },
-  }).response;
+  const token = await getAuthToken();
+  const url = buildUrl(path);
 
-  const data = await response.body.json();
-  return data;
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`DAL API error: ${response.status} - ${error}`);
+  }
+
+  return response.json();
 }
 
 /**
@@ -63,16 +115,29 @@ export async function dalPost(path: string, body: any): Promise<any> {
 export async function dalPut(path: string, body: any): Promise<any> {
   console.log(`[DAL Client] PUT ${path}`, { body });
 
-  const response = await put({
-    apiName: API_NAME,
-    path,
-    options: {
-      body,
-    },
-  }).response;
+  const token = await getAuthToken();
+  const url = buildUrl(path);
 
-  const data = await response.body.json();
-  return data;
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(url, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`DAL API error: ${response.status} - ${error}`);
+  }
+
+  return response.json();
 }
 
 /**
@@ -84,16 +149,29 @@ export async function dalPut(path: string, body: any): Promise<any> {
 export async function dalPatch(path: string, body: any): Promise<any> {
   console.log(`[DAL Client] PATCH ${path}`, { body });
 
-  const response = await patch({
-    apiName: API_NAME,
-    path,
-    options: {
-      body,
-    },
-  }).response;
+  const token = await getAuthToken();
+  const url = buildUrl(path);
 
-  const data = await response.body.json();
-  return data;
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(url, {
+    method: "PATCH",
+    headers,
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`DAL API error: ${response.status} - ${error}`);
+  }
+
+  return response.json();
 }
 
 /**
@@ -104,11 +182,26 @@ export async function dalPatch(path: string, body: any): Promise<any> {
 export async function dalDelete(path: string): Promise<any> {
   console.log(`[DAL Client] DELETE ${path}`);
 
-  const response = await del({
-    apiName: API_NAME,
-    path,
-  }).response;
+  const token = await getAuthToken();
+  const url = buildUrl(path);
 
-  const data = await response.body.json();
-  return data;
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers,
+  });
+
+  if (!response.ok) {
+    const error = await response.text();
+    throw new Error(`DAL API error: ${response.status} - ${error}`);
+  }
+
+  return response.json();
 }
