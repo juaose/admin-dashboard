@@ -22,10 +22,6 @@ frontend:
     build:
       commands:
         - npm install --cache .npm --prefer-offline
-        - env | grep -e DAL_API_URL >> .env.production
-        - env | grep -e DAL_SERVICE_REGION >> .env.production
-        - env | grep -e DAL_SERVICE_ACCESS_KEY_ID >> .env.production
-        - env | grep -e DAL_SERVICE_SECRET_ACCESS_KEY >> .env.production
         - npm run build
   artifacts:
     baseDirectory: .next
