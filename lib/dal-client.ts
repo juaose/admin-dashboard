@@ -42,6 +42,14 @@ async function signRequestServerSide(
     body: body ? JSON.stringify(body) : undefined,
   });
 
+  // Debug: Check what AWS credentials are available
+  console.log("AWS env vars:", {
+    hasAWS_ACCESS_KEY_ID: !!process.env.AWS_ACCESS_KEY_ID,
+    hasAWS_SECRET_ACCESS_KEY: !!process.env.AWS_SECRET_ACCESS_KEY,
+    hasAWS_SESSION_TOKEN: !!process.env.AWS_SESSION_TOKEN,
+    hasAWS_REGION: !!process.env.AWS_REGION,
+  });
+
   const signer = new SignatureV4({
     service: "execute-api",
     region:
@@ -53,7 +61,6 @@ async function signRequestServerSide(
   const signedRequest = await signer.sign(request);
 
   const headers: Record<string, string> = signedRequest.headers;
-  console.debug("fromEnv() values: ", fromEnv());
   console.debug("signedRequest Headers: ", JSON.stringify(headers, null, " "));
   console.debug(
     "signedRequest Body: ",
