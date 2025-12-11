@@ -21,6 +21,21 @@ import {
 // });
 
 /**
+ * Extract raw JWT token from Authorization header
+ * Used to forward the user's token to downstream services
+ */
+export function getAuthTokenFromRequest(request: NextRequest): string | null {
+  const authHeader = request.headers.get("authorization");
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return null;
+  }
+
+  // Return the full "Bearer TOKEN" format
+  return authHeader;
+}
+
+/**
  * Extract user groups from JWT token in Authorization header
  *
  * The frontend will send the Cognito access token (from fetchAuthSession)

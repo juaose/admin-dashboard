@@ -1,5 +1,6 @@
 import type { PlayerDocument } from "@juaose/lotto-shared-types";
 import { getAuthHeaders } from "@/lib/client-auth";
+import { dalGet } from "@/lib/dal-client";
 import { getBankColorBall } from "./utils/playerUtils";
 
 interface AuthorizedAccountsCardProps {
@@ -45,17 +46,9 @@ export default function AuthorizedAccountsCard({
 
       const result = await response.json();
 
-      if (result.success) {
-        // Refresh player data
-        const refreshResponse = await fetch(
-          `/api/jugadores?search=${player.premayor_acc}`
-        );
-        const refreshResult = await refreshResponse.json();
-
-        if (refreshResult.success && refreshResult.data.length > 0) {
-          onUpdate(refreshResult.data[0]);
-        }
-
+      if (result.success && result.data) {
+        // Use the updated player from mutation response
+        onUpdate(result.data);
         alert("✅ Cuenta autorizada eliminada exitosamente");
       } else {
         alert(`Error: ${result.error}`);

@@ -1,6 +1,6 @@
 "use client";
 
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import "./app.css";
 import "./spanish-auth.css";
@@ -16,7 +16,19 @@ import { AppAuthProvider } from "../contexts/AppAuthContext";
 // Import Amplify configuration with environment variable support
 import "../lib/amplify-config";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = localFont({
+  src: [
+    {
+      path: "../public/fonts/InterVariable.ttf",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/InterVariable-Italic.ttf",
+      style: "italic",
+    },
+  ],
+  variable: "--font-inter",
+});
 
 export default function RootLayout({
   children,

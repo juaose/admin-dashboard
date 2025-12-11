@@ -1,17 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { checkUpdatePermission } from "@/lib/api-auth";
-import { dalGet } from "../../../../lib/dal-client";
-
-// Simple field mapping - maps frontend field names to API field names
-const SIMPLE_FIELDS = [
-  "auto_recarga",
-  "shopID",
-  "codename",
-  "sinpe_num",
-  "whatsapp_num",
-  "notes",
-  "withdrawalInstructions",
-];
+import { checkUpdatePermission, getAuthTokenFromRequest } from "@/lib/api-auth";
+import {
+  dalPostServer,
+  dalPatchServer,
+  dalDeleteServer,
+} from "../../../../lib/dal-server-client";
 
 // These operations use DEDICATED ENDPOINTS:
 // - addHostAccount → POST /api/v1/players/:id/host-accounts
@@ -21,36 +14,6 @@ const SIMPLE_FIELDS = [
 // - addFootprint → POST /api/v1/players/:id/footprints
 // - addBankAccount → POST /api/v1/players/:id/bank-accounts
 // - deleteBankAccount → DELETE /api/v1/players/:id/bank-accounts/:accountId
-
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const premayor_acc = parseInt(params.id);
-    if (isNaN(premayor_acc)) {
-      return NextResponse.json(
-        { success: false, error: "Invalid player ID" },
-        { status: 400 }
-      );
-    }
-
-    // Call DAL API
-    const result = await dalGet(`/api/v1/players/${params.id}`);
-
-    return NextResponse.json(result);
-  } catch (error) {
-    console.error("Error fetching player:", error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: "Error fetching player",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 }
-    );
-  }
-}
 
 export async function PUT(
   request: NextRequest,
@@ -91,114 +54,94 @@ export async function PUT(
       );
     }
 
+    // Extract JWT token to forward to API Gateway
+    const authToken = getAuthTokenFromRequest(request);
+    if (!authToken) {
+      return NextResponse.json(
+        { success: false, error: "No authentication token found" },
+        { status: 401 }
+      );
+    }
+
     // Route to dedicated endpoints
     if (updateType === "addHostAccount") {
-      const result = await fetch(
-        `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}/host-accounts`,
+      const result = await dalPostServer(
+        `/api/v1/players/${params.id}/host-accounts`,
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            accountIban: data.accountIban,
-            hostAccount: data.hostAccount,
-          }),
-        }
+          accountIban: data.accountIban,
+          hostAccount: data.hostAccount,
+        },
+        authToken
       );
-      return NextResponse.json(await result.json());
+      return NextResponse.json(result);
     }
 
     if (updateType === "removeHostAccount") {
-      const result = await fetch(
-        `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}/host-accounts/${data.hostAccount.iban_num}?bankAccountIban=${data.accountIban}`,
-        {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-        }
+      const result = await dalDeleteServer(
+        `/api/v1/players/${params.id}/host-accounts/${data.hostAccount.iban_num}?bankAccountIban=${data.accountIban}`,
+        authToken
       );
-      return NextResponse.json(await result.json());
+      return NextResponse.json(result);
     }
 
     if (updateType === "toggleBankAccountStatus") {
-      const result = await fetch(
-        `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}/bank-accounts/${data.accountIban}/toggle-status`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ isActive: data.isActive }),
-        }
+      const result = await dalPatchServer(
+        `/api/v1/players/${params.id}/bank-accounts/${data.accountIban}/toggle-status`,
+        { isActive: data.isActive },
+        authToken
       );
-      return NextResponse.json(await result.json());
+      return NextResponse.json(result);
     }
 
     if (updateType === "toggleBankAccountFavorite") {
-      const result = await fetch(
-        `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}/bank-accounts/${data.accountIban}/toggle-favorite`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ isFavorite: data.isFavorite }),
-        }
+      const result = await dalPatchServer(
+        `/api/v1/players/${params.id}/bank-accounts/${data.accountIban}/toggle-favorite`,
+        { isFavorite: data.isFavorite },
+        authToken
       );
-      return NextResponse.json(await result.json());
+      return NextResponse.json(result);
     }
 
     if (updateType === "addFootprint") {
-      const result = await fetch(
-        `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}/footprints`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ footprint: data.footprint }),
-        }
+      const result = await dalPostServer(
+        `/api/v1/players/${params.id}/footprints`,
+        { footprint: data.footprint },
+        authToken
       );
-      return NextResponse.json(await result.json());
+      return NextResponse.json(result);
     }
 
     if (updateType === "removeFootprint") {
-      const result = await fetch(
-        `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}/footprints/${encodeURIComponent(data.footprint)}`,
-        {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-        }
+      const result = await dalDeleteServer(
+        `/api/v1/players/${params.id}/footprints/${encodeURIComponent(data.footprint)}`,
+        authToken
       );
-      return NextResponse.json(await result.json());
+      return NextResponse.json(result);
     }
 
     if (updateType === "removeAuthorizedAccount") {
-      const result = await fetch(
-        `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}/authorized-numbers/${encodeURIComponent(data.iban)}`,
-        {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-        }
+      const result = await dalDeleteServer(
+        `/api/v1/players/${params.id}/authorized-numbers/${encodeURIComponent(data.iban)}`,
+        authToken
       );
-      return NextResponse.json(await result.json());
+      return NextResponse.json(result);
     }
 
     if (updateType === "addBankAccount") {
-      const result = await fetch(
-        `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}/bank-accounts`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            bankAccount: data.bank_accounts?.[0] || data.bankAccount,
-          }),
-        }
+      const result = await dalPostServer(
+        `/api/v1/players/${params.id}/bank-accounts`,
+        { bankAccount: data.bank_accounts?.[0] || data.bankAccount },
+        authToken
       );
-      return NextResponse.json(await result.json());
+      return NextResponse.json(result);
     }
 
     if (updateType === "deleteBankAccount") {
-      const result = await fetch(
-        `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}/bank-accounts/${data.accountIban}`,
-        {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-        }
+      const result = await dalDeleteServer(
+        `/api/v1/players/${params.id}/bank-accounts/${data.accountIban}`,
+        authToken
       );
-      return NextResponse.json(await result.json());
+      return NextResponse.json(result);
     }
 
     // For simple field updates, use the new clean PATCH endpoint
@@ -230,16 +173,13 @@ export async function PUT(
     }
 
     // Call DAL API with clean field-based PATCH
-    const result = await fetch(
-      `${process.env.NEXT_PUBLIC_DAL_API_URL}/api/v1/players/${params.id}`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(patchData),
-      }
+    const result = await dalPatchServer(
+      `/api/v1/players/${params.id}`,
+      patchData,
+      authToken
     );
 
-    return NextResponse.json(await result.json());
+    return NextResponse.json(result);
   } catch (error) {
     console.error("Error updating player:", error);
     return NextResponse.json(

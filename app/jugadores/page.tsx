@@ -224,16 +224,11 @@ export default function JugadoresPage() {
             alert(`Error al actualizar ${update.type}: ${result.error}`);
             return;
           }
-        }
-
-        // Refresh player data
-        const refreshResult = await dalGet("/api/v1/players", {
-          search: selectedPlayer.premayor_acc.toString(),
-        });
-        if (refreshResult.success && refreshResult.data.length > 0) {
-          const updatedPlayer = refreshResult.data[0];
-          setSelectedPlayer(updatedPlayer);
-          setEditedPlayer(updatedPlayer);
+          // Use last mutation's response (they all return updated player)
+          if (result.data) {
+            setSelectedPlayer(result.data);
+            setEditedPlayer(result.data);
+          }
         }
 
         alert("✅ Cambios guardados exitosamente");
@@ -284,10 +279,11 @@ export default function JugadoresPage() {
 
     try {
       setLoadingReloads(true);
-      const result = await dalGet(
-        `/api/v1/players/${selectedPlayer.premayor_acc}/reloads`,
-        { limit: recordLimit.toString() }
-      );
+      const result = await dalGet("/api/v1/reloads/recent", {
+        premayor_acc: selectedPlayer.premayor_acc.toString(),
+        limit: recordLimit.toString(),
+        reloadTypeFilter: "0", // 0 = ANY
+      });
 
       if (!result.success) {
         throw new Error(result.error || "Error al cargar recargas");
@@ -308,10 +304,10 @@ export default function JugadoresPage() {
 
     try {
       setLoadingRedemptions(true);
-      const result = await dalGet(
-        `/api/v1/players/${selectedPlayer.premayor_acc}/redemptions`,
-        { limit: recordLimit.toString() }
-      );
+      const result = await dalGet("/api/v1/redemptions/by-player", {
+        playerId: selectedPlayer.premayor_acc.toString(),
+        limit: recordLimit.toString(),
+      });
 
       if (!result.success) {
         throw new Error(result.error || "Error al cargar retiros");
@@ -332,10 +328,10 @@ export default function JugadoresPage() {
 
     try {
       setLoadingDeposits(true);
-      const result = await dalGet(
-        `/api/v1/players/${selectedPlayer.premayor_acc}/credits`,
-        { limitPerBank: recordLimit.toString() }
-      );
+      const result = await dalGet("/api/v1/credits/by-player", {
+        playerId: selectedPlayer.premayor_acc.toString(),
+        limitPerBank: recordLimit.toString(),
+      });
 
       if (!result.success) {
         throw new Error(result.error || "Error al cargar depósitos");
@@ -495,24 +491,10 @@ export default function JugadoresPage() {
 
                           const result = await response.json();
 
-                          if (result.success) {
-                            // Refresh player data
-                            const refreshResult = await dalGet(
-                              "/api/v1/players",
-                              {
-                                search: selectedPlayer.premayor_acc.toString(),
-                              }
-                            );
-
-                            if (
-                              refreshResult.success &&
-                              refreshResult.data.length > 0
-                            ) {
-                              const updatedPlayer = refreshResult.data[0];
-                              setSelectedPlayer(updatedPlayer);
-                              setEditedPlayer(updatedPlayer);
-                            }
-
+                          if (result.success && result.data) {
+                            // Use the updated player from mutation response
+                            setSelectedPlayer(result.data);
+                            setEditedPlayer(result.data);
                             alert(
                               `✅ Recargas automáticas ${newStatus ? "activadas" : "desactivadas"} exitosamente`
                             );
@@ -728,21 +710,10 @@ export default function JugadoresPage() {
 
               const result = await response.json();
 
-              if (result.success) {
-                // Update local state
-                handleFieldChange("authorizedNumbers", selectedAccountsForAuth);
-
-                // Refresh player data
-                const refreshResult = await dalGet("/api/v1/players", {
-                  search: selectedPlayer.premayor_acc.toString(),
-                });
-
-                if (refreshResult.success && refreshResult.data.length > 0) {
-                  const updatedPlayer = refreshResult.data[0];
-                  setSelectedPlayer(updatedPlayer);
-                  setEditedPlayer(updatedPlayer);
-                }
-
+              if (result.success && result.data) {
+                // Use the updated player from mutation response
+                setSelectedPlayer(result.data);
+                setEditedPlayer(result.data);
                 setShowAccountSelectionModal(false);
                 alert("✅ Cuentas autorizadas actualizadas exitosamente");
               } else {
