@@ -3,6 +3,7 @@
  * Centralized service for fetching report data from backend APIs
  */
 
+import { dalGet } from "./dal-client";
 import type { EntityType, GroupingType } from "./reportConfig";
 import type { SummaryCard } from "@/components/reports/ReportSummaryCards";
 import type { ChartData } from "@/components/reports/ReportChart";
@@ -25,41 +26,44 @@ export interface ReportData {
 /**
  * Convert Costa Rica local date to UTC datetime
  * Costa Rica is UTC-6, so local midnight = 6am UTC
- * 
+ *
  * @param localDate - Date in YYYY-MM-DD format (Costa Rica local time)
  * @returns UTC datetime string in ISO format
  */
 function costaRicaDateToUTC(localDate: string): string {
   // Parse the local date
-  const [year, month, day] = localDate.split('-').map(Number);
-  
+  const [year, month, day] = localDate.split("-").map(Number);
+
   // Create date in UTC, then add 6 hours to shift to Costa Rica midnight
   // Example: 2025-10-18 (local) → 2025-10-18T06:00:00Z (UTC)
   const utcDate = new Date(Date.UTC(year, month - 1, day, 6, 0, 0, 0));
-  
+
   return utcDate.toISOString();
 }
 
 /**
  * Convert Costa Rica date range to UTC range
- * 
+ *
  * @param startDate - Start date in YYYY-MM-DD format (Costa Rica local)
  * @param endDate - End date in YYYY-MM-DD format (Costa Rica local)
  * @returns Object with UTC start and end datetime strings
  */
-function costaRicaRangeToUTC(startDate: string, endDate: string): {
+function costaRicaRangeToUTC(
+  startDate: string,
+  endDate: string
+): {
   utcStart: string;
   utcEnd: string;
 } {
   // Start: beginning of start date (midnight Costa Rica = 6am UTC)
   const utcStart = costaRicaDateToUTC(startDate);
-  
+
   // End: beginning of day AFTER end date (to include full end date)
   // Example: endDate = 2025-10-18 → need 2025-10-19T06:00:00Z
-  const [year, month, day] = endDate.split('-').map(Number);
+  const [year, month, day] = endDate.split("-").map(Number);
   const nextDay = new Date(Date.UTC(year, month - 1, day + 1, 6, 0, 0, 0));
   const utcEnd = nextDay.toISOString();
-  
+
   return { utcStart, utcEnd };
 }
 
@@ -76,31 +80,19 @@ export async function fetchReportData(
   const endpoint = getApiEndpoint(entityType, groupingType);
 
   if (!endpoint) {
-    throw new Error(`No API endpoint configured for ${entityType}/${groupingType}`);
+    throw new Error(
+      `No API endpoint configured for ${entityType}/${groupingType}`
+    );
   }
 
   // Convert Costa Rica local dates to UTC range
   const { utcStart, utcEnd } = costaRicaRangeToUTC(startDate, endDate);
 
-  // Make API request with UTC datetime strings
-  const url = `${endpoint}?startDate=${encodeURIComponent(utcStart)}&endDate=${encodeURIComponent(utcEnd)}`;
-  
-  const response = await fetch(url, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include", // Include cookies for auth
+  // Call DAL API Gateway directly with UTC datetime strings
+  const result: ReportResponse = await dalGet(endpoint, {
+    startDate: utcStart,
+    endDate: utcEnd,
   });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(
-      errorData.error || errorData.details || `HTTP ${response.status}`
-    );
-  }
-
-  const result: ReportResponse = await response.json();
 
   if (!result.success || !result.data) {
     throw new Error(result.error || result.details || "API returned no data");
@@ -112,6 +104,7 @@ export async function fetchReportData(
 
 /**
  * Get API endpoint for entity-grouping combination
+ * Now returns DAL API Gateway v1 endpoints directly
  */
 function getApiEndpoint(
   entityType: EntityType,
@@ -119,25 +112,25 @@ function getApiEndpoint(
 ): string | null {
   const endpoints: Record<string, Record<string, string>> = {
     depositos: {
-      bank: "/api/depositos/banco-destino",
-      bank_origin: "/api/depositos/banco-procedencia",
-      bank_account: "/api/depositos/cuenta-destino",
-      customer: "/api/depositos/clientes",
+      bank: "/api/v1/credits/deposits/by-bank",
+      bank_origin: "/api/v1/credits/deposits/by-bank",
+      bank_account: "/api/v1/credits/deposits/by-bank",
+      customer: "/api/v1/credits",
     },
     recargas: {
-      shop: "/api/recargas/tiendas",
-      customer: "/api/recargas/clientes",
+      shop: "/api/v1/reloads/date-range",
+      customer: "/api/v1/reloads/date-range",
     },
     retiros: {
-      customer: "/api/retiros/clientes",
-      shop: "/api/retiros/tiendas",
-      bank: "/api/retiros/bancos",
+      customer: "/api/v1/redemptions/by-customer",
+      shop: "/api/v1/redemptions/by-shop",
+      bank: "/api/v1/redemptions/by-bank",
     },
     promociones: {
-      bonusTier: "/api/promociones/nivel",
-      customer: "/api/promociones/clientes",
-      paymentMethod: "/api/promociones/metodo-pago",
-      shop: "/api/promociones/tiendas",
+      bonusTier: "/api/v1/promotions",
+      customer: "/api/v1/promotions",
+      paymentMethod: "/api/v1/promotions",
+      shop: "/api/v1/promotions",
     },
   };
 
@@ -147,32 +140,29 @@ function getApiEndpoint(
 /**
  * Aggregate chart data to show top N items + "Rest"
  */
-function aggregateChartData(
-  data: ChartData[],
-  topN: number = 10
-): ChartData[] {
+function aggregateChartData(data: ChartData[], topN: number = 10): ChartData[] {
   if (data.length <= topN) {
     return data;
   }
 
   // Sort by value descending
   const sorted = [...data].sort((a, b) => b.value - a.value);
-  
+
   // Take top N
   const topItems = sorted.slice(0, topN);
-  
+
   // Aggregate rest
   const restItems = sorted.slice(topN);
   const restTotal = restItems.reduce((sum, item) => sum + item.value, 0);
-  
+
   if (restTotal > 0) {
     const largestIndividual = topItems[0].value;
-    
+
     // If Rest is more than 2x the largest item, it's too dominant - discard it
     if (restTotal > largestIndividual * 2) {
       return topItems;
     }
-    
+
     // Create final array with Rest item
     const finalData = [
       ...topItems,
@@ -181,11 +171,11 @@ function aggregateChartData(
         value: restTotal,
       },
     ];
-    
+
     // Sort again to avoid outlier position
     return finalData.sort((a, b) => b.value - a.value);
   }
-  
+
   return topItems;
 }
 
@@ -203,34 +193,34 @@ function transformReportData(
     case "depositos_bank":
     case "depositos_bank_origin":
       return transformDepositosBankData(apiData);
-    
+
     case "depositos_bank_account":
       return transformDepositosBankAccountData(apiData);
-    
+
     case "depositos_customer":
       return transformDepositosCustomerData(apiData);
-    
+
     case "recargas_shop":
       return transformRecargasShopData(apiData);
-    
+
     case "recargas_customer":
       return transformRecargasCustomerData(apiData);
-    
+
     case "retiros_customer":
       return transformRetirosCustomerData(apiData);
-    
+
     case "retiros_shop":
       return transformRetirosShopData(apiData);
-    
+
     case "retiros_bank":
       return transformRetirosBankData(apiData);
-    
+
     case "promociones_bonusTier":
     case "promociones_customer":
     case "promociones_paymentMethod":
     case "promociones_shop":
       return transformPromocionesData(apiData);
-    
+
     default:
       throw new Error(`No transformer configured for ${key}`);
   }
@@ -362,7 +352,10 @@ function transformRetirosCustomerData(apiData: any): ReportData {
     },
     {
       title: "Promedio por Cliente",
-      value: statistics.totalCustomers > 0 ? statistics.totalVolume / statistics.totalCustomers : 0,
+      value:
+        statistics.totalCustomers > 0
+          ? statistics.totalVolume / statistics.totalCustomers
+          : 0,
       format: "currency",
       icon: "👤",
       subtitle: "Total retirado",
@@ -371,14 +364,23 @@ function transformRetirosCustomerData(apiData: any): ReportData {
 
   // Chart Data - Top 10 customers + Rest
   const allChartData: ChartData[] = customers.map((customer: any) => ({
-    name: customer.screenName || customer.codename || `Cliente ${customer.premayor_acc}`,
+    name:
+      customer.screenName ||
+      customer.codename ||
+      `Cliente ${customer.premayor_acc}`,
     value: customer.totalAmount,
   }));
   const chartData = aggregateChartData(allChartData, 10);
 
   const tableData = customers;
   const tableColumns: ColumnConfig[] = [
-    { key: "shopID", label: "Tienda", format: "number", sortable: true, align: "center" },
+    {
+      key: "shopID",
+      label: "Tienda",
+      format: "number",
+      sortable: true,
+      align: "center",
+    },
     { key: "screenName", label: "Cliente", format: "text", sortable: true },
     {
       key: "totalAmount",
@@ -678,7 +680,10 @@ function transformDepositosCustomerData(apiData: any): ReportData {
     },
     {
       title: "Promedio por Cliente",
-      value: statistics.totalCustomers > 0 ? statistics.totalVolume / statistics.totalCustomers : 0,
+      value:
+        statistics.totalCustomers > 0
+          ? statistics.totalVolume / statistics.totalCustomers
+          : 0,
       format: "currency",
       icon: "👤",
       subtitle: "Total depositado",
@@ -687,14 +692,23 @@ function transformDepositosCustomerData(apiData: any): ReportData {
 
   // Chart Data - Top 10 customers + Rest
   const allChartData: ChartData[] = customers.map((customer: any) => ({
-    name: customer.screenName || customer.codename || `Cliente ${customer.premayor_acc}`,
+    name:
+      customer.screenName ||
+      customer.codename ||
+      `Cliente ${customer.premayor_acc}`,
     value: customer.totalAmount,
   }));
   const chartData = aggregateChartData(allChartData, 10);
 
   const tableData = customers;
   const tableColumns: ColumnConfig[] = [
-    { key: "shopID", label: "Tienda", format: "number", sortable: true, align: "center" },
+    {
+      key: "shopID",
+      label: "Tienda",
+      format: "number",
+      sortable: true,
+      align: "center",
+    },
     { key: "screenName", label: "Cliente", format: "text", sortable: true },
     {
       key: "totalAmount",
@@ -826,7 +840,10 @@ function transformRecargasCustomerData(apiData: any): ReportData {
     },
     {
       title: "Promedio por Cliente",
-      value: statistics.totalCustomers > 0 ? statistics.totalVolume / statistics.totalCustomers : 0,
+      value:
+        statistics.totalCustomers > 0
+          ? statistics.totalVolume / statistics.totalCustomers
+          : 0,
       format: "currency",
       icon: "👤",
       subtitle: "Total recargado",
@@ -835,14 +852,23 @@ function transformRecargasCustomerData(apiData: any): ReportData {
 
   // Chart Data - Top 10 customers + Rest
   const allChartData: ChartData[] = customers.map((customer: any) => ({
-    name: customer.screenName || customer.codename || `Cliente ${customer.premayor_acc}`,
+    name:
+      customer.screenName ||
+      customer.codename ||
+      `Cliente ${customer.premayor_acc}`,
     value: customer.totalAmount,
   }));
   const chartData = aggregateChartData(allChartData, 10);
 
   const tableData = customers;
   const tableColumns: ColumnConfig[] = [
-    { key: "shopID", label: "Tienda", format: "number", sortable: true, align: "center" },
+    {
+      key: "shopID",
+      label: "Tienda",
+      format: "number",
+      sortable: true,
+      align: "center",
+    },
     { key: "screenName", label: "Cliente", format: "text", sortable: true },
     {
       key: "totalAmount",
